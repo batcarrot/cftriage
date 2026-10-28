@@ -18,3 +18,6 @@ cftriage = "cftriage.cli:main"
 
 [tool.setuptools]
 packages = ["cftriage"]
+
+[tool.setuptools.package-data]
+cftriage = ["webui.html"]

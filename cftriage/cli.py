@@ -5,6 +5,7 @@
     python -m cftriage run      --study study --model anthropic:claude-sonnet-4-6 --samples 10
     python -m cftriage analyze  --study study --out study/report
     python -m cftriage power    --cases 70 --samples 10 --shift 0.10
+    python -m cftriage serve    --workspace .        # local web app
 """
 
 from __future__ import annotations
@@ -122,6 +123,11 @@ def cmd_demo(a):
     print(f"demo report written to {path}")
 
 
+def cmd_serve(a):
+    from .web import serve
+    serve(a.workspace, port=a.port, open_browser=not a.no_browser)
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="cftriage")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -180,6 +186,12 @@ def main(argv=None):
     d.add_argument("--n-perm", type=int, default=2000)
     d.add_argument("--seed", type=int, default=0)
     d.set_defaults(func=cmd_demo)
+
+    sv = sub.add_parser("serve", help="local web app (playground, power, studies)")
+    sv.add_argument("--workspace", default=".", help="folder that holds study folders")
+    sv.add_argument("--port", type=int, default=8765)
+    sv.add_argument("--no-browser", action="store_true")
+    sv.set_defaults(func=cmd_serve)
 
     a = ap.parse_args(argv)
     a.func(a)

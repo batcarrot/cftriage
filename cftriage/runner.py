@@ -191,9 +191,13 @@ class RunConfig:
 
 
 def run(vset: VignetteSet, client: ModelClient | Callable, cfg: RunConfig,
-        checkpoint: str | Path | None = None, progress: bool = True) -> pd.DataFrame:
+        checkpoint: str | Path | None = None, progress: bool = True,
+        stop: threading.Event | None = None) -> pd.DataFrame:
     """Return one row per sample:
-    model, case_id, condition, sample, response, esi, error, t."""
+    model, case_id, condition, sample, response, esi, error, t.
+
+    Setting ``stop`` skips calls that have not started yet; completed calls
+    stay in the checkpoint, so the run can be resumed later."""
     done: dict[tuple, dict] = {}
     ck = Path(checkpoint) if checkpoint else None
     if ck and ck.exists():
@@ -215,6 +219,8 @@ def run(vset: VignetteSet, client: ModelClient | Callable, cfg: RunConfig,
 
     def work(job):
         case_id, cond, prompt, s = job
+        if stop is not None and stop.is_set():
+            return None
         err, text = None, None
         for attempt in range(cfg.max_retries):
             try:
@@ -249,6 +255,9 @@ def run(vset: VignetteSet, client: ModelClient | Callable, cfg: RunConfig,
     finally:
         if fh:
             fh.close()
+    if not results:
+        return pd.DataFrame(columns=["model", "case_id", "condition", "sample",
+                                     "response", "esi", "error", "t"])
     df = pd.DataFrame(results)
     # Keep the newest record if a failed call was later retried successfully.
     df = df.sort_values("t").drop_duplicates(

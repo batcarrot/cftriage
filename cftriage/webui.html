@@ -1,0 +1,871 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>cftriage</title>
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f4f3ef;
+  --surface: #fcfcfb;
+  --surface-2: #f0efec;
+  --border: #e4e3df;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --muted: #8a8984;
+  --grid: #e4e3df;
+  --s1: #2a78d6;
+  --s2: #eb6834;
+  --s1-soft: #cde2fb;
+  --good: #0ca30c;
+  --warn: #fab219;
+  --crit: #d03b3b;
+  --focus: #2a78d6;
+  --shadow: 0 1px 2px rgba(0,0,0,.04), 0 2px 8px rgba(0,0,0,.04);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #121211; --surface: #1a1a19; --surface-2: #232321; --border: #30302d;
+    --ink: #f0efec; --ink-2: #c3c2b7; --muted: #8f8e88; --grid: #30302d;
+    --s1: #3987e5; --s2: #d95926; --s1-soft: #184f95; --focus: #3987e5;
+    --shadow: none;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #121211; --surface: #1a1a19; --surface-2: #232321; --border: #30302d;
+  --ink: #f0efec; --ink-2: #c3c2b7; --muted: #8f8e88; --grid: #30302d;
+  --s1: #3987e5; --s2: #d95926; --s1-soft: #184f95; --focus: #3987e5;
+  --shadow: none;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 14px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+code { overflow-wrap: anywhere; }
+code, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; }
+a { color: var(--s1); }
+h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.01em; }
+h2 { font-size: 15px; }
+h3 { font-size: 13px; color: var(--ink-2); text-transform: uppercase; letter-spacing: .04em; }
+p { margin: 0; }
+
+header {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; gap: 24px;
+  padding: 0 24px; height: 56px;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+}
+.brand { font-weight: 700; font-size: 16px; letter-spacing: -0.02em; }
+.brand span { color: var(--muted); font-weight: 500; font-size: 12px; margin-left: 6px; }
+nav { display: flex; gap: 4px; }
+nav button {
+  border: 0; background: none; color: var(--ink-2); font: inherit; font-weight: 500;
+  padding: 6px 12px; border-radius: 8px; cursor: pointer;
+}
+nav button:hover { background: var(--surface-2); color: var(--ink); }
+nav button[aria-selected="true"] { background: var(--surface-2); color: var(--ink); }
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 12px; color: var(--ink-2); font-size: 12.5px; }
+#theme { border: 1px solid var(--border); background: var(--surface); color: var(--ink-2); border-radius: 8px; padding: 4px 8px; cursor: pointer; font: inherit; }
+
+main { max-width: 1280px; margin: 0 auto; padding: 24px; }
+.view[hidden] { display: none; }
+.intro { color: var(--ink-2); max-width: 760px; margin-bottom: 20px; }
+.layout { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 24px; align-items: start; }
+.panel {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 18px; box-shadow: var(--shadow);
+}
+.panel + .panel { margin-top: 16px; }
+.stack > * + * { margin-top: 14px; }
+.side { position: sticky; top: 80px; max-height: calc(100vh - 100px); overflow: auto; }
+
+label.field { display: block; }
+label.field > span { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--ink-2); margin-bottom: 4px; }
+label.field > span output { color: var(--ink); font-variant-numeric: tabular-nums; font-weight: 500; }
+input[type=text], input[type=number], select, textarea {
+  width: 100%; font: inherit; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px;
+}
+input[type=range] { width: 100%; accent-color: var(--s1); }
+input:focus-visible, select:focus-visible, button:focus-visible, textarea:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--focus); outline-offset: 2px;
+}
+.row { display: flex; gap: 10px; }
+.row > * { flex: 1; min-width: 0; }
+.check { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-2); }
+.hint { font-size: 12.5px; color: var(--muted); }
+
+button.btn {
+  font: inherit; font-weight: 500; border-radius: 8px; padding: 8px 14px; cursor: pointer;
+  border: 1px solid var(--border); background: var(--surface); color: var(--ink);
+}
+button.btn:hover { background: var(--surface-2); }
+button.btn.primary { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+button.btn.primary:hover { opacity: .88; }
+button.btn.small { padding: 4px 10px; font-size: 12.5px; }
+button.btn:disabled { opacity: .5; cursor: not-allowed; }
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.model-card { border: 1px solid var(--border); border-radius: 10px; padding: 12px; background: var(--surface-2); }
+.model-card + .model-card { margin-top: 10px; }
+.model-card .head { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+.model-card .head input { font-weight: 600; background: var(--surface); }
+.icon-btn { border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 18px; line-height: 1; padding: 4px 6px; border-radius: 6px; }
+.icon-btn:hover { color: var(--ink); background: var(--surface); }
+.presets { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { font: inherit; font-size: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--ink-2); border-radius: 999px; padding: 3px 10px; cursor: pointer; }
+.chip:hover { color: var(--ink); border-color: var(--muted); }
+
+.empty { color: var(--muted); text-align: center; padding: 64px 24px; }
+.empty strong { display: block; color: var(--ink-2); font-size: 15px; margin-bottom: 4px; }
+
+.job { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; background: var(--surface); }
+.job .top { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+.job .msg { color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bar { height: 6px; border-radius: 3px; background: var(--surface-2); overflow: hidden; margin: 8px 0 4px; }
+.bar > div { height: 100%; background: var(--s1); border-radius: 3px; transition: width .3s; }
+.bar.indet > div { width: 30% !important; animation: indet 1.2s infinite ease-in-out; }
+@keyframes indet { from { margin-left: -30%; } to { margin-left: 100%; } }
+.error { color: var(--crit); background: color-mix(in srgb, var(--crit) 8%, transparent); border: 1px solid color-mix(in srgb, var(--crit) 30%, transparent); border-radius: 8px; padding: 10px 12px; font-size: 13px; white-space: pre-wrap; }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+.mcard h2 { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.mcard h2 small { font-weight: 400; color: var(--muted); font-size: 12px; }
+.badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 500; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface-2); color: var(--ink); }
+.badge i { font-style: normal; font-size: 11px; }
+.badge.good i { color: var(--good); }
+.badge.warn i { color: var(--warn); }
+.badge.crit i { color: var(--crit); }
+.badge.neutral i { color: var(--muted); }
+.kv { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; font-size: 13px; }
+.kv dt { color: var(--ink-2); }
+.kv dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+.contrast { border-top: 1px solid var(--border); padding-top: 10px; margin-top: 10px; }
+.contrast .line { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; font-size: 13px; }
+.contrast .num { font-variant-numeric: tabular-nums; color: var(--ink-2); font-size: 12.5px; }
+.callout { border-left: 3px solid var(--warn); padding: 6px 10px; background: var(--surface-2); border-radius: 0 8px 8px 0; font-size: 12.5px; color: var(--ink-2); }
+
+.chart { width: 100%; overflow: hidden; }
+.chart svg { display: block; width: 100%; height: auto; }
+.chart text { font-family: inherit; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12.5px; color: var(--ink-2); margin: 6px 0 8px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.legend i.ring { background: var(--surface); border: 2px solid var(--s1); border-radius: 50%; }
+.legend i.dot { background: var(--s1); border-radius: 50%; }
+
+table.data { width: 100%; border-collapse: collapse; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+table.data th, table.data td { padding: 6px 8px; border-bottom: 1px solid var(--border); text-align: right; white-space: nowrap; }
+table.data th:first-child, table.data td:first-child { text-align: left; white-space: normal; }
+table.data thead th { color: var(--ink-2); font-weight: 500; }
+.scroll-x { overflow-x: auto; }
+details { border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+details + details { margin-top: 10px; }
+summary { cursor: pointer; padding: 12px 14px; font-weight: 600; list-style: none; display: flex; justify-content: space-between; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; color: var(--muted); font-weight: 400; }
+details[open] summary::after { content: "−"; }
+details > .body { padding: 0 14px 14px; }
+.foot { font-size: 12px; color: var(--muted); margin-top: 8px; }
+
+.study-list { list-style: none; margin: 0; padding: 0; }
+.study-list li button {
+  width: 100%; text-align: left; font: inherit; background: none; border: 1px solid transparent; color: var(--ink);
+  border-radius: 8px; padding: 8px 10px; cursor: pointer; display: flex; justify-content: space-between; gap: 8px;
+}
+.study-list li button:hover { background: var(--surface-2); }
+.study-list li button[aria-current="true"] { background: var(--surface-2); border-color: var(--border); }
+.study-list small { color: var(--muted); }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.seg button { font: inherit; font-size: 12.5px; border: 0; background: var(--surface); color: var(--ink-2); padding: 5px 12px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button[aria-pressed="true"] { background: var(--surface-2); color: var(--ink); font-weight: 500; }
+pre.prompt { margin: 0; white-space: pre-wrap; background: var(--surface-2); border-radius: 8px; padding: 10px 12px; font-size: 12.5px; line-height: 1.55; }
+pre.prompt mark { background: var(--s1-soft); color: var(--ink); border-radius: 3px; padding: 0 2px; }
+.pill { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: var(--ink-2); }
+.pill i { font-style: normal; }
+.pill.ok i { color: var(--good); }
+.pill.missing i { color: var(--crit); }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.stat { font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.stat-label { font-size: 12px; color: var(--muted); }
+.stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+
+#tip {
+  position: fixed; pointer-events: none; z-index: 50; display: none;
+  background: var(--ink); color: var(--surface); border-radius: 8px; padding: 8px 10px;
+  font-size: 12px; line-height: 1.45; max-width: 300px; box-shadow: 0 4px 16px rgba(0,0,0,.18);
+}
+#tip b { font-weight: 600; }
+
+@media (max-width: 900px) {
+  header { gap: 12px; padding: 0 16px; overflow-x: auto; }
+  .header-right #jobs-indicator { display: none; }
+  main { padding: 16px; }
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .row { flex-wrap: wrap; }
+  .row > * { flex: 1 1 140px; }
+  .side { position: static; max-height: none; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .brand span { display: none; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">cftriage<span id="version"></span></div>
+  <nav role="tablist">
+    <button role="tab" data-view="playground" aria-selected="true">Playground</button>
+    <button role="tab" data-view="power" aria-selected="false">Power</button>
+    <button role="tab" data-view="studies" aria-selected="false">Studies</button>
+  </nav>
+  <div class="header-right">
+    <span id="jobs-indicator"></span>
+    <button id="theme" title="Toggle light/dark">◐</button>
+  </div>
+</header>
+
+<main>
+  <!-- ======================================================= Playground -->
+  <section class="view" id="view-playground">
+    <p class="intro">Simulated models with <strong>known</strong> behaviour, analyzed with the same statistics as a real study. Change the noise, plant a bias or add direction-free instability, and see which verdicts come out. Nothing here calls a real model.</p>
+    <div class="layout">
+      <div class="side">
+        <div class="panel stack">
+          <h3>Study design</h3>
+          <label class="field"><span>Cases <output id="pg-cases-o"></output></span>
+            <input type="range" id="pg-cases" min="30" max="500" step="10" value="200"></label>
+          <label class="field"><span>Samples per prompt <output id="pg-samples-o"></output></span>
+            <input type="range" id="pg-samples" min="1" max="20" step="1" value="10"></label>
+          <div class="row">
+            <label class="field"><span>Seed</span><input type="number" id="pg-seed" value="0" min="0"></label>
+            <label class="field"><span>Permutations</span>
+              <select id="pg-perm"><option>500</option><option selected>1000</option><option>2000</option><option>5000</option></select></label>
+          </div>
+        </div>
+        <div class="panel stack">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <h3>Simulated models</h3>
+            <button class="btn small" id="pg-add">+ Add</button>
+          </div>
+          <div id="pg-models"></div>
+          <button class="btn primary" id="pg-run" style="width:100%">Run simulation</button>
+          <p class="hint">At α = 0.05 a noise-only model is wrongly flagged about 1 time in 20. Change the seed to see it happen.</p>
+        </div>
+      </div>
+      <div>
+        <div id="pg-job"></div>
+        <div id="pg-results"><div class="panel empty"><strong>Run a simulation</strong>The three default models match <code>python -m cftriage demo</code>.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ Power -->
+  <section class="view" id="view-power" hidden>
+    <p class="intro">How many cases and samples you need to detect a female-vs-male shift with the primary (case-level sign-flip) test. Each point is the share of simulated studies where p &lt; 0.05.</p>
+    <div class="layout">
+      <div class="side">
+        <div class="panel stack">
+          <label class="field"><span>Case counts to try</span><input type="text" id="pw-cases" value="50, 70, 100, 200, 500"></label>
+          <label class="field"><span>Samples per prompt <output id="pw-samples-o"></output></span>
+            <input type="range" id="pw-samples" min="1" max="20" value="10"></label>
+          <label class="field"><span>Shift <output id="pw-shift-o"></output></span>
+            <input type="range" id="pw-shift" min="0" max="0.3" step="0.01" value="0.10"></label>
+          <p class="hint">Probability the female label pushes a single answer one ESI level less urgent. 0 gives the false-positive rate.</p>
+          <label class="field"><span>Model noise <output id="pw-noise-o"></output></span>
+            <input type="range" id="pw-noise" min="0" max="0.6" step="0.01" value="0.25"></label>
+          <p class="hint">Probability a sample moves one level from the case's level. Use the same-label disagreement from a pilot run.</p>
+          <label class="field"><span>Share of cases affected <output id="pw-aff-o"></output></span>
+            <input type="range" id="pw-aff" min="0.1" max="1" step="0.05" value="1"></label>
+          <label class="field"><span>Simulated studies per point</span>
+            <select id="pw-sims"><option>50</option><option selected>100</option><option>200</option><option>500</option></select></label>
+          <button class="btn primary" id="pw-run" style="width:100%">Estimate power</button>
+        </div>
+      </div>
+      <div>
+        <div id="pw-job"></div>
+        <div id="pw-results"><div class="panel empty"><strong>Estimate power</strong>Takes a few seconds per case count.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================== Studies -->
+  <section class="view" id="view-studies" hidden>
+    <p class="intro">Build a study from MIMIC-IV-ED, your own CSV or synthetic cases, query a model with repeated sampling, then analyze. Studies live in <code id="workspace"></code>.</p>
+    <div class="layout">
+      <div class="side">
+        <div class="panel">
+          <h3 style="margin-bottom:8px">Studies</h3>
+          <ul class="study-list" id="st-list"></ul>
+        </div>
+        <div class="panel stack">
+          <h3>New study</h3>
+          <label class="field"><span>Name</span><input type="text" id="nb-name" placeholder="study" value="study"></label>
+          <div class="seg" id="nb-source">
+            <button aria-pressed="true" data-v="synthetic">Synthetic</button>
+            <button aria-pressed="false" data-v="csv">CSV</button>
+            <button aria-pressed="false" data-v="mimic">MIMIC-IV-ED</button>
+          </div>
+          <label class="field" id="nb-n-wrap"><span>Synthetic cases</span><input type="number" id="nb-n" value="200" min="10"></label>
+          <label class="field" id="nb-path-wrap" hidden><span id="nb-path-label">Path</span><input type="text" id="nb-path" placeholder="~/data/mimic-iv-ed-demo"></label>
+          <p class="hint" id="nb-hint">Synthetic cases test the pipeline only; they say nothing about real models.</p>
+          <label class="field"><span>Max cases (optional)</span><input type="number" id="nb-max" min="1" placeholder="all"></label>
+          <label class="check"><input type="checkbox" id="nb-nb"> Add a “Sex: Non-binary” condition</label>
+          <label class="check"><input type="checkbox" id="nb-age"> Use “45-year-old woman” lines (needs age)</label>
+          <button class="btn primary" id="nb-build" style="width:100%">Build study</button>
+          <div id="nb-err"></div>
+        </div>
+      </div>
+      <div id="st-detail"><div class="panel empty"><strong>No study selected</strong>Build one on the left, or pick an existing one.</div></div>
+    </div>
+  </section>
+</main>
+<div id="tip" role="tooltip"></div>
+
+<script>
+"use strict";
+// ------------------------------------------------------------ utilities
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const isNum = x => typeof x === "number" && isFinite(x);
+const fp = x => !isNum(x) ? "–" : x < 0.001 ? "<0.001" : x.toFixed(3);
+const fs = (x, d = 3) => !isNum(x) ? "–" : (x >= 0 ? "+" : "−") + Math.abs(x).toFixed(d);
+const fpct = (x, d = 1) => !isNum(x) ? "–" : (100 * x).toFixed(d) + "%";
+const fspct = (x, d = 2) => !isNum(x) ? "–" : (x >= 0 ? "+" : "−") + (100 * Math.abs(x)).toFixed(d) + "%";
+const fci = (lo, hi, f = fs) => `[${f(lo)}, ${f(hi)}]`;
+const fn = (x, d = 3) => !isNum(x) ? "–" : x.toFixed(d);
+const store = {
+  get(k, d) { try { const v = localStorage.getItem("cftriage." + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem("cftriage." + k, JSON.stringify(v)); } catch {} },
+};
+
+async function api(path, body) {
+  const opt = body === undefined ? {} : { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) };
+  const r = await fetch(path, opt);
+  const j = await r.json().catch(() => ({ error: `HTTP ${r.status}` }));
+  if (!r.ok || (j && j.error && !j.id)) throw new Error(j.error || `HTTP ${r.status}`);
+  return j;
+}
+
+// ---------------------------------------------------------------- jobs
+function jobWidget(host, jobId, { onDone, cancelLabel = "Cancel", note = "" } = {}) {
+  host.innerHTML = `<div class="job"><div class="top"><span class="msg">Starting…</span><span class="mono" data-t></span></div>
+    <div class="bar indet"><div style="width:0"></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="hint" data-p></span>
+    <button class="btn small" data-cancel>${esc(cancelLabel)}</button></div>${note ? `<p class="hint" style="margin-top:6px">${note}</p>` : ""}</div>`;
+  const msg = $(".msg", host), bar = $(".bar", host), fill = $(".bar > div", host), pt = $("[data-p]", host), tt = $("[data-t]", host);
+  const btn = $("[data-cancel]", host);
+  btn.onclick = async () => { btn.disabled = true; btn.textContent = "Stopping…"; await api(`/api/jobs/${jobId}/cancel`, {}).catch(() => {}); };
+  let stopped = false;
+  const tick = async () => {
+    if (stopped) return;
+    let j;
+    try { j = await api(`/api/jobs/${jobId}`); } catch (e) { msg.textContent = e.message; return setTimeout(tick, 1500); }
+    msg.textContent = j.message || j.label || j.kind;
+    tt.textContent = j.elapsed < 60 ? `${j.elapsed.toFixed(0)}s` : `${Math.floor(j.elapsed / 60)}m ${Math.round(j.elapsed % 60)}s`;
+    const frac = j.total ? j.progress / j.total : 0;
+    if (j.total > 1 || j.progress > 0) { bar.classList.remove("indet"); fill.style.width = (100 * frac).toFixed(1) + "%"; }
+    pt.textContent = j.total > 1 ? `${j.progress.toLocaleString()} / ${j.total.toLocaleString()}` : "";
+    if (j.status === "running") return setTimeout(tick, 600);
+    stopped = true;
+    if (j.status === "error") host.innerHTML = `<div class="error">${esc(j.error)}</div>`;
+    else if (j.status === "cancelled" && !j.result) host.innerHTML = `<div class="callout">Cancelled.</div>`;
+    else host.innerHTML = j.status === "cancelled" ? `<div class="callout">Stopped. Completed work was kept.</div>` : "";
+    refreshJobs();
+    onDone && onDone(j);
+  };
+  tick();
+  return { stop() { stopped = true; } };
+}
+async function refreshJobs() {
+  try {
+    const js = await api("/api/jobs");
+    const n = js.filter(j => j.status === "running").length;
+    $("#jobs-indicator").textContent = n ? `${n} job${n > 1 ? "s" : ""} running` : "";
+    return js;
+  } catch { return []; }
+}
+
+// -------------------------------------------------------------- tooltip
+const tip = $("#tip");
+document.addEventListener("mousemove", e => {
+  const t = e.target.closest && e.target.closest("[data-tip]");
+  if (!t) { tip.style.display = "none"; return; }
+  tip.innerHTML = t.getAttribute("data-tip");
+  tip.style.display = "block";
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let x = e.clientX + 14, y = e.clientY + 14;
+  if (x + w > innerWidth - 8) x = e.clientX - w - 14;
+  if (y + h > innerHeight - 8) y = e.clientY - h - 14;
+  tip.style.left = x + "px"; tip.style.top = y + "px";
+});
+document.addEventListener("scroll", () => tip.style.display = "none", true);
+
+// --------------------------------------------------------------- charts
+function niceTicks(lo, hi, n = 5) {
+  const span = hi - lo || 1, step0 = span / n, mag = Math.pow(10, Math.floor(Math.log10(step0)));
+  const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => span / s <= n) || 10 * mag;
+  const out = []; for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) out.push(+v.toFixed(10));
+  return out;
+}
+// Bar path with 4px rounded data end, square at the baseline.
+function hbar(x0, x1, y, h, r = 4) {
+  const w = x1 - x0; if (Math.abs(w) < 0.5) return "";
+  const s = Math.sign(w), rr = Math.min(r, Math.abs(w), h / 2);
+  return `M${x0},${y}H${x1 - s * rr}Q${x1},${y} ${x1},${y + rr}V${y + h - rr}Q${x1},${y + h} ${x1 - s * rr},${y + h}H${x0}Z`;
+}
+function vbar(x, w, y0, y1, r = 4) {
+  const h = y0 - y1; if (h < 0.5) return "";
+  const rr = Math.min(r, h, w / 2);
+  return `M${x},${y0}V${y1 + rr}Q${x},${y1} ${x + rr},${y1}H${x + w - rr}Q${x + w},${y1} ${x + w},${y1 + rr}V${y0}Z`;
+}
+
+// Forest plot: one row per item {label, sub, est, lo, hi, sig, tip}
+function forest(items, { xlabel = "", labelW = 250 } = {}) {
+  if (!items.length) return `<p class="hint">Nothing to plot.</p>`;
+  const W = 760, rowH = 34, top = 10, bottom = 40, H = top + rowH * items.length + bottom;
+  const vals = items.flatMap(d => [d.lo, d.hi, d.est]).filter(isNum);
+  let lo = Math.min(0, ...vals), hi = Math.max(0, ...vals);
+  const pad = (hi - lo) * 0.08 || 0.05; lo -= pad; hi += pad;
+  const x0 = labelW, x1 = W - 16, X = v => x0 + (v - lo) / (hi - lo) * (x1 - x0);
+  let g = "";
+  for (const t of niceTicks(lo, hi, 6)) {
+    g += `<line x1="${X(t)}" x2="${X(t)}" y1="${top}" y2="${H - bottom}" stroke="var(--grid)"/>`;
+    g += `<text x="${X(t)}" y="${H - bottom + 16}" text-anchor="middle" font-size="11" fill="var(--muted)">${t === 0 ? "0" : fs(t, 2)}</text>`;
+  }
+  g += `<line x1="${X(0)}" x2="${X(0)}" y1="${top}" y2="${H - bottom}" stroke="var(--muted)" stroke-dasharray="3 3"/>`;
+  items.forEach((d, i) => {
+    const y = top + rowH * i + rowH / 2;
+    g += `<g data-tip="${esc(d.tip)}">`;
+    g += `<rect x="0" y="${y - rowH / 2}" width="${W}" height="${rowH}" fill="transparent"/>`;
+    g += `<text x="0" y="${y - (d.sub ? 2 : -4)}" font-size="12.5" fill="var(--ink)">${esc(d.label)}</text>`;
+    if (d.sub) g += `<text x="0" y="${y + 12}" font-size="11" fill="var(--muted)">${esc(d.sub)}</text>`;
+    if (isNum(d.lo) && isNum(d.hi)) g += `<line x1="${X(d.lo)}" x2="${X(d.hi)}" y1="${y}" y2="${y}" stroke="var(--s1)" stroke-width="2" stroke-linecap="round"/>`;
+    if (isNum(d.est)) g += `<circle cx="${X(d.est)}" cy="${y}" r="5" stroke="var(--s1)" stroke-width="2" fill="${d.sig ? "var(--s1)" : "var(--surface)"}"/>`;
+    g += `</g>`;
+  });
+  g += `<text x="${(x0 + x1) / 2}" y="${H - 6}" text-anchor="middle" font-size="11.5" fill="var(--ink-2)">${esc(xlabel)}</text>`;
+  return `<div class="chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(xlabel)}">${g}</svg></div>`;
+}
+
+// Grouped horizontal bars: same-label vs different-label disagreement.
+function noiseChart(models) {
+  const names = Object.keys(models);
+  const W = 760, labelW = 200, groupH = 52, top = 4, bottom = 34, bh = 16, H = top + groupH * names.length + bottom;
+  const mx = Math.max(0.01, ...names.flatMap(m => [models[m].omnibus.within_disagreement, models[m].omnibus.between_disagreement])) * 1.18;
+  const x0 = labelW, x1 = W - 16, X = v => x0 + v / mx * (x1 - x0);
+  let g = "";
+  for (const t of niceTicks(0, mx, 5)) {
+    g += `<line x1="${X(t)}" x2="${X(t)}" y1="${top}" y2="${H - bottom}" stroke="var(--grid)"/>`;
+    g += `<text x="${X(t)}" y="${H - bottom + 16}" text-anchor="middle" font-size="11" fill="var(--muted)">${Math.round(t * 100)}%</text>`;
+  }
+  names.forEach((m, i) => {
+    const o = models[m].omnibus, y = top + groupH * i + 8;
+    const tipTxt = `<b>${esc(m)}</b><br>Same label: ${fpct(o.within_disagreement)}<br>Different labels: ${fpct(o.between_disagreement)}<br>Excess: ${fspct(o.excess_disagreement)} (p = ${fp(o.p_excess_disagreement)})`;
+    g += `<g data-tip="${esc(tipTxt)}"><rect x="0" y="${y - 6}" width="${W}" height="${groupH}" fill="transparent"/>`;
+    g += `<text x="0" y="${y + bh + 2}" font-size="12.5" fill="var(--ink)">${esc(m)}</text>`;
+    g += `<path d="${hbar(x0, X(o.within_disagreement), y, bh)}" fill="var(--s1)"/>`;
+    g += `<path d="${hbar(x0, X(o.between_disagreement), y + bh + 2, bh)}" fill="var(--s2)"/>`;
+    g += `<text x="${X(o.within_disagreement) + 6}" y="${y + bh - 4}" font-size="11" fill="var(--ink-2)">${fpct(o.within_disagreement)}</text>`;
+    g += `<text x="${X(o.between_disagreement) + 6}" y="${y + 2 * bh - 2}" font-size="11" fill="var(--ink-2)">${fpct(o.between_disagreement)}</text>`;
+    g += `</g>`;
+  });
+  g += `<text x="${(x0 + x1) / 2}" y="${H - 4}" text-anchor="middle" font-size="11.5" fill="var(--ink-2)">Chance two answers to the same case disagree</text>`;
+  return `<div class="legend"><span><i style="background:var(--s1)"></i>Same label (the model's own noise)</span><span><i style="background:var(--s2)"></i>Different labels</span></div>
+    <div class="chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Disagreement within vs between labels">${g}</svg></div>`;
+}
+
+function powerChart(rows) {
+  const W = 760, H = 300, left = 44, right = 72, top = 24, bottom = 44;
+  const n = rows.length, slot = (W - left - right) / n, bw = Math.min(56, slot * 0.55);
+  const Y = v => top + (1 - v) * (H - top - bottom);
+  let g = "";
+  for (const t of [0, 0.2, 0.4, 0.6, 0.8, 1]) {
+    g += `<line x1="${left}" x2="${W - right}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--grid)"/>`;
+    g += `<text x="${left - 8}" y="${Y(t) + 4}" text-anchor="end" font-size="11" fill="var(--muted)">${t * 100}%</text>`;
+  }
+  g += `<line x1="${left}" x2="${W - right}" y1="${Y(0.8)}" y2="${Y(0.8)}" stroke="var(--muted)" stroke-dasharray="4 3"/>`;
+  g += `<text x="${W - right + 6}" y="${Y(0.8) + 4}" font-size="11" fill="var(--ink-2)">80% target</text>`;
+  rows.forEach((r, i) => {
+    const cx = left + slot * i + slot / 2;
+    const t = `<b>${r.cases} cases × ${r.samples} samples</b><br>Power: ${fpct(r.power, 0)} (${r.sims} simulated studies)<br>True mean shift ≈ ${fs(r.mean_effect)} ESI`;
+    g += `<g data-tip="${esc(t)}"><rect x="${cx - slot / 2}" y="${top}" width="${slot}" height="${H - top - bottom}" fill="transparent"/>`;
+    g += `<path d="${vbar(cx - bw / 2, bw, Y(0), Y(r.power))}" fill="var(--s1)"/>`;
+    g += `<text x="${cx}" y="${Y(r.power) - 6}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">${fpct(r.power, 0)}</text>`;
+    g += `<text x="${cx}" y="${H - bottom + 18}" text-anchor="middle" font-size="12" fill="var(--ink-2)">${r.cases}</text></g>`;
+  });
+  g += `<text x="${(left + W - right) / 2}" y="${H - 6}" text-anchor="middle" font-size="11.5" fill="var(--ink-2)">Cases</text>`;
+  return `<div class="chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Power by number of cases">${g}</svg></div>`;
+}
+
+// ------------------------------------------------------- results render
+const CONTRAST_ROWS = [
+  ["Mean ESI shift", c => fs(c.mean_shift)],
+  ["95% CI (cluster t)", c => fci(c.ci_low, c.ci_high)],
+  ["95% CI (case bootstrap)", c => fci(c.ci_boot_low, c.ci_boot_high)],
+  ["p case-level sign-flip (primary)", c => fp(c.p_case)],
+  ["p within-case permutation (sharp null)", c => fp(c.p_sharp)],
+  ["q (BH, all contrasts)", c => fp(c.q)],
+  ["p Wilcoxon / sign", c => `${fp(c.p_wilcoxon)} / ${fp(c.p_sign)}`],
+  ["Cohen's d_z", c => fn(c.cohen_dz)],
+  ["Cases first group less / more urgent", c => `${c.n_cases_a_less_urgent} / ${c.n_cases_a_more_urgent}`],
+  ["Δ P(ESI ≤ 2) [95% CI]", c => `${fs(c.high_acuity_diff)} ${c.high_acuity_ci ? fci(...c.high_acuity_ci) : ""}`],
+  ["p Δ P(ESI ≤ 2)", c => fp(c.p_high_acuity)],
+  ["Δ under-triage of nurse ESI 1–2", c => `${fs(c.undertriage_diff)} ${c.undertriage_ci ? fci(...c.undertriage_ci) : ""} (n=${c.n_true_high})`],
+  ["Modal flip rate (all samples)", c => fpct(c.modal_flip_rate)],
+  ["Modal flip, half samples vs noise floor", c => `${fpct(c.modal_flip_rate_halfsample)} vs ${fpct(c.modal_noise_floor)}`],
+  ["Directional ratio (modal)", c => `${fn(c.directional_ratio, 2)} ${c.directional_ratio_ci ? fci(...c.directional_ratio_ci, v => fn(v, 2)) : ""} (${c.modal_a_worse}:${c.modal_b_worse})`],
+  ["Stuart–Maxwell p (modal)", c => fp(c.stuart_maxwell_p)],
+  ["McNemar p, ESI ≤ 2 (modal)", c => fp(c.mcnemar_high_p)],
+  ["One-shot flip rate (single sample)", c => fpct(c.single_sample_flip_rate)],
+  ["One-shot retest flip (same prompt)", c => fpct(c.single_sample_retest_flip)],
+];
+
+function omnibusBadge(o) {
+  return o.p_omnibus < 0.05
+    ? `<span class="badge warn"><i>▲</i>Label changes answers</span>`
+    : `<span class="badge good"><i>✓</i>No effect beyond noise</span>`;
+}
+function directionBadge(c) {
+  return c.direction_significant
+    ? `<span class="badge crit"><i>●</i>${esc(c.less_urgent_group)} triaged less urgently</span>`
+    : `<span class="badge neutral"><i>○</i>No reliable direction</span>`;
+}
+
+function renderResults(host, res, { reportPath } = {}) {
+  const models = res.models, cs = res.contrasts;
+  let h = "";
+  // --- summary cards
+  h += `<div class="cards">`;
+  for (const [m, r] of Object.entries(models)) {
+    const o = r.omnibus, mc = cs.filter(c => c.model === m);
+    const anyDir = mc.some(c => c.direction_significant);
+    h += `<div class="panel mcard stack"><h2><span>${esc(m)}</span><small>${r.n_cases} cases × ${o.conditions.length} labels × ~${r.samples_per_cell.toFixed(0)}</small></h2>`;
+    h += `<div>${omnibusBadge(o)}</div>`;
+    h += `<dl class="kv"><dt>Same label disagree (noise)</dt><dd>${fpct(o.within_disagreement)}</dd>
+      <dt>Different labels disagree</dt><dd>${fpct(o.between_disagreement)}</dd>
+      <dt>Omnibus p (Bonferroni)</dt><dd>${fp(o.p_omnibus)}</dd></dl>`;
+    for (const c of mc) {
+      h += `<div class="contrast"><div class="line"><strong>${esc(c.a)} vs ${esc(c.b)}</strong><span class="num">${fs(c.mean_shift)} ${fci(c.ci_low, c.ci_high)} · q ${fp(c.q)}</span></div><div style="margin-top:6px">${directionBadge(c)}</div></div>`;
+    }
+    if (o.p_omnibus < 0.05 && !anyDir) h += `<p class="callout">The label moves answers but in no consistent direction: a reliability problem, not evidence of bias against one group.</p>`;
+    if (r.parse && r.parse.p < 0.05) h += `<p class="callout">Parse failures differ by label (p = ${fp(r.parse.p)}). Dropping them is itself a biased filter.</p>`;
+    h += `</div>`;
+  }
+  h += `</div>`;
+
+  // --- charts
+  h += `<div class="panel" style="margin-top:16px"><h2>Label effect on ESI</h2><p class="hint" style="margin:2px 0 8px">Mean shift per case with 95% CI. Positive means the first-named group was triaged less urgently.</p>`;
+  h += `<div class="legend"><span><i class="dot"></i>q &lt; 0.05 (BH-adjusted)</span><span><i class="ring"></i>not significant</span></div>`;
+  h += forest(cs.map(c => ({
+    label: `${c.a} vs ${c.b}`, sub: c.model, est: c.mean_shift, lo: c.ci_low, hi: c.ci_high, sig: c.direction_significant,
+    tip: `<b>${esc(c.model)}</b> · ${esc(c.a)} vs ${esc(c.b)}<br>Shift ${fs(c.mean_shift)} ${fci(c.ci_low, c.ci_high)}<br>p ${fp(c.p_case)} · q ${fp(c.q)}<br>${esc(c.verdict)}`,
+  })), { xlabel: "Mean ESI shift (positive = first group triaged less urgently)" });
+  h += `</div>`;
+  h += `<div class="panel"><h2>Is the label effect bigger than the model's own noise?</h2>${noiseChart(models)}</div>`;
+
+  // --- per-model detail
+  h += `<div style="margin-top:16px">`;
+  for (const [m, r] of Object.entries(models)) {
+    const mc = cs.filter(c => c.model === m), o = r.omnibus;
+    h += `<details><summary>${esc(m)}: full statistics</summary><div class="body stack">`;
+    h += `<div><h3 style="margin-bottom:6px">Does the label matter at all?</h3><dl class="kv">
+      <dt>Excess disagreement</dt><dd>${fspct(o.excess_disagreement)} (null 95th pct ${fspct(o.excess_disagreement_null_95)}), p ${fp(o.p_excess_disagreement)}</dd>
+      <dt>Mean-shift omnibus (SSB)</dt><dd>p ${fp(o.p_ssb)}</dd>
+      <dt>Parse failures by label</dt><dd>${(r.parse.by_condition || []).map(x => `${esc(x.condition)} ${fpct(x.rate)}`).join(", ")}; χ² p ${fp(r.parse.p)}</dd></dl></div>`;
+    if (mc.length) {
+      h += `<div class="scroll-x"><table class="data"><thead><tr><th></th>${mc.map(c => `<th>${esc(c.a)} vs ${esc(c.b)}</th>`).join("")}</tr></thead><tbody>`;
+      for (const [name, f] of CONTRAST_ROWS) h += `<tr><td>${name}</td>${mc.map(c => `<td>${esc(f(c))}</td>`).join("")}</tr>`;
+      h += `</tbody></table></div><p class="foot">The last two rows are what a single-sample design would report. If they are close, flips in such designs are mostly noise.</p>`;
+    }
+    if (r.accuracy && r.accuracy.length) {
+      h += `<div><h3 style="margin-bottom:6px">Agreement with nurse ESI</h3><div class="scroll-x"><table class="data"><thead><tr><th>Label</th><th>Exact</th><th>Within ±1</th><th>Weighted κ</th><th>Under-triage</th><th>Over-triage</th><th>ESI ≤ 2</th></tr></thead><tbody>`;
+      for (const a of r.accuracy) h += `<tr><td>${esc(a.condition)}</td><td>${fpct(a.exact_match)}</td><td>${fpct(a.within_1)}</td><td>${fn(a.weighted_kappa)}</td><td>${fpct(a.under_triage)}</td><td>${fpct(a.over_triage)}</td><td>${fpct(a.share_high_acuity)}</td></tr>`;
+      h += `</tbody></table></div><p class="foot">Nurse labels are human decisions and may themselves be biased; treat as context, not truth.</p></div>`;
+    }
+    if (r.by_category && r.by_category.length) {
+      const bc = [...r.by_category].sort((a, b) => a.category.localeCompare(b.category));
+      h += `<div><h3 style="margin-bottom:6px">Female vs male by complaint category (exploratory)</h3>`;
+      h += forest(bc.map(t => ({ label: t.category, sub: `n = ${t.n_cases}`, est: t.mean_shift, lo: t.ci_low, hi: t.ci_high, sig: t.q_bh < 0.05,
+        tip: `<b>${esc(t.category)}</b> (n = ${t.n_cases})<br>Shift ${fs(t.mean_shift)} ${fci(t.ci_low, t.ci_high)}<br>p ${fp(t.p_case)} · q ${fp(t.q_bh)}` })),
+        { xlabel: "Female − male ESI shift", labelW: 200 });
+      h += `</div>`;
+    }
+    h += `</div></details>`;
+  }
+  h += `</div>`;
+  if (reportPath) h += `<p class="foot">Markdown report and figures written to <code>${esc(reportPath)}</code></p>`;
+  host.innerHTML = h;
+}
+
+// ------------------------------------------------------------- routing
+function show(view) {
+  $$("nav button").forEach(b => b.setAttribute("aria-selected", b.dataset.view === view));
+  $$(".view").forEach(v => v.hidden = v.id !== "view-" + view);
+  store.set("view", view);
+  if (view === "studies") loadStudies();
+}
+$$("nav button").forEach(b => b.onclick = () => show(b.dataset.view));
+$("#theme").onclick = () => {
+  const cur = document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  const next = cur === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = next; store.set("theme", next);
+};
+const savedTheme = store.get("theme", null); if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+
+function bindRange(id, fmt = v => v) {
+  const i = $("#" + id), o = $("#" + id + "-o");
+  const u = () => o.textContent = fmt(+i.value); i.addEventListener("input", u); u();
+}
+
+// ---------------------------------------------------------- playground
+const PRESETS = {
+  "Noise only": { name: "sim-noise-only", noise: 0.25, female_shift: 0, instability: 0, model_disagreement: 0.4 },
+  "Female under-triage": { name: "sim-female-undertriage", noise: 0.25, female_shift: 0.12, instability: 0, model_disagreement: 0.4 },
+  "Unstable, no direction": { name: "sim-unstable-no-direction", noise: 0.25, female_shift: 0, instability: 0.25, model_disagreement: 0.4 },
+};
+const PARAMS = [
+  ["noise", "Sampling noise", 0, 0.6, 0.01, "P(a sample moves one level up or down)"],
+  ["female_shift", "Female under-triage", 0, 0.4, 0.01, "P(a female-labelled sample moves one level less urgent)"],
+  ["instability", "Label instability", 0, 0.6, 0.01, "P(a label gets a fixed random ±1 offset for a case): label sensitivity with no direction"],
+  ["model_disagreement", "Disagreement with nurse", 0, 0.8, 0.01, "P(the model's base level differs by one from the nurse ESI); unrelated to labels"],
+];
+let pgModels = store.get("pg-models", Object.values(PRESETS).map(p => ({ ...p })));
+function renderPgModels() {
+  const host = $("#pg-models");
+  host.innerHTML = pgModels.map((m, i) => `<div class="model-card stack" data-i="${i}">
+    <div class="head"><input type="text" value="${esc(m.name)}" data-k="name" aria-label="Model name">
+      <button class="icon-btn" data-rm title="Remove" aria-label="Remove model">×</button></div>
+    ${PARAMS.map(([k, lab, mn, mx, st, help]) => `<label class="field" title="${esc(help)}"><span>${lab} <output>${(+m[k] || 0).toFixed(2)}</output></span>
+      <input type="range" min="${mn}" max="${mx}" step="${st}" value="${+m[k] || 0}" data-k="${k}"></label>`).join("")}
+    <div class="presets">${Object.keys(PRESETS).map(p => `<button class="chip" data-preset="${esc(p)}">${esc(p)}</button>`).join("")}</div>
+  </div>`).join("") || `<p class="hint">No models. Add one.</p>`;
+  $$(".model-card", host).forEach(card => {
+    const i = +card.dataset.i;
+    $$("[data-k]", card).forEach(inp => inp.addEventListener("input", () => {
+      const k = inp.dataset.k;
+      pgModels[i][k] = k === "name" ? inp.value : +inp.value;
+      if (k !== "name") inp.previousElementSibling.querySelector("output").textContent = (+inp.value).toFixed(2);
+      store.set("pg-models", pgModels);
+    }));
+    $("[data-rm]", card).onclick = () => { pgModels.splice(i, 1); store.set("pg-models", pgModels); renderPgModels(); };
+    $$("[data-preset]", card).forEach(b => b.onclick = () => { pgModels[i] = { ...PRESETS[b.dataset.preset] }; store.set("pg-models", pgModels); renderPgModels(); });
+  });
+  $("#pg-add").disabled = pgModels.length >= 6;
+}
+$("#pg-add").onclick = () => { pgModels.push({ ...PRESETS["Noise only"], name: `sim-${pgModels.length + 1}` }); store.set("pg-models", pgModels); renderPgModels(); };
+bindRange("pg-cases"); bindRange("pg-samples");
+renderPgModels();
+$("#pg-run").onclick = async () => {
+  const btn = $("#pg-run"), names = pgModels.map(m => m.name.trim());
+  if (new Set(names).size !== names.length || names.some(n => !n)) { $("#pg-job").innerHTML = `<div class="error">Give every model a different, non-empty name.</div>`; return; }
+  btn.disabled = true;
+  try {
+    const { job } = await api("/api/simulate", { cases: +$("#pg-cases").value, samples: +$("#pg-samples").value, seed: +$("#pg-seed").value, n_perm: +$("#pg-perm").value, models: pgModels });
+    jobWidget($("#pg-job"), job, { onDone: j => { btn.disabled = false; if (j.result) renderResults($("#pg-results"), j.result); } });
+    refreshJobs();
+  } catch (e) { btn.disabled = false; $("#pg-job").innerHTML = `<div class="error">${esc(e.message)}</div>`; }
+};
+
+// --------------------------------------------------------------- power
+bindRange("pw-samples"); bindRange("pw-shift", v => v.toFixed(2)); bindRange("pw-noise", v => v.toFixed(2)); bindRange("pw-aff", v => fpct(v, 0));
+$("#pw-run").onclick = async () => {
+  const btn = $("#pw-run");
+  const cases = $("#pw-cases").value.split(/[\s,]+/).map(Number).filter(n => n >= 5 && n <= 5000);
+  if (!cases.length) { $("#pw-job").innerHTML = `<div class="error">Enter case counts between 5 and 5000.</div>`; return; }
+  btn.disabled = true;
+  try {
+    const { job } = await api("/api/power", { cases: [...new Set(cases)].sort((a, b) => a - b), samples: +$("#pw-samples").value, shift: +$("#pw-shift").value,
+      noise: +$("#pw-noise").value, affected: +$("#pw-aff").value, sims: +$("#pw-sims").value });
+    jobWidget($("#pw-job"), job, { onDone: j => { btn.disabled = false; if (j.result) renderPower(j.result.rows); } });
+    refreshJobs();
+  } catch (e) { btn.disabled = false; $("#pw-job").innerHTML = `<div class="error">${esc(e.message)}</div>`; }
+};
+function renderPower(rows) {
+  if (!rows.length) { $("#pw-results").innerHTML = ""; return; }
+  const r0 = rows[0];
+  const first80 = rows.find(r => r.power >= 0.8);
+  const head = r0.shift === 0
+    ? `With no planted effect, these are false-positive rates; they should sit near 5%.`
+    : first80 ? `About <strong>${first80.cases} cases</strong> × ${r0.samples} samples reach 80% power for a shift of ${r0.shift.toFixed(2)}.`
+    : `None of these case counts reach 80% power for a shift of ${r0.shift.toFixed(2)}. Add cases or samples.`;
+  let h = `<div class="panel"><h2>Power, female vs male</h2><p class="hint" style="margin:2px 0 12px">${head}</p>${powerChart(rows)}</div>`;
+  h += `<div class="panel"><div class="scroll-x"><table class="data"><thead><tr><th>Cases</th><th>Samples</th><th>Calls per model (3 labels)</th><th>True mean shift</th><th>Power</th></tr></thead><tbody>`;
+  for (const r of rows) h += `<tr><td>${r.cases}</td><td>${r.samples}</td><td>${(r.cases * r.samples * 3).toLocaleString()}</td><td>${fs(r.mean_effect)}</td><td>${fpct(r.power, 0)}</td></tr>`;
+  h += `</tbody></table></div><p class="foot">${r0.sims} simulated studies per row; Monte Carlo SE ≈ ${fpct(Math.sqrt(0.25 / r0.sims), 0)} at 50% power. Model noise ${r0.noise.toFixed(2)}.</p></div>`;
+  $("#pw-results").innerHTML = h;
+}
+
+// ------------------------------------------------------------- studies
+let info = null, current = store.get("study", null), studyJobs = {};
+let nbSource = "synthetic";
+$$("#nb-source button").forEach(b => b.onclick = () => {
+  nbSource = b.dataset.v;
+  $$("#nb-source button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  $("#nb-n-wrap").hidden = nbSource !== "synthetic";
+  $("#nb-path-wrap").hidden = nbSource === "synthetic";
+  $("#nb-path-label").textContent = nbSource === "csv" ? "CSV file" : "Folder with ed/edstays.csv.gz and ed/triage.csv.gz";
+  $("#nb-path").placeholder = nbSource === "csv" ? "~/data/cases.csv" : "~/data/mimic-iv-ed-demo";
+  $("#nb-hint").innerHTML = {
+    synthetic: "Synthetic cases test the pipeline only; they say nothing about real models.",
+    csv: "Columns: case_id, chief_complaint, heart_rate, resp_rate, spo2, sbp, dbp, temperature, pain, esi_true (and optionally age).",
+    mimic: `Open-access demo: <a href="https://physionet.org/content/mimic-iv-ed-demo/2.2/" target="_blank" rel="noopener">physionet.org</a>. Check the data use agreement before sending the full MIMIC-IV-ED to a commercial API.`,
+  }[nbSource];
+});
+$("#nb-build").onclick = async () => {
+  const btn = $("#nb-build"); btn.disabled = true; $("#nb-err").innerHTML = "";
+  try {
+    const d = await api("/api/studies", { name: $("#nb-name").value.trim(), source: nbSource, n: +$("#nb-n").value, path: $("#nb-path").value.trim(),
+      max_cases: +$("#nb-max").value || null, nonbinary: $("#nb-nb").checked, with_age: $("#nb-age").checked });
+    current = d.name; store.set("study", current);
+    await loadStudies();
+  } catch (e) { $("#nb-err").innerHTML = `<div class="error">${esc(e.message)}</div>`; }
+  btn.disabled = false;
+};
+
+async function loadStudies() {
+  if (!info) { info = await api("/api/info"); $("#workspace").textContent = info.workspace; }
+  const list = await api("/api/studies");
+  $("#st-list").innerHTML = list.length ? list.map(s => `<li><button data-s="${esc(s.name)}" aria-current="${s.name === current}"><span>${esc(s.name)}</span><small>${s.n_cases} cases · ${s.n_results} run${s.n_results === 1 ? "" : "s"}</small></button></li>`).join("")
+    : `<li class="hint">No studies yet.</li>`;
+  $$("#st-list button").forEach(b => b.onclick = () => { current = b.dataset.s; store.set("study", current); loadStudies(); });
+  if (current && list.some(s => s.name === current)) loadStudy(current);
+}
+
+const PROVIDERS = [
+  ["anthropic", "claude-sonnet-4-6"], ["openai", "gpt-5.4-mini"], ["gemini", "gemini-3.5-flash"],
+  ["openrouter", "deepseek/deepseek-v3.2"], ["ollama", "llama3.3"], ["litellm", "provider/model"], ["simulated", ""],
+];
+
+async function loadStudy(name) {
+  const host = $("#st-detail");
+  let d;
+  try { d = await api(`/api/studies/${encodeURIComponent(name)}`); } catch (e) { host.innerHTML = `<div class="error">${esc(e.message)}</div>`; return; }
+  const runForm = store.get("run-form", { provider: "anthropic", model: "", name: "", samples: 10, temperature: 1, max_tokens: 64, concurrency: 4 });
+  let h = `<div class="panel stack"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><h2 style="font-size:18px">${esc(d.name)}</h2><code class="hint">${esc(d.path)}</code></div>
+    <div class="stats">
+      <div><div class="stat">${d.n_cases.toLocaleString()}</div><div class="stat-label">cases kept</div></div>
+      <div><div class="stat">${d.excluded.toLocaleString()}</div><div class="stat-label">excluded</div></div>
+      <div><div class="stat">${d.conditions.length}</div><div class="stat-label">labels</div></div>
+      <div><div class="stat">${d.n_prompts.toLocaleString()}</div><div class="stat-label">prompts</div></div>
+    </div>`;
+  const reasons = Object.entries(d.exclusion_reasons);
+  if (reasons.length) h += `<p class="hint">Excluded: ${reasons.map(([k, v]) => `${esc(k)} (${v})`).join(", ")}</p>`;
+  h += `<div><h3 style="margin-bottom:6px">Example prompt</h3><div class="seg" id="ex-tabs">${d.example.map((e, i) => `<button aria-pressed="${i === 0}" data-i="${i}">${esc(e.condition)}</button>`).join("")}</div>
+    <pre class="prompt" id="ex-prompt" style="margin-top:8px"></pre><p class="foot">Only the highlighted line differs between labels. The clinical text is checked to be byte-identical.</p></div>
+    <details><summary>System prompt</summary><div class="body"><pre class="prompt">${esc(d.system_prompt)}</pre></div></details></div>`;
+
+  // runs table
+  h += `<div class="panel stack"><h2>Model runs</h2>`;
+  if (d.results.length) {
+    h += `<div class="scroll-x"><table class="data"><thead><tr><th>Model</th><th>Samples</th><th>Answers</th><th>Of expected</th><th>Errors</th><th>Unparsed</th></tr></thead><tbody>`;
+    for (const r of d.results) {
+      const exp = d.n_prompts * r.samples;
+      h += `<tr><td>${esc(r.model)}</td><td>${r.samples}</td><td>${(r.n_records - r.n_errors).toLocaleString()}</td><td>${fpct((r.n_records - r.n_errors) / exp, 0)}</td><td>${r.n_errors}</td><td>${r.n_unparsed}</td></tr>`;
+    }
+    h += `</tbody></table></div>`;
+  } else h += `<p class="hint">No runs yet.</p>`;
+
+  // run form
+  h += `<h3>Run a model</h3>
+    <div class="row"><label class="field" style="flex:0 0 150px"><span>Provider</span><select id="rf-provider">${PROVIDERS.map(([p]) => `<option ${p === runForm.provider ? "selected" : ""}>${p}</option>`).join("")}</select></label>
+      <label class="field"><span>Model ID</span><input type="text" id="rf-model" value="${esc(runForm.model)}"></label></div>
+    <div id="rf-key"></div>
+    <div class="row"><label class="field"><span>Report name (optional)</span><input type="text" id="rf-name" value="${esc(runForm.name)}" placeholder="defaults to provider:model"></label></div>
+    <div class="row">
+      <label class="field"><span>Samples</span><input type="number" id="rf-samples" min="1" max="50" value="${runForm.samples}"></label>
+      <label class="field"><span>Temperature</span><input type="number" id="rf-temp" min="0" max="2" step="0.1" value="${runForm.temperature}"></label>
+      <label class="field"><span>Max tokens</span><input type="number" id="rf-tok" min="8" max="4096" value="${runForm.max_tokens}"></label>
+      <label class="field"><span>Concurrency</span><input type="number" id="rf-conc" min="1" max="32" value="${runForm.concurrency}"></label>
+    </div>
+    <p class="hint" id="rf-count"></p>
+    <div class="btn-row"><button class="btn" id="rf-test">Test 1 call</button><button class="btn primary" id="rf-run">Start run</button></div>
+    <div id="rf-out"></div><div id="rf-job"></div></div>`;
+
+  // analyze
+  h += `<div class="panel stack"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h2>Analysis</h2>
+    <div class="btn-row"><label class="check">Permutations <select id="an-perm" style="width:auto"><option>1000</option><option selected>2000</option><option>5000</option></select></label>
+    <button class="btn primary" id="an-run" ${d.results.length ? "" : "disabled"}>Analyze all runs</button></div></div>
+    ${d.report ? `<p class="hint">Last report: <code>${esc(d.report)}</code></p>` : ""}<div id="an-job"></div></div><div id="an-results"></div>`;
+  host.innerHTML = h;
+
+  // example prompt tabs
+  const showEx = i => {
+    const e = d.example[i], line = d.conditions.find(c => c.name === e.condition)?.line;
+    const firstLine = e.prompt.split("\n")[0];
+    const isDemo = line && (firstLine.startsWith("Sex:") || firstLine.startsWith("Patient:"));
+    $("#ex-prompt").innerHTML = isDemo ? `<mark>${esc(firstLine)}</mark>\n${esc(e.prompt.split("\n").slice(1).join("\n"))}`
+      : `<span class="hint">(no demographic line)</span>\n${esc(e.prompt)}`;
+    $$("#ex-tabs button").forEach(b => b.setAttribute("aria-pressed", +b.dataset.i === i));
+  };
+  $$("#ex-tabs button").forEach(b => b.onclick = () => showEx(+b.dataset.i));
+  if (d.example.length) showEx(0);
+
+  // run form behaviour
+  const spec = () => { const p = $("#rf-provider").value; return p === "simulated" ? "simulated" : `${p}:${$("#rf-model").value.trim()}`; };
+  const saveForm = () => store.set("run-form", { provider: $("#rf-provider").value, model: $("#rf-model").value, name: $("#rf-name").value,
+    samples: +$("#rf-samples").value, temperature: +$("#rf-temp").value, max_tokens: +$("#rf-tok").value, concurrency: +$("#rf-conc").value });
+  const upd = () => {
+    const p = $("#rf-provider").value, ph = PROVIDERS.find(x => x[0] === p)[1];
+    $("#rf-model").placeholder = ph; $("#rf-model").disabled = p === "simulated";
+    const env = info.key_env[p];
+    $("#rf-key").innerHTML = p === "simulated" ? `<span class="pill ok"><i>✓</i>Offline simulated model; no API key, no cost.</span>`
+      : env ? (info.keys[p] ? `<span class="pill ok"><i>✓</i><code>${env}</code> is set</span>`
+        : `<span class="pill missing"><i>✕</i><code>${env}</code> is not set. Export it, then restart <code>python -m cftriage serve</code>.</span>`)
+      : p === "ollama" ? `<span class="pill ok"><i>✓</i>Local server at localhost:11434</span>` : `<span class="pill"><i>•</i>Uses LiteLLM's own environment variables</span>`;
+    const calls = d.n_prompts * (+$("#rf-samples").value || 0);
+    $("#rf-count").textContent = `${calls.toLocaleString()} calls (${d.n_cases} cases × ${d.conditions.length} labels × ${+$("#rf-samples").value} samples). Resumes from the checkpoint if stopped.`;
+    saveForm();
+  };
+  ["rf-provider", "rf-model", "rf-name", "rf-samples", "rf-temp", "rf-tok", "rf-conc"].forEach(id => $("#" + id).addEventListener("input", upd));
+  upd();
+  const runBody = () => ({ study: d.name, model: spec(), name: $("#rf-name").value.trim() || null, samples: +$("#rf-samples").value,
+    temperature: +$("#rf-temp").value, max_tokens: +$("#rf-tok").value, concurrency: +$("#rf-conc").value });
+  $("#rf-test").onclick = async () => {
+    const b = $("#rf-test"); b.disabled = true; $("#rf-out").innerHTML = `<p class="hint">Calling…</p>`;
+    try {
+      const r = await api("/api/test-call", runBody());
+      $("#rf-out").innerHTML = `<div class="stack" style="margin-top:4px"><p class="hint">${r.seconds.toFixed(1)}s · parsed ESI: <strong style="color:var(--ink)">${r.esi ?? "could not parse"}</strong></p><pre class="prompt">${esc(r.response)}</pre></div>`;
+    } catch (e) { $("#rf-out").innerHTML = `<div class="error">${esc(e.message)}</div>`; }
+    b.disabled = false;
+  };
+  const attachRun = (jobId) => {
+    $("#rf-run").disabled = true;
+    jobWidget($("#rf-job"), jobId, { cancelLabel: "Stop", note: "Stopping keeps every finished call; start the same run again to resume.",
+      onDone: () => { delete studyJobs[d.name + ":run"]; loadStudies(); } });
+  };
+  $("#rf-run").onclick = async () => {
+    if (!$("#rf-model").value.trim() && $("#rf-provider").value !== "simulated") { $("#rf-out").innerHTML = `<div class="error">Enter a model ID.</div>`; return; }
+    $("#rf-out").innerHTML = "";
+    try { const { job } = await api("/api/run", runBody()); studyJobs[d.name + ":run"] = job; attachRun(job); refreshJobs(); }
+    catch (e) { $("#rf-out").innerHTML = `<div class="error">${esc(e.message)}</div>`; }
+  };
+  $("#an-run").onclick = async () => {
+    const b = $("#an-run"); b.disabled = true;
+    try {
+      const { job } = await api("/api/analyze", { study: d.name, n_perm: +$("#an-perm").value });
+      jobWidget($("#an-job"), job, { onDone: j => { b.disabled = false; if (j.result) { renderResults($("#an-results"), j.result, { reportPath: j.result.report }); } } });
+    } catch (e) { b.disabled = false; $("#an-job").innerHTML = `<div class="error">${esc(e.message)}</div>`; }
+  };
+  // reattach to a run that is still going (e.g. after a reload)
+  const jobs = await refreshJobs();
+  const live = jobs.find(j => j.kind === "run" && j.status === "running" && j.study === d.name);
+  if (live) attachRun(live.id);
+}
+
+// ---------------------------------------------------------------- boot
+(async () => {
+  try { info = await api("/api/info"); $("#version").textContent = "v" + info.version; $("#workspace").textContent = info.workspace; } catch {}
+  show(store.get("view", "playground"));
+  refreshJobs(); setInterval(refreshJobs, 5000);
+})();
+</script>
+</body>
+</html>

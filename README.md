@@ -29,6 +29,20 @@ python -m cftriage demo --out demo   # offline, simulated models, no API keys
 
 The demo builds 200 synthetic cases, runs three simulated models with known behaviour (noise only, planted female under-triage, direction-free instability) and writes `demo/report/report.md`. Read it first: it shows what each verdict looks like when the truth is known.
 
+## Web app
+
+```bash
+python -m cftriage serve            # opens http://localhost:8765/
+```
+
+A local web app, standard library only, with three views:
+
+- **Playground**: tune simulated models (noise, planted female under-triage, direction-free instability) and see the verdicts, effect plot and noise comparison update. No API calls.
+- **Power**: power for the female-vs-male test across case counts, samples and noise.
+- **Studies**: build a study (synthetic, CSV or MIMIC-IV-ED demo), test one call, run a model with live progress (stop and resume at any time), analyze and write the Markdown report.
+
+Study folders live under `--workspace` (default: the current folder), so everything the web app does also works from the CLI. API keys come only from the server's environment. Export them before `serve`; the page never asks for them. The server listens on 127.0.0.1 only and refuses cross-origin requests, so other websites cannot start paid runs.
+
 ## Running a real study
 
 ### 1. Get cases
@@ -184,6 +198,8 @@ cftriage/
   report.py      markdown report and figures
   simulate.py    synthetic cases and simulated models
   cli.py         command line
+  web.py         local web app server (python -m cftriage serve)
+  webui.html     web app page
 tests/
   test_basics.py
   validate_calibration.py
