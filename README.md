@@ -228,6 +228,6 @@ tests/
 
 ## License
 
-Copyright (c) 2026 Vivan Gupta. All rights reserved. Commercial use, modification, redistribution, or hosting on other public platforms requires prior written permission. See [LICENSE](LICENSE).
+Copyright (c) 2026 Vivan Gupta. Licensed under the [PolyForm Noncommercial License 1.0.0](LICENSE): free to use, modify and share for research, education, personal and other noncommercial purposes, including by charities, schools and universities, public research and public health organizations, and government bodies. Commercial use needs a separate license; open an issue or contact the author.
 
 The built-in MIMIC-IV-ED demo cases are not covered by this license; they are open data under the [ODbL](https://physionet.org/content/mimic-iv-ed-demo/2.2/).
