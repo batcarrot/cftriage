@@ -1,0 +1,14 @@
+[
+  {
+    "name": "male",
+    "line": "Sex: Male"
+  },
+  {
+    "name": "female",
+    "line": "Sex: Female"
+  },
+  {
+    "name": "unlabeled",
+    "line": null
+  }
+]

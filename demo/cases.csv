@@ -1,0 +1,201 @@
+case_id,chief_complaint,heart_rate,resp_rate,spo2,sbp,dbp,temperature,pain,esi_true,age,category
+syn0_00000,Fatigue,81,17,96,146,92,98.8,9,3,36,general
+syn0_00001,Dyspnea on exertion,51,20,95,123,70,98.8,3,2,70,respiratory
+syn0_00002,Back pain,103,24,92,138,80,98.7,3,1,30,extremity_pain
+syn0_00003,Syncope,97,23,94,109,64,99.4,4,1,32,neuro
+syn0_00004,"Cough, fever",90,16,98,126,81,97.5,5,3,74,respiratory
+syn0_00005,Suicidal ideation,82,17,97,137,65,99.1,6,3,35,psych
+syn0_00006,Fall,87,19,98,127,60,98.3,6,3,83,trauma
+syn0_00007,Headache,89,20,98,104,102,98.2,3,3,60,neuro
+syn0_00008,Etoh intoxication,84,16,98,147,89,97.6,5,3,88,psych
+syn0_00009,Fall,84,13,96,114,79,98.0,3,4,23,trauma
+syn0_00010,Weakness,89,16,99,156,64,98.0,3,3,47,neuro
+syn0_00011,Hand laceration,117,22,95,100,60,98.7,7,1,72,trauma
+syn0_00012,Rash,79,15,97,113,82,98.9,7,3,86,general
+syn0_00013,Weakness,106,20,94,121,97,98.5,9,1,37,neuro
+syn0_00014,"Chest pain, diaphoresis",80,18,95,170,61,99.0,9,3,66,chest_pain
+syn0_00015,Palpitations,110,18,96,126,91,98.6,10,2,34,chest_pain
+syn0_00016,MVC,87,16,99,150,76,97.5,8,3,39,trauma
+syn0_00017,RLQ abdominal pain,79,19,99,126,103,98.2,6,3,51,abdominal
+syn0_00018,"S/p fall, head strike",109,17,98,109,89,99.1,3,2,39,trauma
+syn0_00019,Suicidal ideation,97,14,100,130,71,98.8,8,3,78,psych
+syn0_00020,Shortness of breath,132,24,95,110,79,99.5,7,1,63,general
+syn0_00021,"Blurred vision, headache",100,20,97,124,73,98.3,6,2,31,neuro
+syn0_00022,Suicidal ideation,83,18,96,97,65,99.1,1,3,50,psych
+syn0_00023,Abd pain,88,15,97,126,73,96.9,10,3,59,abdominal
+syn0_00024,Fatigue,103,17,100,124,74,96.1,5,3,54,general
+syn0_00025,"Chest pain, diaphoresis",103,23,95,127,69,98.1,1,2,48,chest_pain
+syn0_00026,Anxiety,77,12,96,134,80,98.0,9,5,35,psych
+syn0_00027,Anxiety,50,14,98,107,82,99.2,2,4,64,psych
+syn0_00028,Shortness of breath,76,19,98,131,83,98.8,2,3,52,general
+syn0_00029,Chest pressure,81,17,97,129,93,97.8,6,3,69,chest_pain
+syn0_00030,Wheezing,64,16,98,118,69,98.3,5,3,18,respiratory
+syn0_00031,Abd pain,90,23,96,124,95,99.2,10,2,28,abdominal
+syn0_00032,Fever,118,21,95,97,82,98.1,3,2,71,general
+syn0_00033,Back pain,81,17,99,137,87,97.7,8,3,63,extremity_pain
+syn0_00034,Syncope,95,17,99,122,82,98.6,9,3,27,neuro
+syn0_00035,Diarrhea,99,18,93,143,73,98.3,10,2,48,abdominal
+syn0_00036,MVC,103,16,98,156,84,99.0,4,3,40,trauma
+syn0_00037,Rash,94,16,99,113,68,99.2,6,3,82,general
+syn0_00038,Headache,73,13,99,109,76,98.6,5,4,62,neuro
+syn0_00039,Back pain,87,17,96,107,85,97.9,10,2,66,extremity_pain
+syn0_00040,Rash,69,18,97,113,59,97.5,0,3,80,general
+syn0_00041,Weakness,83,16,95,166,81,99.3,5,2,27,neuro
+syn0_00042,"Cough, fever",68,16,98,131,75,98.0,7,3,36,respiratory
+syn0_00043,Headache,87,14,94,134,96,99.9,5,2,72,neuro
+syn0_00044,"S/p fall, head strike",95,15,95,132,56,98.2,1,3,46,trauma
+syn0_00045,Chest pain,67,17,99,138,84,98.9,3,3,79,chest_pain
+syn0_00046,"Blurred vision, headache",111,19,95,131,70,98.5,9,2,43,neuro
+syn0_00047,Palpitations,57,17,96,130,95,98.1,10,3,48,chest_pain
+syn0_00048,Dizziness,103,21,95,139,69,98.4,10,2,78,neuro
+syn0_00049,Back pain,77,18,100,101,68,99.1,5,3,28,extremity_pain
+syn0_00050,Etoh intoxication,72,17,97,134,81,97.7,0,3,39,psych
+syn0_00051,Suicidal ideation,113,20,96,125,82,98.1,4,2,48,psych
+syn0_00052,Rash,86,18,97,156,82,98.7,9,3,38,general
+syn0_00053,Abd pain,99,18,92,149,93,99.0,2,1,86,abdominal
+syn0_00054,Palpitations,94,16,97,134,47,98.6,7,2,56,chest_pain
+syn0_00055,Dizziness,102,19,95,123,81,98.6,0,2,74,neuro
+syn0_00056,Shortness of breath,73,16,94,141,87,98.7,5,3,70,general
+syn0_00057,Anxiety,90,17,98,127,92,98.2,7,3,89,psych
+syn0_00058,Wheezing,119,17,95,113,73,98.8,8,2,89,respiratory
+syn0_00059,Dyspnea on exertion,105,19,93,98,65,98.2,10,1,41,respiratory
+syn0_00060,Palpitations,61,15,96,119,60,98.9,1,3,35,chest_pain
+syn0_00061,Etoh intoxication,102,20,98,93,98,99.6,1,2,32,psych
+syn0_00062,Palpitations,99,21,94,146,80,98.5,6,2,79,chest_pain
+syn0_00063,Abd pain,81,17,97,118,84,98.8,4,3,88,abdominal
+syn0_00064,Suicidal ideation,109,18,94,136,84,98.2,4,2,37,psych
+syn0_00065,Hand laceration,70,13,96,157,75,98.2,5,3,45,trauma
+syn0_00066,Anxiety,88,18,97,144,65,98.9,3,2,77,psych
+syn0_00067,Knee pain,60,13,96,108,79,98.0,0,4,48,extremity_pain
+syn0_00068,Headache,101,18,95,124,77,98.4,2,2,50,neuro
+syn0_00069,"Chest pain, diaphoresis",105,19,98,114,84,98.6,4,2,19,chest_pain
+syn0_00070,"Chest pain, diaphoresis",98,17,99,109,72,97.9,6,3,66,chest_pain
+syn0_00071,Fall,64,14,97,131,71,98.5,8,4,41,trauma
+syn0_00072,"Cough, fever",85,16,98,130,77,97.8,9,3,45,respiratory
+syn0_00073,Syncope,61,15,97,132,67,98.9,9,4,50,neuro
+syn0_00074,Suicidal ideation,111,16,99,129,82,98.6,8,3,79,psych
+syn0_00075,Leg swelling,92,16,98,141,98,97.9,8,3,78,extremity_pain
+syn0_00076,Rash,86,17,98,153,89,98.4,6,3,63,general
+syn0_00077,Abd pain,56,11,97,103,72,98.1,0,5,59,abdominal
+syn0_00078,"S/p fall, head strike",81,13,97,141,75,98.5,8,4,45,trauma
+syn0_00079,Fatigue,90,17,97,144,80,98.1,10,3,39,general
+syn0_00080,"S/p fall, head strike",73,13,96,156,71,98.9,4,3,18,trauma
+syn0_00081,Headache,76,19,98,100,90,97.8,7,3,45,neuro
+syn0_00082,"Cough, fever",81,19,99,103,72,98.6,8,3,81,respiratory
+syn0_00083,Fever,82,18,98,115,80,98.0,7,3,25,general
+syn0_00084,Palpitations,88,16,98,111,75,97.8,9,3,83,chest_pain
+syn0_00085,Ankle injury,83,14,99,176,83,97.8,3,3,55,trauma
+syn0_00086,Anxiety,80,18,98,113,81,99.1,8,3,26,psych
+syn0_00087,Diarrhea,64,12,98,79,71,98.2,3,4,69,abdominal
+syn0_00088,Leg swelling,94,17,97,109,74,98.7,3,2,48,extremity_pain
+syn0_00089,Leg swelling,54,16,99,125,59,98.6,8,3,75,extremity_pain
+syn0_00090,RLQ abdominal pain,59,13,97,116,54,97.9,7,4,24,abdominal
+syn0_00091,MVC,66,14,98,148,104,98.8,6,4,61,trauma
+syn0_00092,Leg swelling,107,22,92,124,68,99.4,9,1,31,extremity_pain
+syn0_00093,Suicidal ideation,89,13,97,129,60,99.5,5,3,66,psych
+syn0_00094,Diarrhea,65,14,99,137,80,98.6,7,4,82,abdominal
+syn0_00095,Fever,68,12,98,122,77,98.4,4,4,45,general
+syn0_00096,Fatigue,89,17,95,145,82,99.2,2,2,80,general
+syn0_00097,Chest pain,58,15,96,125,83,99.4,1,4,39,chest_pain
+syn0_00098,"S/p fall, head strike",98,14,98,126,67,98.5,5,3,27,trauma
+syn0_00099,Leg swelling,74,17,98,109,96,99.1,9,3,85,extremity_pain
+syn0_00100,Chest pain,94,16,95,150,78,99.5,10,3,87,chest_pain
+syn0_00101,Diarrhea,99,25,95,108,80,99.5,8,2,79,abdominal
+syn0_00102,MVC,90,10,96,146,70,97.4,6,3,49,trauma
+syn0_00103,Dyspnea on exertion,56,13,97,133,73,98.4,4,4,19,respiratory
+syn0_00104,Anxiety,98,14,96,100,52,99.6,1,2,81,psych
+syn0_00105,Fever,87,15,96,140,65,98.6,1,3,21,general
+syn0_00106,Shortness of breath,80,19,100,160,85,98.7,9,3,63,general
+syn0_00107,Knee pain,99,12,99,142,78,98.5,5,4,67,extremity_pain
+syn0_00108,"Chest pain, diaphoresis",111,22,96,125,84,99.8,7,1,88,chest_pain
+syn0_00109,Diarrhea,99,17,98,109,81,97.8,3,3,87,abdominal
+syn0_00110,Chest pressure,83,17,97,153,79,99.1,0,3,36,chest_pain
+syn0_00111,RLQ abdominal pain,110,21,94,134,86,98.5,5,1,61,abdominal
+syn0_00112,Chest pain,94,15,98,117,79,98.2,0,3,41,chest_pain
+syn0_00113,Weakness,102,21,91,135,89,98.9,7,1,77,neuro
+syn0_00114,Fever,96,18,97,148,65,98.0,4,3,82,general
+syn0_00115,Chest pain,83,15,94,144,81,97.4,8,3,79,chest_pain
+syn0_00116,Leg swelling,76,16,96,144,86,98.9,0,4,86,extremity_pain
+syn0_00117,Anxiety,104,18,98,106,72,98.2,6,2,27,psych
+syn0_00118,"Cough, fever",100,17,97,122,70,99.0,3,3,62,respiratory
+syn0_00119,Back pain,107,19,96,153,72,99.8,9,2,41,extremity_pain
+syn0_00120,Fatigue,78,18,96,139,81,99.0,3,2,42,general
+syn0_00121,Ankle injury,69,17,100,125,62,97.5,0,3,58,trauma
+syn0_00122,Anxiety,70,12,97,123,81,98.0,10,4,44,psych
+syn0_00123,"Cough, fever",82,17,99,141,72,97.4,8,3,23,respiratory
+syn0_00124,Hand laceration,80,20,95,115,91,98.9,0,2,65,trauma
+syn0_00125,Leg swelling,85,21,97,72,76,99.7,2,2,74,extremity_pain
+syn0_00126,Anxiety,82,14,98,99,65,99.1,7,3,58,psych
+syn0_00127,Headache,92,19,100,144,68,99.8,1,2,72,neuro
+syn0_00128,Nausea/vomiting,89,17,97,112,68,99.3,5,2,76,abdominal
+syn0_00129,Shortness of breath,79,20,93,112,73,98.0,8,2,88,general
+syn0_00130,Suicidal ideation,88,15,98,159,62,98.4,0,3,34,psych
+syn0_00131,Nausea/vomiting,92,18,97,117,91,98.8,3,3,18,abdominal
+syn0_00132,Diarrhea,64,17,96,129,86,98.9,5,3,58,abdominal
+syn0_00133,MVC,112,19,96,117,105,98.0,10,3,28,trauma
+syn0_00134,Hand laceration,117,22,95,130,58,98.3,1,2,72,trauma
+syn0_00135,Chest pain,84,16,98,171,83,98.6,10,3,45,chest_pain
+syn0_00136,Weakness,99,15,97,112,79,98.5,5,3,84,neuro
+syn0_00137,Diarrhea,99,18,100,160,81,98.6,7,3,50,abdominal
+syn0_00138,Headache,72,11,97,149,63,99.2,5,4,60,neuro
+syn0_00139,Palpitations,94,19,97,100,102,98.3,6,2,20,chest_pain
+syn0_00140,Abd pain,94,19,99,138,62,98.1,8,3,63,abdominal
+syn0_00141,Etoh intoxication,84,12,99,163,95,97.8,1,3,84,psych
+syn0_00142,Shortness of breath,105,13,98,152,93,98.6,9,3,28,general
+syn0_00143,Ankle injury,95,18,96,143,85,100.1,10,2,83,trauma
+syn0_00144,Syncope,104,16,98,135,50,98.6,9,3,35,neuro
+syn0_00145,Syncope,82,16,96,133,96,98.3,1,3,86,neuro
+syn0_00146,Abd pain,133,19,95,122,101,100.0,2,1,72,abdominal
+syn0_00147,Anxiety,66,19,100,112,86,97.9,3,3,84,psych
+syn0_00148,Shortness of breath,96,17,98,158,86,98.8,3,3,54,general
+syn0_00149,Leg swelling,72,16,96,115,76,99.0,10,3,88,extremity_pain
+syn0_00150,Palpitations,111,21,94,130,82,98.6,6,1,77,chest_pain
+syn0_00151,Fever,107,18,98,121,70,99.0,6,2,28,general
+syn0_00152,"Chest pain, diaphoresis",96,22,99,115,88,98.9,2,2,37,chest_pain
+syn0_00153,Leg swelling,100,18,98,115,64,98.4,10,3,65,extremity_pain
+syn0_00154,Palpitations,106,21,92,142,65,99.5,10,2,83,chest_pain
+syn0_00155,Nausea/vomiting,92,15,98,98,91,98.2,5,3,62,abdominal
+syn0_00156,Wheezing,93,12,99,118,50,98.2,8,4,82,respiratory
+syn0_00157,Rash,98,19,96,129,75,98.4,3,2,19,general
+syn0_00158,Etoh intoxication,81,14,97,133,81,98.4,6,3,68,psych
+syn0_00159,Weakness,115,23,95,88,72,99.6,6,1,88,neuro
+syn0_00160,Diarrhea,100,17,97,101,89,98.8,6,2,53,abdominal
+syn0_00161,Fall,80,19,97,110,74,97.9,9,3,35,trauma
+syn0_00162,Fall,94,15,98,125,76,98.5,8,3,30,trauma
+syn0_00163,Leg swelling,79,12,98,128,72,97.9,10,4,45,extremity_pain
+syn0_00164,MVC,80,14,95,134,80,99.7,5,3,88,trauma
+syn0_00165,Fever,109,21,95,127,72,99.9,4,2,32,general
+syn0_00166,"Blurred vision, headache",113,19,95,130,84,99.1,9,2,55,neuro
+syn0_00167,RLQ abdominal pain,94,18,96,125,88,98.7,4,3,36,abdominal
+syn0_00168,Syncope,96,15,96,111,100,97.8,0,3,38,neuro
+syn0_00169,Back pain,82,19,95,131,92,99.1,5,3,79,extremity_pain
+syn0_00170,Dizziness,118,16,97,135,85,99.0,4,2,62,neuro
+syn0_00171,Suicidal ideation,84,12,96,134,78,98.5,3,4,87,psych
+syn0_00172,Weakness,106,20,99,100,71,98.5,9,2,50,neuro
+syn0_00173,"Cough, fever",87,22,98,141,83,97.9,7,2,63,respiratory
+syn0_00174,Wheezing,80,17,97,149,76,97.5,3,3,24,respiratory
+syn0_00175,Leg swelling,69,16,99,141,82,97.6,4,3,34,extremity_pain
+syn0_00176,Fall,114,15,97,178,65,98.7,6,3,22,trauma
+syn0_00177,Hand laceration,63,18,96,148,91,97.8,4,4,35,trauma
+syn0_00178,Rash,63,14,98,128,76,99.0,7,4,44,general
+syn0_00179,Chest pain,89,15,99,135,69,98.1,9,3,88,chest_pain
+syn0_00180,Shortness of breath,78,12,98,115,86,98.2,6,3,35,general
+syn0_00181,Nausea/vomiting,98,21,94,75,79,99.0,7,2,86,abdominal
+syn0_00182,Rash,81,16,96,138,67,98.5,2,2,66,general
+syn0_00183,Chest pain,62,17,99,127,60,98.3,0,3,34,chest_pain
+syn0_00184,Abd pain,88,15,95,104,76,98.5,5,3,83,abdominal
+syn0_00185,Nausea/vomiting,93,16,93,128,68,99.6,2,2,53,abdominal
+syn0_00186,Chest pressure,77,17,98,125,53,98.1,10,3,76,chest_pain
+syn0_00187,Diarrhea,69,13,97,124,62,97.9,4,3,42,abdominal
+syn0_00188,Etoh intoxication,86,18,98,138,98,99.1,8,3,87,psych
+syn0_00189,Abd pain,80,13,96,145,75,98.1,6,3,59,abdominal
+syn0_00190,Dyspnea on exertion,95,20,96,105,77,99.3,1,2,73,respiratory
+syn0_00191,"S/p fall, head strike",88,17,98,109,74,98.7,5,3,44,trauma
+syn0_00192,Fatigue,89,14,96,128,82,98.2,10,3,64,general
+syn0_00193,Palpitations,101,17,95,130,86,99.2,1,2,18,chest_pain
+syn0_00194,Dyspnea on exertion,72,16,96,142,55,98.7,8,4,44,respiratory
+syn0_00195,Weakness,84,12,100,148,78,98.7,2,3,67,neuro
+syn0_00196,"Cough, fever",127,19,98,112,87,98.7,3,1,69,respiratory
+syn0_00197,Suicidal ideation,69,15,97,120,75,99.0,8,3,23,psych
+syn0_00198,Shortness of breath,73,13,96,134,71,98.6,6,4,52,general
+syn0_00199,Ankle injury,82,16,99,155,76,97.8,7,3,23,trauma

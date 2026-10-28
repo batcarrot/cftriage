@@ -1,0 +1,20 @@
+null: done (118s)
+biased (shift 0.10): done (236s)
+unstable, no direction: done (349s)
+
+Rejection rate at alpha=0.05 over 600 simulated studies (70 cases x 2 labels x 10 samples). Monte Carlo SE at 5% = 0.009
+
+                          null  biased (shift 0.10)  unstable, no direction
+omnibus                  0.053                0.218                   0.998
+excess_disagreement      0.047                0.180                   0.998
+ssb                      0.053                0.215                   0.998
+case_signflip            0.043                0.917                   0.043
+within_case_perm         0.045                0.932                   0.302
+wilcoxon                 0.058                0.912                   0.052
+sign                     0.025                0.800                   0.032
+stuart_maxwell_modal     0.000                0.000                   0.082
+directional_binom_modal  0.002                0.003                   0.018
+high_acuity              0.045                0.407                   0.038
+ci_excludes_0            0.050                0.932                   0.050
+one_shot_flip (mean)     0.381                0.426                   0.456
+one_shot_retest (mean)   0.382                0.458                   0.372

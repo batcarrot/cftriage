@@ -1,0 +1,1601 @@
+case_id,condition,prompt
+syn0_00000,male,"Sex: Male
+Chief complaint: Fatigue
+Vitals: HR 81 bpm | RR 17 breaths/min | SpO2 96% | BP 146/92 mmHg | Temp 98.8°F | Pain 9/10"
+syn0_00000,female,"Sex: Female
+Chief complaint: Fatigue
+Vitals: HR 81 bpm | RR 17 breaths/min | SpO2 96% | BP 146/92 mmHg | Temp 98.8°F | Pain 9/10"
+syn0_00000,unlabeled,"Chief complaint: Fatigue
+Vitals: HR 81 bpm | RR 17 breaths/min | SpO2 96% | BP 146/92 mmHg | Temp 98.8°F | Pain 9/10"
+syn0_00001,male,"Sex: Male
+Chief complaint: Dyspnea on exertion
+Vitals: HR 51 bpm | RR 20 breaths/min | SpO2 95% | BP 123/70 mmHg | Temp 98.8°F | Pain 3/10"
+syn0_00001,female,"Sex: Female
+Chief complaint: Dyspnea on exertion
+Vitals: HR 51 bpm | RR 20 breaths/min | SpO2 95% | BP 123/70 mmHg | Temp 98.8°F | Pain 3/10"
+syn0_00001,unlabeled,"Chief complaint: Dyspnea on exertion
+Vitals: HR 51 bpm | RR 20 breaths/min | SpO2 95% | BP 123/70 mmHg | Temp 98.8°F | Pain 3/10"
+syn0_00002,male,"Sex: Male
+Chief complaint: Back pain
+Vitals: HR 103 bpm | RR 24 breaths/min | SpO2 92% | BP 138/80 mmHg | Temp 98.7°F | Pain 3/10"
+syn0_00002,female,"Sex: Female
+Chief complaint: Back pain
+Vitals: HR 103 bpm | RR 24 breaths/min | SpO2 92% | BP 138/80 mmHg | Temp 98.7°F | Pain 3/10"
+syn0_00002,unlabeled,"Chief complaint: Back pain
+Vitals: HR 103 bpm | RR 24 breaths/min | SpO2 92% | BP 138/80 mmHg | Temp 98.7°F | Pain 3/10"
+syn0_00003,male,"Sex: Male
+Chief complaint: Syncope
+Vitals: HR 97 bpm | RR 23 breaths/min | SpO2 94% | BP 109/64 mmHg | Temp 99.4°F | Pain 4/10"
+syn0_00003,female,"Sex: Female
+Chief complaint: Syncope
+Vitals: HR 97 bpm | RR 23 breaths/min | SpO2 94% | BP 109/64 mmHg | Temp 99.4°F | Pain 4/10"
+syn0_00003,unlabeled,"Chief complaint: Syncope
+Vitals: HR 97 bpm | RR 23 breaths/min | SpO2 94% | BP 109/64 mmHg | Temp 99.4°F | Pain 4/10"
+syn0_00004,male,"Sex: Male
+Chief complaint: Cough, fever
+Vitals: HR 90 bpm | RR 16 breaths/min | SpO2 98% | BP 126/81 mmHg | Temp 97.5°F | Pain 5/10"
+syn0_00004,female,"Sex: Female
+Chief complaint: Cough, fever
+Vitals: HR 90 bpm | RR 16 breaths/min | SpO2 98% | BP 126/81 mmHg | Temp 97.5°F | Pain 5/10"
+syn0_00004,unlabeled,"Chief complaint: Cough, fever
+Vitals: HR 90 bpm | RR 16 breaths/min | SpO2 98% | BP 126/81 mmHg | Temp 97.5°F | Pain 5/10"
+syn0_00005,male,"Sex: Male
+Chief complaint: Suicidal ideation
+Vitals: HR 82 bpm | RR 17 breaths/min | SpO2 97% | BP 137/65 mmHg | Temp 99.1°F | Pain 6/10"
+syn0_00005,female,"Sex: Female
+Chief complaint: Suicidal ideation
+Vitals: HR 82 bpm | RR 17 breaths/min | SpO2 97% | BP 137/65 mmHg | Temp 99.1°F | Pain 6/10"
+syn0_00005,unlabeled,"Chief complaint: Suicidal ideation
+Vitals: HR 82 bpm | RR 17 breaths/min | SpO2 97% | BP 137/65 mmHg | Temp 99.1°F | Pain 6/10"
+syn0_00006,male,"Sex: Male
+Chief complaint: Fall
+Vitals: HR 87 bpm | RR 19 breaths/min | SpO2 98% | BP 127/60 mmHg | Temp 98.3°F | Pain 6/10"
+syn0_00006,female,"Sex: Female
+Chief complaint: Fall
+Vitals: HR 87 bpm | RR 19 breaths/min | SpO2 98% | BP 127/60 mmHg | Temp 98.3°F | Pain 6/10"
+syn0_00006,unlabeled,"Chief complaint: Fall
+Vitals: HR 87 bpm | RR 19 breaths/min | SpO2 98% | BP 127/60 mmHg | Temp 98.3°F | Pain 6/10"
+syn0_00007,male,"Sex: Male
+Chief complaint: Headache
+Vitals: HR 89 bpm | RR 20 breaths/min | SpO2 98% | BP 104/102 mmHg | Temp 98.2°F | Pain 3/10"
+syn0_00007,female,"Sex: Female
+Chief complaint: Headache
+Vitals: HR 89 bpm | RR 20 breaths/min | SpO2 98% | BP 104/102 mmHg | Temp 98.2°F | Pain 3/10"
+syn0_00007,unlabeled,"Chief complaint: Headache
+Vitals: HR 89 bpm | RR 20 breaths/min | SpO2 98% | BP 104/102 mmHg | Temp 98.2°F | Pain 3/10"
+syn0_00008,male,"Sex: Male
+Chief complaint: Etoh intoxication
+Vitals: HR 84 bpm | RR 16 breaths/min | SpO2 98% | BP 147/89 mmHg | Temp 97.6°F | Pain 5/10"
+syn0_00008,female,"Sex: Female
+Chief complaint: Etoh intoxication
+Vitals: HR 84 bpm | RR 16 breaths/min | SpO2 98% | BP 147/89 mmHg | Temp 97.6°F | Pain 5/10"
+syn0_00008,unlabeled,"Chief complaint: Etoh intoxication
+Vitals: HR 84 bpm | RR 16 breaths/min | SpO2 98% | BP 147/89 mmHg | Temp 97.6°F | Pain 5/10"
+syn0_00009,male,"Sex: Male
+Chief complaint: Fall
+Vitals: HR 84 bpm | RR 13 breaths/min | SpO2 96% | BP 114/79 mmHg | Temp 98.0°F | Pain 3/10"
+syn0_00009,female,"Sex: Female
+Chief complaint: Fall
+Vitals: HR 84 bpm | RR 13 breaths/min | SpO2 96% | BP 114/79 mmHg | Temp 98.0°F | Pain 3/10"
+syn0_00009,unlabeled,"Chief complaint: Fall
+Vitals: HR 84 bpm | RR 13 breaths/min | SpO2 96% | BP 114/79 mmHg | Temp 98.0°F | Pain 3/10"
+syn0_00010,male,"Sex: Male
+Chief complaint: Weakness
+Vitals: HR 89 bpm | RR 16 breaths/min | SpO2 99% | BP 156/64 mmHg | Temp 98.0°F | Pain 3/10"
+syn0_00010,female,"Sex: Female
+Chief complaint: Weakness
+Vitals: HR 89 bpm | RR 16 breaths/min | SpO2 99% | BP 156/64 mmHg | Temp 98.0°F | Pain 3/10"
+syn0_00010,unlabeled,"Chief complaint: Weakness
+Vitals: HR 89 bpm | RR 16 breaths/min | SpO2 99% | BP 156/64 mmHg | Temp 98.0°F | Pain 3/10"
+syn0_00011,male,"Sex: Male
+Chief complaint: Hand laceration
+Vitals: HR 117 bpm | RR 22 breaths/min | SpO2 95% | BP 100/60 mmHg | Temp 98.7°F | Pain 7/10"
+syn0_00011,female,"Sex: Female
+Chief complaint: Hand laceration
+Vitals: HR 117 bpm | RR 22 breaths/min | SpO2 95% | BP 100/60 mmHg | Temp 98.7°F | Pain 7/10"
+syn0_00011,unlabeled,"Chief complaint: Hand laceration
+Vitals: HR 117 bpm | RR 22 breaths/min | SpO2 95% | BP 100/60 mmHg | Temp 98.7°F | Pain 7/10"
+syn0_00012,male,"Sex: Male
+Chief complaint: Rash
+Vitals: HR 79 bpm | RR 15 breaths/min | SpO2 97% | BP 113/82 mmHg | Temp 98.9°F | Pain 7/10"
+syn0_00012,female,"Sex: Female
+Chief complaint: Rash
+Vitals: HR 79 bpm | RR 15 breaths/min | SpO2 97% | BP 113/82 mmHg | Temp 98.9°F | Pain 7/10"
+syn0_00012,unlabeled,"Chief complaint: Rash
+Vitals: HR 79 bpm | RR 15 breaths/min | SpO2 97% | BP 113/82 mmHg | Temp 98.9°F | Pain 7/10"
+syn0_00013,male,"Sex: Male
+Chief complaint: Weakness
+Vitals: HR 106 bpm | RR 20 breaths/min | SpO2 94% | BP 121/97 mmHg | Temp 98.5°F | Pain 9/10"
+syn0_00013,female,"Sex: Female
+Chief complaint: Weakness
+Vitals: HR 106 bpm | RR 20 breaths/min | SpO2 94% | BP 121/97 mmHg | Temp 98.5°F | Pain 9/10"
+syn0_00013,unlabeled,"Chief complaint: Weakness
+Vitals: HR 106 bpm | RR 20 breaths/min | SpO2 94% | BP 121/97 mmHg | Temp 98.5°F | Pain 9/10"
+syn0_00014,male,"Sex: Male
+Chief complaint: Chest pain, diaphoresis
+Vitals: HR 80 bpm | RR 18 breaths/min | SpO2 95% | BP 170/61 mmHg | Temp 99.0°F | Pain 9/10"
+syn0_00014,female,"Sex: Female
+Chief complaint: Chest pain, diaphoresis
+Vitals: HR 80 bpm | RR 18 breaths/min | SpO2 95% | BP 170/61 mmHg | Temp 99.0°F | Pain 9/10"
+syn0_00014,unlabeled,"Chief complaint: Chest pain, diaphoresis
+Vitals: HR 80 bpm | RR 18 breaths/min | SpO2 95% | BP 170/61 mmHg | Temp 99.0°F | Pain 9/10"
+syn0_00015,male,"Sex: Male
+Chief complaint: Palpitations
+Vitals: HR 110 bpm | RR 18 breaths/min | SpO2 96% | BP 126/91 mmHg | Temp 98.6°F | Pain 10/10"
+syn0_00015,female,"Sex: Female
+Chief complaint: Palpitations
+Vitals: HR 110 bpm | RR 18 breaths/min | SpO2 96% | BP 126/91 mmHg | Temp 98.6°F | Pain 10/10"
+syn0_00015,unlabeled,"Chief complaint: Palpitations
+Vitals: HR 110 bpm | RR 18 breaths/min | SpO2 96% | BP 126/91 mmHg | Temp 98.6°F | Pain 10/10"
+syn0_00016,male,"Sex: Male
+Chief complaint: MVC
+Vitals: HR 87 bpm | RR 16 breaths/min | SpO2 99% | BP 150/76 mmHg | Temp 97.5°F | Pain 8/10"
+syn0_00016,female,"Sex: Female
+Chief complaint: MVC
+Vitals: HR 87 bpm | RR 16 breaths/min | SpO2 99% | BP 150/76 mmHg | Temp 97.5°F | Pain 8/10"
+syn0_00016,unlabeled,"Chief complaint: MVC
+Vitals: HR 87 bpm | RR 16 breaths/min | SpO2 99% | BP 150/76 mmHg | Temp 97.5°F | Pain 8/10"
+syn0_00017,male,"Sex: Male
+Chief complaint: RLQ abdominal pain
+Vitals: HR 79 bpm | RR 19 breaths/min | SpO2 99% | BP 126/103 mmHg | Temp 98.2°F | Pain 6/10"
+syn0_00017,female,"Sex: Female
+Chief complaint: RLQ abdominal pain
+Vitals: HR 79 bpm | RR 19 breaths/min | SpO2 99% | BP 126/103 mmHg | Temp 98.2°F | Pain 6/10"
+syn0_00017,unlabeled,"Chief complaint: RLQ abdominal pain
+Vitals: HR 79 bpm | RR 19 breaths/min | SpO2 99% | BP 126/103 mmHg | Temp 98.2°F | Pain 6/10"
+syn0_00018,male,"Sex: Male
+Chief complaint: S/p fall, head strike
+Vitals: HR 109 bpm | RR 17 breaths/min | SpO2 98% | BP 109/89 mmHg | Temp 99.1°F | Pain 3/10"
+syn0_00018,female,"Sex: Female
+Chief complaint: S/p fall, head strike
+Vitals: HR 109 bpm | RR 17 breaths/min | SpO2 98% | BP 109/89 mmHg | Temp 99.1°F | Pain 3/10"
+syn0_00018,unlabeled,"Chief complaint: S/p fall, head strike
+Vitals: HR 109 bpm | RR 17 breaths/min | SpO2 98% | BP 109/89 mmHg | Temp 99.1°F | Pain 3/10"
+syn0_00019,male,"Sex: Male
+Chief complaint: Suicidal ideation
+Vitals: HR 97 bpm | RR 14 breaths/min | SpO2 100% | BP 130/71 mmHg | Temp 98.8°F | Pain 8/10"
+syn0_00019,female,"Sex: Female
+Chief complaint: Suicidal ideation
+Vitals: HR 97 bpm | RR 14 breaths/min | SpO2 100% | BP 130/71 mmHg | Temp 98.8°F | Pain 8/10"
+syn0_00019,unlabeled,"Chief complaint: Suicidal ideation
+Vitals: HR 97 bpm | RR 14 breaths/min | SpO2 100% | BP 130/71 mmHg | Temp 98.8°F | Pain 8/10"
+syn0_00020,male,"Sex: Male
+Chief complaint: Shortness of breath
+Vitals: HR 132 bpm | RR 24 breaths/min | SpO2 95% | BP 110/79 mmHg | Temp 99.5°F | Pain 7/10"
+syn0_00020,female,"Sex: Female
+Chief complaint: Shortness of breath
+Vitals: HR 132 bpm | RR 24 breaths/min | SpO2 95% | BP 110/79 mmHg | Temp 99.5°F | Pain 7/10"
+syn0_00020,unlabeled,"Chief complaint: Shortness of breath
+Vitals: HR 132 bpm | RR 24 breaths/min | SpO2 95% | BP 110/79 mmHg | Temp 99.5°F | Pain 7/10"
+syn0_00021,male,"Sex: Male
+Chief complaint: Blurred vision, headache
+Vitals: HR 100 bpm | RR 20 breaths/min | SpO2 97% | BP 124/73 mmHg | Temp 98.3°F | Pain 6/10"
+syn0_00021,female,"Sex: Female
+Chief complaint: Blurred vision, headache
+Vitals: HR 100 bpm | RR 20 breaths/min | SpO2 97% | BP 124/73 mmHg | Temp 98.3°F | Pain 6/10"
+syn0_00021,unlabeled,"Chief complaint: Blurred vision, headache
+Vitals: HR 100 bpm | RR 20 breaths/min | SpO2 97% | BP 124/73 mmHg | Temp 98.3°F | Pain 6/10"
+syn0_00022,male,"Sex: Male
+Chief complaint: Suicidal ideation
+Vitals: HR 83 bpm | RR 18 breaths/min | SpO2 96% | BP 97/65 mmHg | Temp 99.1°F | Pain 1/10"
+syn0_00022,female,"Sex: Female
+Chief complaint: Suicidal ideation
+Vitals: HR 83 bpm | RR 18 breaths/min | SpO2 96% | BP 97/65 mmHg | Temp 99.1°F | Pain 1/10"
+syn0_00022,unlabeled,"Chief complaint: Suicidal ideation
+Vitals: HR 83 bpm | RR 18 breaths/min | SpO2 96% | BP 97/65 mmHg | Temp 99.1°F | Pain 1/10"
+syn0_00023,male,"Sex: Male
+Chief complaint: Abd pain
+Vitals: HR 88 bpm | RR 15 breaths/min | SpO2 97% | BP 126/73 mmHg | Temp 96.9°F | Pain 10/10"
+syn0_00023,female,"Sex: Female
+Chief complaint: Abd pain
+Vitals: HR 88 bpm | RR 15 breaths/min | SpO2 97% | BP 126/73 mmHg | Temp 96.9°F | Pain 10/10"
+syn0_00023,unlabeled,"Chief complaint: Abd pain
+Vitals: HR 88 bpm | RR 15 breaths/min | SpO2 97% | BP 126/73 mmHg | Temp 96.9°F | Pain 10/10"
+syn0_00024,male,"Sex: Male
+Chief complaint: Fatigue
+Vitals: HR 103 bpm | RR 17 breaths/min | SpO2 100% | BP 124/74 mmHg | Temp 96.1°F | Pain 5/10"
+syn0_00024,female,"Sex: Female
+Chief complaint: Fatigue
+Vitals: HR 103 bpm | RR 17 breaths/min | SpO2 100% | BP 124/74 mmHg | Temp 96.1°F | Pain 5/10"
+syn0_00024,unlabeled,"Chief complaint: Fatigue
+Vitals: HR 103 bpm | RR 17 breaths/min | SpO2 100% | BP 124/74 mmHg | Temp 96.1°F | Pain 5/10"
+syn0_00025,male,"Sex: Male
+Chief complaint: Chest pain, diaphoresis
+Vitals: HR 103 bpm | RR 23 breaths/min | SpO2 95% | BP 127/69 mmHg | Temp 98.1°F | Pain 1/10"
+syn0_00025,female,"Sex: Female
+Chief complaint: Chest pain, diaphoresis
+Vitals: HR 103 bpm | RR 23 breaths/min | SpO2 95% | BP 127/69 mmHg | Temp 98.1°F | Pain 1/10"
+syn0_00025,unlabeled,"Chief complaint: Chest pain, diaphoresis
+Vitals: HR 103 bpm | RR 23 breaths/min | SpO2 95% | BP 127/69 mmHg | Temp 98.1°F | Pain 1/10"
+syn0_00026,male,"Sex: Male
+Chief complaint: Anxiety
+Vitals: HR 77 bpm | RR 12 breaths/min | SpO2 96% | BP 134/80 mmHg | Temp 98.0°F | Pain 9/10"
+syn0_00026,female,"Sex: Female
+Chief complaint: Anxiety
+Vitals: HR 77 bpm | RR 12 breaths/min | SpO2 96% | BP 134/80 mmHg | Temp 98.0°F | Pain 9/10"
+syn0_00026,unlabeled,"Chief complaint: Anxiety
+Vitals: HR 77 bpm | RR 12 breaths/min | SpO2 96% | BP 134/80 mmHg | Temp 98.0°F | Pain 9/10"
+syn0_00027,male,"Sex: Male
+Chief complaint: Anxiety
+Vitals: HR 50 bpm | RR 14 breaths/min | SpO2 98% | BP 107/82 mmHg | Temp 99.2°F | Pain 2/10"
+syn0_00027,female,"Sex: Female
+Chief complaint: Anxiety
+Vitals: HR 50 bpm | RR 14 breaths/min | SpO2 98% | BP 107/82 mmHg | Temp 99.2°F | Pain 2/10"
+syn0_00027,unlabeled,"Chief complaint: Anxiety
+Vitals: HR 50 bpm | RR 14 breaths/min | SpO2 98% | BP 107/82 mmHg | Temp 99.2°F | Pain 2/10"
+syn0_00028,male,"Sex: Male
+Chief complaint: Shortness of breath
+Vitals: HR 76 bpm | RR 19 breaths/min | SpO2 98% | BP 131/83 mmHg | Temp 98.8°F | Pain 2/10"
+syn0_00028,female,"Sex: Female
+Chief complaint: Shortness of breath
+Vitals: HR 76 bpm | RR 19 breaths/min | SpO2 98% | BP 131/83 mmHg | Temp 98.8°F | Pain 2/10"
+syn0_00028,unlabeled,"Chief complaint: Shortness of breath
+Vitals: HR 76 bpm | RR 19 breaths/min | SpO2 98% | BP 131/83 mmHg | Temp 98.8°F | Pain 2/10"
+syn0_00029,male,"Sex: Male
+Chief complaint: Chest pressure
+Vitals: HR 81 bpm | RR 17 breaths/min | SpO2 97% | BP 129/93 mmHg | Temp 97.8°F | Pain 6/10"
+syn0_00029,female,"Sex: Female
+Chief complaint: Chest pressure
+Vitals: HR 81 bpm | RR 17 breaths/min | SpO2 97% | BP 129/93 mmHg | Temp 97.8°F | Pain 6/10"
+syn0_00029,unlabeled,"Chief complaint: Chest pressure
+Vitals: HR 81 bpm | RR 17 breaths/min | SpO2 97% | BP 129/93 mmHg | Temp 97.8°F | Pain 6/10"
+syn0_00030,male,"Sex: Male
+Chief complaint: Wheezing
+Vitals: HR 64 bpm | RR 16 breaths/min | SpO2 98% | BP 118/69 mmHg | Temp 98.3°F | Pain 5/10"
+syn0_00030,female,"Sex: Female
+Chief complaint: Wheezing
+Vitals: HR 64 bpm | RR 16 breaths/min | SpO2 98% | BP 118/69 mmHg | Temp 98.3°F | Pain 5/10"
+syn0_00030,unlabeled,"Chief complaint: Wheezing
+Vitals: HR 64 bpm | RR 16 breaths/min | SpO2 98% | BP 118/69 mmHg | Temp 98.3°F | Pain 5/10"
+syn0_00031,male,"Sex: Male
+Chief complaint: Abd pain
+Vitals: HR 90 bpm | RR 23 breaths/min | SpO2 96% | BP 124/95 mmHg | Temp 99.2°F | Pain 10/10"
+syn0_00031,female,"Sex: Female
+Chief complaint: Abd pain
+Vitals: HR 90 bpm | RR 23 breaths/min | SpO2 96% | BP 124/95 mmHg | Temp 99.2°F | Pain 10/10"
+syn0_00031,unlabeled,"Chief complaint: Abd pain
+Vitals: HR 90 bpm | RR 23 breaths/min | SpO2 96% | BP 124/95 mmHg | Temp 99.2°F | Pain 10/10"
+syn0_00032,male,"Sex: Male
+Chief complaint: Fever
+Vitals: HR 118 bpm | RR 21 breaths/min | SpO2 95% | BP 97/82 mmHg | Temp 98.1°F | Pain 3/10"
+syn0_00032,female,"Sex: Female
+Chief complaint: Fever
+Vitals: HR 118 bpm | RR 21 breaths/min | SpO2 95% | BP 97/82 mmHg | Temp 98.1°F | Pain 3/10"
+syn0_00032,unlabeled,"Chief complaint: Fever
+Vitals: HR 118 bpm | RR 21 breaths/min | SpO2 95% | BP 97/82 mmHg | Temp 98.1°F | Pain 3/10"
+syn0_00033,male,"Sex: Male
+Chief complaint: Back pain
+Vitals: HR 81 bpm | RR 17 breaths/min | SpO2 99% | BP 137/87 mmHg | Temp 97.7°F | Pain 8/10"
+syn0_00033,female,"Sex: Female
+Chief complaint: Back pain
+Vitals: HR 81 bpm | RR 17 breaths/min | SpO2 99% | BP 137/87 mmHg | Temp 97.7°F | Pain 8/10"
+syn0_00033,unlabeled,"Chief complaint: Back pain
+Vitals: HR 81 bpm | RR 17 breaths/min | SpO2 99% | BP 137/87 mmHg | Temp 97.7°F | Pain 8/10"
+syn0_00034,male,"Sex: Male
+Chief complaint: Syncope
+Vitals: HR 95 bpm | RR 17 breaths/min | SpO2 99% | BP 122/82 mmHg | Temp 98.6°F | Pain 9/10"
+syn0_00034,female,"Sex: Female
+Chief complaint: Syncope
+Vitals: HR 95 bpm | RR 17 breaths/min | SpO2 99% | BP 122/82 mmHg | Temp 98.6°F | Pain 9/10"
+syn0_00034,unlabeled,"Chief complaint: Syncope
+Vitals: HR 95 bpm | RR 17 breaths/min | SpO2 99% | BP 122/82 mmHg | Temp 98.6°F | Pain 9/10"
+syn0_00035,male,"Sex: Male
+Chief complaint: Diarrhea
+Vitals: HR 99 bpm | RR 18 breaths/min | SpO2 93% | BP 143/73 mmHg | Temp 98.3°F | Pain 10/10"
+syn0_00035,female,"Sex: Female
+Chief complaint: Diarrhea
+Vitals: HR 99 bpm | RR 18 breaths/min | SpO2 93% | BP 143/73 mmHg | Temp 98.3°F | Pain 10/10"
+syn0_00035,unlabeled,"Chief complaint: Diarrhea
+Vitals: HR 99 bpm | RR 18 breaths/min | SpO2 93% | BP 143/73 mmHg | Temp 98.3°F | Pain 10/10"
+syn0_00036,male,"Sex: Male
+Chief complaint: MVC
+Vitals: HR 103 bpm | RR 16 breaths/min | SpO2 98% | BP 156/84 mmHg | Temp 99.0°F | Pain 4/10"
+syn0_00036,female,"Sex: Female
+Chief complaint: MVC
+Vitals: HR 103 bpm | RR 16 breaths/min | SpO2 98% | BP 156/84 mmHg | Temp 99.0°F | Pain 4/10"
+syn0_00036,unlabeled,"Chief complaint: MVC
+Vitals: HR 103 bpm | RR 16 breaths/min | SpO2 98% | BP 156/84 mmHg | Temp 99.0°F | Pain 4/10"
+syn0_00037,male,"Sex: Male
+Chief complaint: Rash
+Vitals: HR 94 bpm | RR 16 breaths/min | SpO2 99% | BP 113/68 mmHg | Temp 99.2°F | Pain 6/10"
+syn0_00037,female,"Sex: Female
+Chief complaint: Rash
+Vitals: HR 94 bpm | RR 16 breaths/min | SpO2 99% | BP 113/68 mmHg | Temp 99.2°F | Pain 6/10"
+syn0_00037,unlabeled,"Chief complaint: Rash
+Vitals: HR 94 bpm | RR 16 breaths/min | SpO2 99% | BP 113/68 mmHg | Temp 99.2°F | Pain 6/10"
+syn0_00038,male,"Sex: Male
+Chief complaint: Headache
+Vitals: HR 73 bpm | RR 13 breaths/min | SpO2 99% | BP 109/76 mmHg | Temp 98.6°F | Pain 5/10"
+syn0_00038,female,"Sex: Female
+Chief complaint: Headache
+Vitals: HR 73 bpm | RR 13 breaths/min | SpO2 99% | BP 109/76 mmHg | Temp 98.6°F | Pain 5/10"
+syn0_00038,unlabeled,"Chief complaint: Headache
+Vitals: HR 73 bpm | RR 13 breaths/min | SpO2 99% | BP 109/76 mmHg | Temp 98.6°F | Pain 5/10"
+syn0_00039,male,"Sex: Male
+Chief complaint: Back pain
+Vitals: HR 87 bpm | RR 17 breaths/min | SpO2 96% | BP 107/85 mmHg | Temp 97.9°F | Pain 10/10"
+syn0_00039,female,"Sex: Female
+Chief complaint: Back pain
+Vitals: HR 87 bpm | RR 17 breaths/min | SpO2 96% | BP 107/85 mmHg | Temp 97.9°F | Pain 10/10"
+syn0_00039,unlabeled,"Chief complaint: Back pain
+Vitals: HR 87 bpm | RR 17 breaths/min | SpO2 96% | BP 107/85 mmHg | Temp 97.9°F | Pain 10/10"
+syn0_00040,male,"Sex: Male
+Chief complaint: Rash
+Vitals: HR 69 bpm | RR 18 breaths/min | SpO2 97% | BP 113/59 mmHg | Temp 97.5°F | Pain 0/10"
+syn0_00040,female,"Sex: Female
+Chief complaint: Rash
+Vitals: HR 69 bpm | RR 18 breaths/min | SpO2 97% | BP 113/59 mmHg | Temp 97.5°F | Pain 0/10"
+syn0_00040,unlabeled,"Chief complaint: Rash
+Vitals: HR 69 bpm | RR 18 breaths/min | SpO2 97% | BP 113/59 mmHg | Temp 97.5°F | Pain 0/10"
+syn0_00041,male,"Sex: Male
+Chief complaint: Weakness
+Vitals: HR 83 bpm | RR 16 breaths/min | SpO2 95% | BP 166/81 mmHg | Temp 99.3°F | Pain 5/10"
+syn0_00041,female,"Sex: Female
+Chief complaint: Weakness
+Vitals: HR 83 bpm | RR 16 breaths/min | SpO2 95% | BP 166/81 mmHg | Temp 99.3°F | Pain 5/10"
+syn0_00041,unlabeled,"Chief complaint: Weakness
+Vitals: HR 83 bpm | RR 16 breaths/min | SpO2 95% | BP 166/81 mmHg | Temp 99.3°F | Pain 5/10"
+syn0_00042,male,"Sex: Male
+Chief complaint: Cough, fever
+Vitals: HR 68 bpm | RR 16 breaths/min | SpO2 98% | BP 131/75 mmHg | Temp 98.0°F | Pain 7/10"
+syn0_00042,female,"Sex: Female
+Chief complaint: Cough, fever
+Vitals: HR 68 bpm | RR 16 breaths/min | SpO2 98% | BP 131/75 mmHg | Temp 98.0°F | Pain 7/10"
+syn0_00042,unlabeled,"Chief complaint: Cough, fever
+Vitals: HR 68 bpm | RR 16 breaths/min | SpO2 98% | BP 131/75 mmHg | Temp 98.0°F | Pain 7/10"
+syn0_00043,male,"Sex: Male
+Chief complaint: Headache
+Vitals: HR 87 bpm | RR 14 breaths/min | SpO2 94% | BP 134/96 mmHg | Temp 99.9°F | Pain 5/10"
+syn0_00043,female,"Sex: Female
+Chief complaint: Headache
+Vitals: HR 87 bpm | RR 14 breaths/min | SpO2 94% | BP 134/96 mmHg | Temp 99.9°F | Pain 5/10"
+syn0_00043,unlabeled,"Chief complaint: Headache
+Vitals: HR 87 bpm | RR 14 breaths/min | SpO2 94% | BP 134/96 mmHg | Temp 99.9°F | Pain 5/10"
+syn0_00044,male,"Sex: Male
+Chief complaint: S/p fall, head strike
+Vitals: HR 95 bpm | RR 15 breaths/min | SpO2 95% | BP 132/56 mmHg | Temp 98.2°F | Pain 1/10"
+syn0_00044,female,"Sex: Female
+Chief complaint: S/p fall, head strike
+Vitals: HR 95 bpm | RR 15 breaths/min | SpO2 95% | BP 132/56 mmHg | Temp 98.2°F | Pain 1/10"
+syn0_00044,unlabeled,"Chief complaint: S/p fall, head strike
+Vitals: HR 95 bpm | RR 15 breaths/min | SpO2 95% | BP 132/56 mmHg | Temp 98.2°F | Pain 1/10"
+syn0_00045,male,"Sex: Male
+Chief complaint: Chest pain
+Vitals: HR 67 bpm | RR 17 breaths/min | SpO2 99% | BP 138/84 mmHg | Temp 98.9°F | Pain 3/10"
+syn0_00045,female,"Sex: Female
+Chief complaint: Chest pain
+Vitals: HR 67 bpm | RR 17 breaths/min | SpO2 99% | BP 138/84 mmHg | Temp 98.9°F | Pain 3/10"
+syn0_00045,unlabeled,"Chief complaint: Chest pain
+Vitals: HR 67 bpm | RR 17 breaths/min | SpO2 99% | BP 138/84 mmHg | Temp 98.9°F | Pain 3/10"
+syn0_00046,male,"Sex: Male
+Chief complaint: Blurred vision, headache
+Vitals: HR 111 bpm | RR 19 breaths/min | SpO2 95% | BP 131/70 mmHg | Temp 98.5°F | Pain 9/10"
+syn0_00046,female,"Sex: Female
+Chief complaint: Blurred vision, headache
+Vitals: HR 111 bpm | RR 19 breaths/min | SpO2 95% | BP 131/70 mmHg | Temp 98.5°F | Pain 9/10"
+syn0_00046,unlabeled,"Chief complaint: Blurred vision, headache
+Vitals: HR 111 bpm | RR 19 breaths/min | SpO2 95% | BP 131/70 mmHg | Temp 98.5°F | Pain 9/10"
+syn0_00047,male,"Sex: Male
+Chief complaint: Palpitations
+Vitals: HR 57 bpm | RR 17 breaths/min | SpO2 96% | BP 130/95 mmHg | Temp 98.1°F | Pain 10/10"
+syn0_00047,female,"Sex: Female
+Chief complaint: Palpitations
+Vitals: HR 57 bpm | RR 17 breaths/min | SpO2 96% | BP 130/95 mmHg | Temp 98.1°F | Pain 10/10"
+syn0_00047,unlabeled,"Chief complaint: Palpitations
+Vitals: HR 57 bpm | RR 17 breaths/min | SpO2 96% | BP 130/95 mmHg | Temp 98.1°F | Pain 10/10"
+syn0_00048,male,"Sex: Male
+Chief complaint: Dizziness
+Vitals: HR 103 bpm | RR 21 breaths/min | SpO2 95% | BP 139/69 mmHg | Temp 98.4°F | Pain 10/10"
+syn0_00048,female,"Sex: Female
+Chief complaint: Dizziness
+Vitals: HR 103 bpm | RR 21 breaths/min | SpO2 95% | BP 139/69 mmHg | Temp 98.4°F | Pain 10/10"
+syn0_00048,unlabeled,"Chief complaint: Dizziness
+Vitals: HR 103 bpm | RR 21 breaths/min | SpO2 95% | BP 139/69 mmHg | Temp 98.4°F | Pain 10/10"
+syn0_00049,male,"Sex: Male
+Chief complaint: Back pain
+Vitals: HR 77 bpm | RR 18 breaths/min | SpO2 100% | BP 101/68 mmHg | Temp 99.1°F | Pain 5/10"
+syn0_00049,female,"Sex: Female
+Chief complaint: Back pain
+Vitals: HR 77 bpm | RR 18 breaths/min | SpO2 100% | BP 101/68 mmHg | Temp 99.1°F | Pain 5/10"
+syn0_00049,unlabeled,"Chief complaint: Back pain
+Vitals: HR 77 bpm | RR 18 breaths/min | SpO2 100% | BP 101/68 mmHg | Temp 99.1°F | Pain 5/10"
+syn0_00050,male,"Sex: Male
+Chief complaint: Etoh intoxication
+Vitals: HR 72 bpm | RR 17 breaths/min | SpO2 97% | BP 134/81 mmHg | Temp 97.7°F | Pain 0/10"
+syn0_00050,female,"Sex: Female
+Chief complaint: Etoh intoxication
+Vitals: HR 72 bpm | RR 17 breaths/min | SpO2 97% | BP 134/81 mmHg | Temp 97.7°F | Pain 0/10"
+syn0_00050,unlabeled,"Chief complaint: Etoh intoxication
+Vitals: HR 72 bpm | RR 17 breaths/min | SpO2 97% | BP 134/81 mmHg | Temp 97.7°F | Pain 0/10"
+syn0_00051,male,"Sex: Male
+Chief complaint: Suicidal ideation
+Vitals: HR 113 bpm | RR 20 breaths/min | SpO2 96% | BP 125/82 mmHg | Temp 98.1°F | Pain 4/10"
+syn0_00051,female,"Sex: Female
+Chief complaint: Suicidal ideation
+Vitals: HR 113 bpm | RR 20 breaths/min | SpO2 96% | BP 125/82 mmHg | Temp 98.1°F | Pain 4/10"
+syn0_00051,unlabeled,"Chief complaint: Suicidal ideation
+Vitals: HR 113 bpm | RR 20 breaths/min | SpO2 96% | BP 125/82 mmHg | Temp 98.1°F | Pain 4/10"
+syn0_00052,male,"Sex: Male
+Chief complaint: Rash
+Vitals: HR 86 bpm | RR 18 breaths/min | SpO2 97% | BP 156/82 mmHg | Temp 98.7°F | Pain 9/10"
+syn0_00052,female,"Sex: Female
+Chief complaint: Rash
+Vitals: HR 86 bpm | RR 18 breaths/min | SpO2 97% | BP 156/82 mmHg | Temp 98.7°F | Pain 9/10"
+syn0_00052,unlabeled,"Chief complaint: Rash
+Vitals: HR 86 bpm | RR 18 breaths/min | SpO2 97% | BP 156/82 mmHg | Temp 98.7°F | Pain 9/10"
+syn0_00053,male,"Sex: Male
+Chief complaint: Abd pain
+Vitals: HR 99 bpm | RR 18 breaths/min | SpO2 92% | BP 149/93 mmHg | Temp 99.0°F | Pain 2/10"
+syn0_00053,female,"Sex: Female
+Chief complaint: Abd pain
+Vitals: HR 99 bpm | RR 18 breaths/min | SpO2 92% | BP 149/93 mmHg | Temp 99.0°F | Pain 2/10"
+syn0_00053,unlabeled,"Chief complaint: Abd pain
+Vitals: HR 99 bpm | RR 18 breaths/min | SpO2 92% | BP 149/93 mmHg | Temp 99.0°F | Pain 2/10"
+syn0_00054,male,"Sex: Male
+Chief complaint: Palpitations
+Vitals: HR 94 bpm | RR 16 breaths/min | SpO2 97% | BP 134/47 mmHg | Temp 98.6°F | Pain 7/10"
+syn0_00054,female,"Sex: Female
+Chief complaint: Palpitations
+Vitals: HR 94 bpm | RR 16 breaths/min | SpO2 97% | BP 134/47 mmHg | Temp 98.6°F | Pain 7/10"
+syn0_00054,unlabeled,"Chief complaint: Palpitations
+Vitals: HR 94 bpm | RR 16 breaths/min | SpO2 97% | BP 134/47 mmHg | Temp 98.6°F | Pain 7/10"
+syn0_00055,male,"Sex: Male
+Chief complaint: Dizziness
+Vitals: HR 102 bpm | RR 19 breaths/min | SpO2 95% | BP 123/81 mmHg | Temp 98.6°F | Pain 0/10"
+syn0_00055,female,"Sex: Female
+Chief complaint: Dizziness
+Vitals: HR 102 bpm | RR 19 breaths/min | SpO2 95% | BP 123/81 mmHg | Temp 98.6°F | Pain 0/10"
+syn0_00055,unlabeled,"Chief complaint: Dizziness
+Vitals: HR 102 bpm | RR 19 breaths/min | SpO2 95% | BP 123/81 mmHg | Temp 98.6°F | Pain 0/10"
+syn0_00056,male,"Sex: Male
+Chief complaint: Shortness of breath
+Vitals: HR 73 bpm | RR 16 breaths/min | SpO2 94% | BP 141/87 mmHg | Temp 98.7°F | Pain 5/10"
+syn0_00056,female,"Sex: Female
+Chief complaint: Shortness of breath
+Vitals: HR 73 bpm | RR 16 breaths/min | SpO2 94% | BP 141/87 mmHg | Temp 98.7°F | Pain 5/10"
+syn0_00056,unlabeled,"Chief complaint: Shortness of breath
+Vitals: HR 73 bpm | RR 16 breaths/min | SpO2 94% | BP 141/87 mmHg | Temp 98.7°F | Pain 5/10"
+syn0_00057,male,"Sex: Male
+Chief complaint: Anxiety
+Vitals: HR 90 bpm | RR 17 breaths/min | SpO2 98% | BP 127/92 mmHg | Temp 98.2°F | Pain 7/10"
+syn0_00057,female,"Sex: Female
+Chief complaint: Anxiety
+Vitals: HR 90 bpm | RR 17 breaths/min | SpO2 98% | BP 127/92 mmHg | Temp 98.2°F | Pain 7/10"
+syn0_00057,unlabeled,"Chief complaint: Anxiety
+Vitals: HR 90 bpm | RR 17 breaths/min | SpO2 98% | BP 127/92 mmHg | Temp 98.2°F | Pain 7/10"
+syn0_00058,male,"Sex: Male
+Chief complaint: Wheezing
+Vitals: HR 119 bpm | RR 17 breaths/min | SpO2 95% | BP 113/73 mmHg | Temp 98.8°F | Pain 8/10"
+syn0_00058,female,"Sex: Female
+Chief complaint: Wheezing
+Vitals: HR 119 bpm | RR 17 breaths/min | SpO2 95% | BP 113/73 mmHg | Temp 98.8°F | Pain 8/10"
+syn0_00058,unlabeled,"Chief complaint: Wheezing
+Vitals: HR 119 bpm | RR 17 breaths/min | SpO2 95% | BP 113/73 mmHg | Temp 98.8°F | Pain 8/10"
+syn0_00059,male,"Sex: Male
+Chief complaint: Dyspnea on exertion
+Vitals: HR 105 bpm | RR 19 breaths/min | SpO2 93% | BP 98/65 mmHg | Temp 98.2°F | Pain 10/10"
+syn0_00059,female,"Sex: Female
+Chief complaint: Dyspnea on exertion
+Vitals: HR 105 bpm | RR 19 breaths/min | SpO2 93% | BP 98/65 mmHg | Temp 98.2°F | Pain 10/10"
+syn0_00059,unlabeled,"Chief complaint: Dyspnea on exertion
+Vitals: HR 105 bpm | RR 19 breaths/min | SpO2 93% | BP 98/65 mmHg | Temp 98.2°F | Pain 10/10"
+syn0_00060,male,"Sex: Male
+Chief complaint: Palpitations
+Vitals: HR 61 bpm | RR 15 breaths/min | SpO2 96% | BP 119/60 mmHg | Temp 98.9°F | Pain 1/10"
+syn0_00060,female,"Sex: Female
+Chief complaint: Palpitations
+Vitals: HR 61 bpm | RR 15 breaths/min | SpO2 96% | BP 119/60 mmHg | Temp 98.9°F | Pain 1/10"
+syn0_00060,unlabeled,"Chief complaint: Palpitations
+Vitals: HR 61 bpm | RR 15 breaths/min | SpO2 96% | BP 119/60 mmHg | Temp 98.9°F | Pain 1/10"
+syn0_00061,male,"Sex: Male
+Chief complaint: Etoh intoxication
+Vitals: HR 102 bpm | RR 20 breaths/min | SpO2 98% | BP 93/98 mmHg | Temp 99.6°F | Pain 1/10"
+syn0_00061,female,"Sex: Female
+Chief complaint: Etoh intoxication
+Vitals: HR 102 bpm | RR 20 breaths/min | SpO2 98% | BP 93/98 mmHg | Temp 99.6°F | Pain 1/10"
+syn0_00061,unlabeled,"Chief complaint: Etoh intoxication
+Vitals: HR 102 bpm | RR 20 breaths/min | SpO2 98% | BP 93/98 mmHg | Temp 99.6°F | Pain 1/10"
+syn0_00062,male,"Sex: Male
+Chief complaint: Palpitations
+Vitals: HR 99 bpm | RR 21 breaths/min | SpO2 94% | BP 146/80 mmHg | Temp 98.5°F | Pain 6/10"
+syn0_00062,female,"Sex: Female
+Chief complaint: Palpitations
+Vitals: HR 99 bpm | RR 21 breaths/min | SpO2 94% | BP 146/80 mmHg | Temp 98.5°F | Pain 6/10"
+syn0_00062,unlabeled,"Chief complaint: Palpitations
+Vitals: HR 99 bpm | RR 21 breaths/min | SpO2 94% | BP 146/80 mmHg | Temp 98.5°F | Pain 6/10"
+syn0_00063,male,"Sex: Male
+Chief complaint: Abd pain
+Vitals: HR 81 bpm | RR 17 breaths/min | SpO2 97% | BP 118/84 mmHg | Temp 98.8°F | Pain 4/10"
+syn0_00063,female,"Sex: Female
+Chief complaint: Abd pain
+Vitals: HR 81 bpm | RR 17 breaths/min | SpO2 97% | BP 118/84 mmHg | Temp 98.8°F | Pain 4/10"
+syn0_00063,unlabeled,"Chief complaint: Abd pain
+Vitals: HR 81 bpm | RR 17 breaths/min | SpO2 97% | BP 118/84 mmHg | Temp 98.8°F | Pain 4/10"
+syn0_00064,male,"Sex: Male
+Chief complaint: Suicidal ideation
+Vitals: HR 109 bpm | RR 18 breaths/min | SpO2 94% | BP 136/84 mmHg | Temp 98.2°F | Pain 4/10"
+syn0_00064,female,"Sex: Female
+Chief complaint: Suicidal ideation
+Vitals: HR 109 bpm | RR 18 breaths/min | SpO2 94% | BP 136/84 mmHg | Temp 98.2°F | Pain 4/10"
+syn0_00064,unlabeled,"Chief complaint: Suicidal ideation
+Vitals: HR 109 bpm | RR 18 breaths/min | SpO2 94% | BP 136/84 mmHg | Temp 98.2°F | Pain 4/10"
+syn0_00065,male,"Sex: Male
+Chief complaint: Hand laceration
+Vitals: HR 70 bpm | RR 13 breaths/min | SpO2 96% | BP 157/75 mmHg | Temp 98.2°F | Pain 5/10"
+syn0_00065,female,"Sex: Female
+Chief complaint: Hand laceration
+Vitals: HR 70 bpm | RR 13 breaths/min | SpO2 96% | BP 157/75 mmHg | Temp 98.2°F | Pain 5/10"
+syn0_00065,unlabeled,"Chief complaint: Hand laceration
+Vitals: HR 70 bpm | RR 13 breaths/min | SpO2 96% | BP 157/75 mmHg | Temp 98.2°F | Pain 5/10"
+syn0_00066,male,"Sex: Male
+Chief complaint: Anxiety
+Vitals: HR 88 bpm | RR 18 breaths/min | SpO2 97% | BP 144/65 mmHg | Temp 98.9°F | Pain 3/10"
+syn0_00066,female,"Sex: Female
+Chief complaint: Anxiety
+Vitals: HR 88 bpm | RR 18 breaths/min | SpO2 97% | BP 144/65 mmHg | Temp 98.9°F | Pain 3/10"
+syn0_00066,unlabeled,"Chief complaint: Anxiety
+Vitals: HR 88 bpm | RR 18 breaths/min | SpO2 97% | BP 144/65 mmHg | Temp 98.9°F | Pain 3/10"
+syn0_00067,male,"Sex: Male
+Chief complaint: Knee pain
+Vitals: HR 60 bpm | RR 13 breaths/min | SpO2 96% | BP 108/79 mmHg | Temp 98.0°F | Pain 0/10"
+syn0_00067,female,"Sex: Female
+Chief complaint: Knee pain
+Vitals: HR 60 bpm | RR 13 breaths/min | SpO2 96% | BP 108/79 mmHg | Temp 98.0°F | Pain 0/10"
+syn0_00067,unlabeled,"Chief complaint: Knee pain
+Vitals: HR 60 bpm | RR 13 breaths/min | SpO2 96% | BP 108/79 mmHg | Temp 98.0°F | Pain 0/10"
+syn0_00068,male,"Sex: Male
+Chief complaint: Headache
+Vitals: HR 101 bpm | RR 18 breaths/min | SpO2 95% | BP 124/77 mmHg | Temp 98.4°F | Pain 2/10"
+syn0_00068,female,"Sex: Female
+Chief complaint: Headache
+Vitals: HR 101 bpm | RR 18 breaths/min | SpO2 95% | BP 124/77 mmHg | Temp 98.4°F | Pain 2/10"
+syn0_00068,unlabeled,"Chief complaint: Headache
+Vitals: HR 101 bpm | RR 18 breaths/min | SpO2 95% | BP 124/77 mmHg | Temp 98.4°F | Pain 2/10"
+syn0_00069,male,"Sex: Male
+Chief complaint: Chest pain, diaphoresis
+Vitals: HR 105 bpm | RR 19 breaths/min | SpO2 98% | BP 114/84 mmHg | Temp 98.6°F | Pain 4/10"
+syn0_00069,female,"Sex: Female
+Chief complaint: Chest pain, diaphoresis
+Vitals: HR 105 bpm | RR 19 breaths/min | SpO2 98% | BP 114/84 mmHg | Temp 98.6°F | Pain 4/10"
+syn0_00069,unlabeled,"Chief complaint: Chest pain, diaphoresis
+Vitals: HR 105 bpm | RR 19 breaths/min | SpO2 98% | BP 114/84 mmHg | Temp 98.6°F | Pain 4/10"
+syn0_00070,male,"Sex: Male
+Chief complaint: Chest pain, diaphoresis
+Vitals: HR 98 bpm | RR 17 breaths/min | SpO2 99% | BP 109/72 mmHg | Temp 97.9°F | Pain 6/10"
+syn0_00070,female,"Sex: Female
+Chief complaint: Chest pain, diaphoresis
+Vitals: HR 98 bpm | RR 17 breaths/min | SpO2 99% | BP 109/72 mmHg | Temp 97.9°F | Pain 6/10"
+syn0_00070,unlabeled,"Chief complaint: Chest pain, diaphoresis
+Vitals: HR 98 bpm | RR 17 breaths/min | SpO2 99% | BP 109/72 mmHg | Temp 97.9°F | Pain 6/10"
+syn0_00071,male,"Sex: Male
+Chief complaint: Fall
+Vitals: HR 64 bpm | RR 14 breaths/min | SpO2 97% | BP 131/71 mmHg | Temp 98.5°F | Pain 8/10"
+syn0_00071,female,"Sex: Female
+Chief complaint: Fall
+Vitals: HR 64 bpm | RR 14 breaths/min | SpO2 97% | BP 131/71 mmHg | Temp 98.5°F | Pain 8/10"
+syn0_00071,unlabeled,"Chief complaint: Fall
+Vitals: HR 64 bpm | RR 14 breaths/min | SpO2 97% | BP 131/71 mmHg | Temp 98.5°F | Pain 8/10"
+syn0_00072,male,"Sex: Male
+Chief complaint: Cough, fever
+Vitals: HR 85 bpm | RR 16 breaths/min | SpO2 98% | BP 130/77 mmHg | Temp 97.8°F | Pain 9/10"
+syn0_00072,female,"Sex: Female
+Chief complaint: Cough, fever
+Vitals: HR 85 bpm | RR 16 breaths/min | SpO2 98% | BP 130/77 mmHg | Temp 97.8°F | Pain 9/10"
+syn0_00072,unlabeled,"Chief complaint: Cough, fever
+Vitals: HR 85 bpm | RR 16 breaths/min | SpO2 98% | BP 130/77 mmHg | Temp 97.8°F | Pain 9/10"
+syn0_00073,male,"Sex: Male
+Chief complaint: Syncope
+Vitals: HR 61 bpm | RR 15 breaths/min | SpO2 97% | BP 132/67 mmHg | Temp 98.9°F | Pain 9/10"
+syn0_00073,female,"Sex: Female
+Chief complaint: Syncope
+Vitals: HR 61 bpm | RR 15 breaths/min | SpO2 97% | BP 132/67 mmHg | Temp 98.9°F | Pain 9/10"
+syn0_00073,unlabeled,"Chief complaint: Syncope
+Vitals: HR 61 bpm | RR 15 breaths/min | SpO2 97% | BP 132/67 mmHg | Temp 98.9°F | Pain 9/10"
+syn0_00074,male,"Sex: Male
+Chief complaint: Suicidal ideation
+Vitals: HR 111 bpm | RR 16 breaths/min | SpO2 99% | BP 129/82 mmHg | Temp 98.6°F | Pain 8/10"
+syn0_00074,female,"Sex: Female
+Chief complaint: Suicidal ideation
+Vitals: HR 111 bpm | RR 16 breaths/min | SpO2 99% | BP 129/82 mmHg | Temp 98.6°F | Pain 8/10"
+syn0_00074,unlabeled,"Chief complaint: Suicidal ideation
+Vitals: HR 111 bpm | RR 16 breaths/min | SpO2 99% | BP 129/82 mmHg | Temp 98.6°F | Pain 8/10"
+syn0_00075,male,"Sex: Male
+Chief complaint: Leg swelling
+Vitals: HR 92 bpm | RR 16 breaths/min | SpO2 98% | BP 141/98 mmHg | Temp 97.9°F | Pain 8/10"
+syn0_00075,female,"Sex: Female
+Chief complaint: Leg swelling
+Vitals: HR 92 bpm | RR 16 breaths/min | SpO2 98% | BP 141/98 mmHg | Temp 97.9°F | Pain 8/10"
+syn0_00075,unlabeled,"Chief complaint: Leg swelling
+Vitals: HR 92 bpm | RR 16 breaths/min | SpO2 98% | BP 141/98 mmHg | Temp 97.9°F | Pain 8/10"
+syn0_00076,male,"Sex: Male
+Chief complaint: Rash
+Vitals: HR 86 bpm | RR 17 breaths/min | SpO2 98% | BP 153/89 mmHg | Temp 98.4°F | Pain 6/10"
+syn0_00076,female,"Sex: Female
+Chief complaint: Rash
+Vitals: HR 86 bpm | RR 17 breaths/min | SpO2 98% | BP 153/89 mmHg | Temp 98.4°F | Pain 6/10"
+syn0_00076,unlabeled,"Chief complaint: Rash
+Vitals: HR 86 bpm | RR 17 breaths/min | SpO2 98% | BP 153/89 mmHg | Temp 98.4°F | Pain 6/10"
+syn0_00077,male,"Sex: Male
+Chief complaint: Abd pain
+Vitals: HR 56 bpm | RR 11 breaths/min | SpO2 97% | BP 103/72 mmHg | Temp 98.1°F | Pain 0/10"
+syn0_00077,female,"Sex: Female
+Chief complaint: Abd pain
+Vitals: HR 56 bpm | RR 11 breaths/min | SpO2 97% | BP 103/72 mmHg | Temp 98.1°F | Pain 0/10"
+syn0_00077,unlabeled,"Chief complaint: Abd pain
+Vitals: HR 56 bpm | RR 11 breaths/min | SpO2 97% | BP 103/72 mmHg | Temp 98.1°F | Pain 0/10"
+syn0_00078,male,"Sex: Male
+Chief complaint: S/p fall, head strike
+Vitals: HR 81 bpm | RR 13 breaths/min | SpO2 97% | BP 141/75 mmHg | Temp 98.5°F | Pain 8/10"
+syn0_00078,female,"Sex: Female
+Chief complaint: S/p fall, head strike
+Vitals: HR 81 bpm | RR 13 breaths/min | SpO2 97% | BP 141/75 mmHg | Temp 98.5°F | Pain 8/10"
+syn0_00078,unlabeled,"Chief complaint: S/p fall, head strike
+Vitals: HR 81 bpm | RR 13 breaths/min | SpO2 97% | BP 141/75 mmHg | Temp 98.5°F | Pain 8/10"
+syn0_00079,male,"Sex: Male
+Chief complaint: Fatigue
+Vitals: HR 90 bpm | RR 17 breaths/min | SpO2 97% | BP 144/80 mmHg | Temp 98.1°F | Pain 10/10"
+syn0_00079,female,"Sex: Female
+Chief complaint: Fatigue
+Vitals: HR 90 bpm | RR 17 breaths/min | SpO2 97% | BP 144/80 mmHg | Temp 98.1°F | Pain 10/10"
+syn0_00079,unlabeled,"Chief complaint: Fatigue
+Vitals: HR 90 bpm | RR 17 breaths/min | SpO2 97% | BP 144/80 mmHg | Temp 98.1°F | Pain 10/10"
+syn0_00080,male,"Sex: Male
+Chief complaint: S/p fall, head strike
+Vitals: HR 73 bpm | RR 13 breaths/min | SpO2 96% | BP 156/71 mmHg | Temp 98.9°F | Pain 4/10"
+syn0_00080,female,"Sex: Female
+Chief complaint: S/p fall, head strike
+Vitals: HR 73 bpm | RR 13 breaths/min | SpO2 96% | BP 156/71 mmHg | Temp 98.9°F | Pain 4/10"
+syn0_00080,unlabeled,"Chief complaint: S/p fall, head strike
+Vitals: HR 73 bpm | RR 13 breaths/min | SpO2 96% | BP 156/71 mmHg | Temp 98.9°F | Pain 4/10"
+syn0_00081,male,"Sex: Male
+Chief complaint: Headache
+Vitals: HR 76 bpm | RR 19 breaths/min | SpO2 98% | BP 100/90 mmHg | Temp 97.8°F | Pain 7/10"
+syn0_00081,female,"Sex: Female
+Chief complaint: Headache
+Vitals: HR 76 bpm | RR 19 breaths/min | SpO2 98% | BP 100/90 mmHg | Temp 97.8°F | Pain 7/10"
+syn0_00081,unlabeled,"Chief complaint: Headache
+Vitals: HR 76 bpm | RR 19 breaths/min | SpO2 98% | BP 100/90 mmHg | Temp 97.8°F | Pain 7/10"
+syn0_00082,male,"Sex: Male
+Chief complaint: Cough, fever
+Vitals: HR 81 bpm | RR 19 breaths/min | SpO2 99% | BP 103/72 mmHg | Temp 98.6°F | Pain 8/10"
+syn0_00082,female,"Sex: Female
+Chief complaint: Cough, fever
+Vitals: HR 81 bpm | RR 19 breaths/min | SpO2 99% | BP 103/72 mmHg | Temp 98.6°F | Pain 8/10"
+syn0_00082,unlabeled,"Chief complaint: Cough, fever
+Vitals: HR 81 bpm | RR 19 breaths/min | SpO2 99% | BP 103/72 mmHg | Temp 98.6°F | Pain 8/10"
+syn0_00083,male,"Sex: Male
+Chief complaint: Fever
+Vitals: HR 82 bpm | RR 18 breaths/min | SpO2 98% | BP 115/80 mmHg | Temp 98.0°F | Pain 7/10"
+syn0_00083,female,"Sex: Female
+Chief complaint: Fever
+Vitals: HR 82 bpm | RR 18 breaths/min | SpO2 98% | BP 115/80 mmHg | Temp 98.0°F | Pain 7/10"
+syn0_00083,unlabeled,"Chief complaint: Fever
+Vitals: HR 82 bpm | RR 18 breaths/min | SpO2 98% | BP 115/80 mmHg | Temp 98.0°F | Pain 7/10"
+syn0_00084,male,"Sex: Male
+Chief complaint: Palpitations
+Vitals: HR 88 bpm | RR 16 breaths/min | SpO2 98% | BP 111/75 mmHg | Temp 97.8°F | Pain 9/10"
+syn0_00084,female,"Sex: Female
+Chief complaint: Palpitations
+Vitals: HR 88 bpm | RR 16 breaths/min | SpO2 98% | BP 111/75 mmHg | Temp 97.8°F | Pain 9/10"
+syn0_00084,unlabeled,"Chief complaint: Palpitations
+Vitals: HR 88 bpm | RR 16 breaths/min | SpO2 98% | BP 111/75 mmHg | Temp 97.8°F | Pain 9/10"
+syn0_00085,male,"Sex: Male
+Chief complaint: Ankle injury
+Vitals: HR 83 bpm | RR 14 breaths/min | SpO2 99% | BP 176/83 mmHg | Temp 97.8°F | Pain 3/10"
+syn0_00085,female,"Sex: Female
+Chief complaint: Ankle injury
+Vitals: HR 83 bpm | RR 14 breaths/min | SpO2 99% | BP 176/83 mmHg | Temp 97.8°F | Pain 3/10"
+syn0_00085,unlabeled,"Chief complaint: Ankle injury
+Vitals: HR 83 bpm | RR 14 breaths/min | SpO2 99% | BP 176/83 mmHg | Temp 97.8°F | Pain 3/10"
+syn0_00086,male,"Sex: Male
+Chief complaint: Anxiety
+Vitals: HR 80 bpm | RR 18 breaths/min | SpO2 98% | BP 113/81 mmHg | Temp 99.1°F | Pain 8/10"
+syn0_00086,female,"Sex: Female
+Chief complaint: Anxiety
+Vitals: HR 80 bpm | RR 18 breaths/min | SpO2 98% | BP 113/81 mmHg | Temp 99.1°F | Pain 8/10"
+syn0_00086,unlabeled,"Chief complaint: Anxiety
+Vitals: HR 80 bpm | RR 18 breaths/min | SpO2 98% | BP 113/81 mmHg | Temp 99.1°F | Pain 8/10"
+syn0_00087,male,"Sex: Male
+Chief complaint: Diarrhea
+Vitals: HR 64 bpm | RR 12 breaths/min | SpO2 98% | BP 79/71 mmHg | Temp 98.2°F | Pain 3/10"
+syn0_00087,female,"Sex: Female
+Chief complaint: Diarrhea
+Vitals: HR 64 bpm | RR 12 breaths/min | SpO2 98% | BP 79/71 mmHg | Temp 98.2°F | Pain 3/10"
+syn0_00087,unlabeled,"Chief complaint: Diarrhea
+Vitals: HR 64 bpm | RR 12 breaths/min | SpO2 98% | BP 79/71 mmHg | Temp 98.2°F | Pain 3/10"
+syn0_00088,male,"Sex: Male
+Chief complaint: Leg swelling
+Vitals: HR 94 bpm | RR 17 breaths/min | SpO2 97% | BP 109/74 mmHg | Temp 98.7°F | Pain 3/10"
+syn0_00088,female,"Sex: Female
+Chief complaint: Leg swelling
+Vitals: HR 94 bpm | RR 17 breaths/min | SpO2 97% | BP 109/74 mmHg | Temp 98.7°F | Pain 3/10"
+syn0_00088,unlabeled,"Chief complaint: Leg swelling
+Vitals: HR 94 bpm | RR 17 breaths/min | SpO2 97% | BP 109/74 mmHg | Temp 98.7°F | Pain 3/10"
+syn0_00089,male,"Sex: Male
+Chief complaint: Leg swelling
+Vitals: HR 54 bpm | RR 16 breaths/min | SpO2 99% | BP 125/59 mmHg | Temp 98.6°F | Pain 8/10"
+syn0_00089,female,"Sex: Female
+Chief complaint: Leg swelling
+Vitals: HR 54 bpm | RR 16 breaths/min | SpO2 99% | BP 125/59 mmHg | Temp 98.6°F | Pain 8/10"
+syn0_00089,unlabeled,"Chief complaint: Leg swelling
+Vitals: HR 54 bpm | RR 16 breaths/min | SpO2 99% | BP 125/59 mmHg | Temp 98.6°F | Pain 8/10"
+syn0_00090,male,"Sex: Male
+Chief complaint: RLQ abdominal pain
+Vitals: HR 59 bpm | RR 13 breaths/min | SpO2 97% | BP 116/54 mmHg | Temp 97.9°F | Pain 7/10"
+syn0_00090,female,"Sex: Female
+Chief complaint: RLQ abdominal pain
+Vitals: HR 59 bpm | RR 13 breaths/min | SpO2 97% | BP 116/54 mmHg | Temp 97.9°F | Pain 7/10"
+syn0_00090,unlabeled,"Chief complaint: RLQ abdominal pain
+Vitals: HR 59 bpm | RR 13 breaths/min | SpO2 97% | BP 116/54 mmHg | Temp 97.9°F | Pain 7/10"
+syn0_00091,male,"Sex: Male
+Chief complaint: MVC
+Vitals: HR 66 bpm | RR 14 breaths/min | SpO2 98% | BP 148/104 mmHg | Temp 98.8°F | Pain 6/10"
+syn0_00091,female,"Sex: Female
+Chief complaint: MVC
+Vitals: HR 66 bpm | RR 14 breaths/min | SpO2 98% | BP 148/104 mmHg | Temp 98.8°F | Pain 6/10"
+syn0_00091,unlabeled,"Chief complaint: MVC
+Vitals: HR 66 bpm | RR 14 breaths/min | SpO2 98% | BP 148/104 mmHg | Temp 98.8°F | Pain 6/10"
+syn0_00092,male,"Sex: Male
+Chief complaint: Leg swelling
+Vitals: HR 107 bpm | RR 22 breaths/min | SpO2 92% | BP 124/68 mmHg | Temp 99.4°F | Pain 9/10"
+syn0_00092,female,"Sex: Female
+Chief complaint: Leg swelling
+Vitals: HR 107 bpm | RR 22 breaths/min | SpO2 92% | BP 124/68 mmHg | Temp 99.4°F | Pain 9/10"
+syn0_00092,unlabeled,"Chief complaint: Leg swelling
+Vitals: HR 107 bpm | RR 22 breaths/min | SpO2 92% | BP 124/68 mmHg | Temp 99.4°F | Pain 9/10"
+syn0_00093,male,"Sex: Male
+Chief complaint: Suicidal ideation
+Vitals: HR 89 bpm | RR 13 breaths/min | SpO2 97% | BP 129/60 mmHg | Temp 99.5°F | Pain 5/10"
+syn0_00093,female,"Sex: Female
+Chief complaint: Suicidal ideation
+Vitals: HR 89 bpm | RR 13 breaths/min | SpO2 97% | BP 129/60 mmHg | Temp 99.5°F | Pain 5/10"
+syn0_00093,unlabeled,"Chief complaint: Suicidal ideation
+Vitals: HR 89 bpm | RR 13 breaths/min | SpO2 97% | BP 129/60 mmHg | Temp 99.5°F | Pain 5/10"
+syn0_00094,male,"Sex: Male
+Chief complaint: Diarrhea
+Vitals: HR 65 bpm | RR 14 breaths/min | SpO2 99% | BP 137/80 mmHg | Temp 98.6°F | Pain 7/10"
+syn0_00094,female,"Sex: Female
+Chief complaint: Diarrhea
+Vitals: HR 65 bpm | RR 14 breaths/min | SpO2 99% | BP 137/80 mmHg | Temp 98.6°F | Pain 7/10"
+syn0_00094,unlabeled,"Chief complaint: Diarrhea
+Vitals: HR 65 bpm | RR 14 breaths/min | SpO2 99% | BP 137/80 mmHg | Temp 98.6°F | Pain 7/10"
+syn0_00095,male,"Sex: Male
+Chief complaint: Fever
+Vitals: HR 68 bpm | RR 12 breaths/min | SpO2 98% | BP 122/77 mmHg | Temp 98.4°F | Pain 4/10"
+syn0_00095,female,"Sex: Female
+Chief complaint: Fever
+Vitals: HR 68 bpm | RR 12 breaths/min | SpO2 98% | BP 122/77 mmHg | Temp 98.4°F | Pain 4/10"
+syn0_00095,unlabeled,"Chief complaint: Fever
+Vitals: HR 68 bpm | RR 12 breaths/min | SpO2 98% | BP 122/77 mmHg | Temp 98.4°F | Pain 4/10"
+syn0_00096,male,"Sex: Male
+Chief complaint: Fatigue
+Vitals: HR 89 bpm | RR 17 breaths/min | SpO2 95% | BP 145/82 mmHg | Temp 99.2°F | Pain 2/10"
+syn0_00096,female,"Sex: Female
+Chief complaint: Fatigue
+Vitals: HR 89 bpm | RR 17 breaths/min | SpO2 95% | BP 145/82 mmHg | Temp 99.2°F | Pain 2/10"
+syn0_00096,unlabeled,"Chief complaint: Fatigue
+Vitals: HR 89 bpm | RR 17 breaths/min | SpO2 95% | BP 145/82 mmHg | Temp 99.2°F | Pain 2/10"
+syn0_00097,male,"Sex: Male
+Chief complaint: Chest pain
+Vitals: HR 58 bpm | RR 15 breaths/min | SpO2 96% | BP 125/83 mmHg | Temp 99.4°F | Pain 1/10"
+syn0_00097,female,"Sex: Female
+Chief complaint: Chest pain
+Vitals: HR 58 bpm | RR 15 breaths/min | SpO2 96% | BP 125/83 mmHg | Temp 99.4°F | Pain 1/10"
+syn0_00097,unlabeled,"Chief complaint: Chest pain
+Vitals: HR 58 bpm | RR 15 breaths/min | SpO2 96% | BP 125/83 mmHg | Temp 99.4°F | Pain 1/10"
+syn0_00098,male,"Sex: Male
+Chief complaint: S/p fall, head strike
+Vitals: HR 98 bpm | RR 14 breaths/min | SpO2 98% | BP 126/67 mmHg | Temp 98.5°F | Pain 5/10"
+syn0_00098,female,"Sex: Female
+Chief complaint: S/p fall, head strike
+Vitals: HR 98 bpm | RR 14 breaths/min | SpO2 98% | BP 126/67 mmHg | Temp 98.5°F | Pain 5/10"
+syn0_00098,unlabeled,"Chief complaint: S/p fall, head strike
+Vitals: HR 98 bpm | RR 14 breaths/min | SpO2 98% | BP 126/67 mmHg | Temp 98.5°F | Pain 5/10"
+syn0_00099,male,"Sex: Male
+Chief complaint: Leg swelling
+Vitals: HR 74 bpm | RR 17 breaths/min | SpO2 98% | BP 109/96 mmHg | Temp 99.1°F | Pain 9/10"
+syn0_00099,female,"Sex: Female
+Chief complaint: Leg swelling
+Vitals: HR 74 bpm | RR 17 breaths/min | SpO2 98% | BP 109/96 mmHg | Temp 99.1°F | Pain 9/10"
+syn0_00099,unlabeled,"Chief complaint: Leg swelling
+Vitals: HR 74 bpm | RR 17 breaths/min | SpO2 98% | BP 109/96 mmHg | Temp 99.1°F | Pain 9/10"
+syn0_00100,male,"Sex: Male
+Chief complaint: Chest pain
+Vitals: HR 94 bpm | RR 16 breaths/min | SpO2 95% | BP 150/78 mmHg | Temp 99.5°F | Pain 10/10"
+syn0_00100,female,"Sex: Female
+Chief complaint: Chest pain
+Vitals: HR 94 bpm | RR 16 breaths/min | SpO2 95% | BP 150/78 mmHg | Temp 99.5°F | Pain 10/10"
+syn0_00100,unlabeled,"Chief complaint: Chest pain
+Vitals: HR 94 bpm | RR 16 breaths/min | SpO2 95% | BP 150/78 mmHg | Temp 99.5°F | Pain 10/10"
+syn0_00101,male,"Sex: Male
+Chief complaint: Diarrhea
+Vitals: HR 99 bpm | RR 25 breaths/min | SpO2 95% | BP 108/80 mmHg | Temp 99.5°F | Pain 8/10"
+syn0_00101,female,"Sex: Female
+Chief complaint: Diarrhea
+Vitals: HR 99 bpm | RR 25 breaths/min | SpO2 95% | BP 108/80 mmHg | Temp 99.5°F | Pain 8/10"
+syn0_00101,unlabeled,"Chief complaint: Diarrhea
+Vitals: HR 99 bpm | RR 25 breaths/min | SpO2 95% | BP 108/80 mmHg | Temp 99.5°F | Pain 8/10"
+syn0_00102,male,"Sex: Male
+Chief complaint: MVC
+Vitals: HR 90 bpm | RR 10 breaths/min | SpO2 96% | BP 146/70 mmHg | Temp 97.4°F | Pain 6/10"
+syn0_00102,female,"Sex: Female
+Chief complaint: MVC
+Vitals: HR 90 bpm | RR 10 breaths/min | SpO2 96% | BP 146/70 mmHg | Temp 97.4°F | Pain 6/10"
+syn0_00102,unlabeled,"Chief complaint: MVC
+Vitals: HR 90 bpm | RR 10 breaths/min | SpO2 96% | BP 146/70 mmHg | Temp 97.4°F | Pain 6/10"
+syn0_00103,male,"Sex: Male
+Chief complaint: Dyspnea on exertion
+Vitals: HR 56 bpm | RR 13 breaths/min | SpO2 97% | BP 133/73 mmHg | Temp 98.4°F | Pain 4/10"
+syn0_00103,female,"Sex: Female
+Chief complaint: Dyspnea on exertion
+Vitals: HR 56 bpm | RR 13 breaths/min | SpO2 97% | BP 133/73 mmHg | Temp 98.4°F | Pain 4/10"
+syn0_00103,unlabeled,"Chief complaint: Dyspnea on exertion
+Vitals: HR 56 bpm | RR 13 breaths/min | SpO2 97% | BP 133/73 mmHg | Temp 98.4°F | Pain 4/10"
+syn0_00104,male,"Sex: Male
+Chief complaint: Anxiety
+Vitals: HR 98 bpm | RR 14 breaths/min | SpO2 96% | BP 100/52 mmHg | Temp 99.6°F | Pain 1/10"
+syn0_00104,female,"Sex: Female
+Chief complaint: Anxiety
+Vitals: HR 98 bpm | RR 14 breaths/min | SpO2 96% | BP 100/52 mmHg | Temp 99.6°F | Pain 1/10"
+syn0_00104,unlabeled,"Chief complaint: Anxiety
+Vitals: HR 98 bpm | RR 14 breaths/min | SpO2 96% | BP 100/52 mmHg | Temp 99.6°F | Pain 1/10"
+syn0_00105,male,"Sex: Male
+Chief complaint: Fever
+Vitals: HR 87 bpm | RR 15 breaths/min | SpO2 96% | BP 140/65 mmHg | Temp 98.6°F | Pain 1/10"
+syn0_00105,female,"Sex: Female
+Chief complaint: Fever
+Vitals: HR 87 bpm | RR 15 breaths/min | SpO2 96% | BP 140/65 mmHg | Temp 98.6°F | Pain 1/10"
+syn0_00105,unlabeled,"Chief complaint: Fever
+Vitals: HR 87 bpm | RR 15 breaths/min | SpO2 96% | BP 140/65 mmHg | Temp 98.6°F | Pain 1/10"
+syn0_00106,male,"Sex: Male
+Chief complaint: Shortness of breath
+Vitals: HR 80 bpm | RR 19 breaths/min | SpO2 100% | BP 160/85 mmHg | Temp 98.7°F | Pain 9/10"
+syn0_00106,female,"Sex: Female
+Chief complaint: Shortness of breath
+Vitals: HR 80 bpm | RR 19 breaths/min | SpO2 100% | BP 160/85 mmHg | Temp 98.7°F | Pain 9/10"
+syn0_00106,unlabeled,"Chief complaint: Shortness of breath
+Vitals: HR 80 bpm | RR 19 breaths/min | SpO2 100% | BP 160/85 mmHg | Temp 98.7°F | Pain 9/10"
+syn0_00107,male,"Sex: Male
+Chief complaint: Knee pain
+Vitals: HR 99 bpm | RR 12 breaths/min | SpO2 99% | BP 142/78 mmHg | Temp 98.5°F | Pain 5/10"
+syn0_00107,female,"Sex: Female
+Chief complaint: Knee pain
+Vitals: HR 99 bpm | RR 12 breaths/min | SpO2 99% | BP 142/78 mmHg | Temp 98.5°F | Pain 5/10"
+syn0_00107,unlabeled,"Chief complaint: Knee pain
+Vitals: HR 99 bpm | RR 12 breaths/min | SpO2 99% | BP 142/78 mmHg | Temp 98.5°F | Pain 5/10"
+syn0_00108,male,"Sex: Male
+Chief complaint: Chest pain, diaphoresis
+Vitals: HR 111 bpm | RR 22 breaths/min | SpO2 96% | BP 125/84 mmHg | Temp 99.8°F | Pain 7/10"
+syn0_00108,female,"Sex: Female
+Chief complaint: Chest pain, diaphoresis
+Vitals: HR 111 bpm | RR 22 breaths/min | SpO2 96% | BP 125/84 mmHg | Temp 99.8°F | Pain 7/10"
+syn0_00108,unlabeled,"Chief complaint: Chest pain, diaphoresis
+Vitals: HR 111 bpm | RR 22 breaths/min | SpO2 96% | BP 125/84 mmHg | Temp 99.8°F | Pain 7/10"
+syn0_00109,male,"Sex: Male
+Chief complaint: Diarrhea
+Vitals: HR 99 bpm | RR 17 breaths/min | SpO2 98% | BP 109/81 mmHg | Temp 97.8°F | Pain 3/10"
+syn0_00109,female,"Sex: Female
+Chief complaint: Diarrhea
+Vitals: HR 99 bpm | RR 17 breaths/min | SpO2 98% | BP 109/81 mmHg | Temp 97.8°F | Pain 3/10"
+syn0_00109,unlabeled,"Chief complaint: Diarrhea
+Vitals: HR 99 bpm | RR 17 breaths/min | SpO2 98% | BP 109/81 mmHg | Temp 97.8°F | Pain 3/10"
+syn0_00110,male,"Sex: Male
+Chief complaint: Chest pressure
+Vitals: HR 83 bpm | RR 17 breaths/min | SpO2 97% | BP 153/79 mmHg | Temp 99.1°F | Pain 0/10"
+syn0_00110,female,"Sex: Female
+Chief complaint: Chest pressure
+Vitals: HR 83 bpm | RR 17 breaths/min | SpO2 97% | BP 153/79 mmHg | Temp 99.1°F | Pain 0/10"
+syn0_00110,unlabeled,"Chief complaint: Chest pressure
+Vitals: HR 83 bpm | RR 17 breaths/min | SpO2 97% | BP 153/79 mmHg | Temp 99.1°F | Pain 0/10"
+syn0_00111,male,"Sex: Male
+Chief complaint: RLQ abdominal pain
+Vitals: HR 110 bpm | RR 21 breaths/min | SpO2 94% | BP 134/86 mmHg | Temp 98.5°F | Pain 5/10"
+syn0_00111,female,"Sex: Female
+Chief complaint: RLQ abdominal pain
+Vitals: HR 110 bpm | RR 21 breaths/min | SpO2 94% | BP 134/86 mmHg | Temp 98.5°F | Pain 5/10"
+syn0_00111,unlabeled,"Chief complaint: RLQ abdominal pain
+Vitals: HR 110 bpm | RR 21 breaths/min | SpO2 94% | BP 134/86 mmHg | Temp 98.5°F | Pain 5/10"
+syn0_00112,male,"Sex: Male
+Chief complaint: Chest pain
+Vitals: HR 94 bpm | RR 15 breaths/min | SpO2 98% | BP 117/79 mmHg | Temp 98.2°F | Pain 0/10"
+syn0_00112,female,"Sex: Female
+Chief complaint: Chest pain
+Vitals: HR 94 bpm | RR 15 breaths/min | SpO2 98% | BP 117/79 mmHg | Temp 98.2°F | Pain 0/10"
+syn0_00112,unlabeled,"Chief complaint: Chest pain
+Vitals: HR 94 bpm | RR 15 breaths/min | SpO2 98% | BP 117/79 mmHg | Temp 98.2°F | Pain 0/10"
+syn0_00113,male,"Sex: Male
+Chief complaint: Weakness
+Vitals: HR 102 bpm | RR 21 breaths/min | SpO2 91% | BP 135/89 mmHg | Temp 98.9°F | Pain 7/10"
+syn0_00113,female,"Sex: Female
+Chief complaint: Weakness
+Vitals: HR 102 bpm | RR 21 breaths/min | SpO2 91% | BP 135/89 mmHg | Temp 98.9°F | Pain 7/10"
+syn0_00113,unlabeled,"Chief complaint: Weakness
+Vitals: HR 102 bpm | RR 21 breaths/min | SpO2 91% | BP 135/89 mmHg | Temp 98.9°F | Pain 7/10"
+syn0_00114,male,"Sex: Male
+Chief complaint: Fever
+Vitals: HR 96 bpm | RR 18 breaths/min | SpO2 97% | BP 148/65 mmHg | Temp 98.0°F | Pain 4/10"
+syn0_00114,female,"Sex: Female
+Chief complaint: Fever
+Vitals: HR 96 bpm | RR 18 breaths/min | SpO2 97% | BP 148/65 mmHg | Temp 98.0°F | Pain 4/10"
+syn0_00114,unlabeled,"Chief complaint: Fever
+Vitals: HR 96 bpm | RR 18 breaths/min | SpO2 97% | BP 148/65 mmHg | Temp 98.0°F | Pain 4/10"
+syn0_00115,male,"Sex: Male
+Chief complaint: Chest pain
+Vitals: HR 83 bpm | RR 15 breaths/min | SpO2 94% | BP 144/81 mmHg | Temp 97.4°F | Pain 8/10"
+syn0_00115,female,"Sex: Female
+Chief complaint: Chest pain
+Vitals: HR 83 bpm | RR 15 breaths/min | SpO2 94% | BP 144/81 mmHg | Temp 97.4°F | Pain 8/10"
+syn0_00115,unlabeled,"Chief complaint: Chest pain
+Vitals: HR 83 bpm | RR 15 breaths/min | SpO2 94% | BP 144/81 mmHg | Temp 97.4°F | Pain 8/10"
+syn0_00116,male,"Sex: Male
+Chief complaint: Leg swelling
+Vitals: HR 76 bpm | RR 16 breaths/min | SpO2 96% | BP 144/86 mmHg | Temp 98.9°F | Pain 0/10"
+syn0_00116,female,"Sex: Female
+Chief complaint: Leg swelling
+Vitals: HR 76 bpm | RR 16 breaths/min | SpO2 96% | BP 144/86 mmHg | Temp 98.9°F | Pain 0/10"
+syn0_00116,unlabeled,"Chief complaint: Leg swelling
+Vitals: HR 76 bpm | RR 16 breaths/min | SpO2 96% | BP 144/86 mmHg | Temp 98.9°F | Pain 0/10"
+syn0_00117,male,"Sex: Male
+Chief complaint: Anxiety
+Vitals: HR 104 bpm | RR 18 breaths/min | SpO2 98% | BP 106/72 mmHg | Temp 98.2°F | Pain 6/10"
+syn0_00117,female,"Sex: Female
+Chief complaint: Anxiety
+Vitals: HR 104 bpm | RR 18 breaths/min | SpO2 98% | BP 106/72 mmHg | Temp 98.2°F | Pain 6/10"
+syn0_00117,unlabeled,"Chief complaint: Anxiety
+Vitals: HR 104 bpm | RR 18 breaths/min | SpO2 98% | BP 106/72 mmHg | Temp 98.2°F | Pain 6/10"
+syn0_00118,male,"Sex: Male
+Chief complaint: Cough, fever
+Vitals: HR 100 bpm | RR 17 breaths/min | SpO2 97% | BP 122/70 mmHg | Temp 99.0°F | Pain 3/10"
+syn0_00118,female,"Sex: Female
+Chief complaint: Cough, fever
+Vitals: HR 100 bpm | RR 17 breaths/min | SpO2 97% | BP 122/70 mmHg | Temp 99.0°F | Pain 3/10"
+syn0_00118,unlabeled,"Chief complaint: Cough, fever
+Vitals: HR 100 bpm | RR 17 breaths/min | SpO2 97% | BP 122/70 mmHg | Temp 99.0°F | Pain 3/10"
+syn0_00119,male,"Sex: Male
+Chief complaint: Back pain
+Vitals: HR 107 bpm | RR 19 breaths/min | SpO2 96% | BP 153/72 mmHg | Temp 99.8°F | Pain 9/10"
+syn0_00119,female,"Sex: Female
+Chief complaint: Back pain
+Vitals: HR 107 bpm | RR 19 breaths/min | SpO2 96% | BP 153/72 mmHg | Temp 99.8°F | Pain 9/10"
+syn0_00119,unlabeled,"Chief complaint: Back pain
+Vitals: HR 107 bpm | RR 19 breaths/min | SpO2 96% | BP 153/72 mmHg | Temp 99.8°F | Pain 9/10"
+syn0_00120,male,"Sex: Male
+Chief complaint: Fatigue
+Vitals: HR 78 bpm | RR 18 breaths/min | SpO2 96% | BP 139/81 mmHg | Temp 99.0°F | Pain 3/10"
+syn0_00120,female,"Sex: Female
+Chief complaint: Fatigue
+Vitals: HR 78 bpm | RR 18 breaths/min | SpO2 96% | BP 139/81 mmHg | Temp 99.0°F | Pain 3/10"
+syn0_00120,unlabeled,"Chief complaint: Fatigue
+Vitals: HR 78 bpm | RR 18 breaths/min | SpO2 96% | BP 139/81 mmHg | Temp 99.0°F | Pain 3/10"
+syn0_00121,male,"Sex: Male
+Chief complaint: Ankle injury
+Vitals: HR 69 bpm | RR 17 breaths/min | SpO2 100% | BP 125/62 mmHg | Temp 97.5°F | Pain 0/10"
+syn0_00121,female,"Sex: Female
+Chief complaint: Ankle injury
+Vitals: HR 69 bpm | RR 17 breaths/min | SpO2 100% | BP 125/62 mmHg | Temp 97.5°F | Pain 0/10"
+syn0_00121,unlabeled,"Chief complaint: Ankle injury
+Vitals: HR 69 bpm | RR 17 breaths/min | SpO2 100% | BP 125/62 mmHg | Temp 97.5°F | Pain 0/10"
+syn0_00122,male,"Sex: Male
+Chief complaint: Anxiety
+Vitals: HR 70 bpm | RR 12 breaths/min | SpO2 97% | BP 123/81 mmHg | Temp 98.0°F | Pain 10/10"
+syn0_00122,female,"Sex: Female
+Chief complaint: Anxiety
+Vitals: HR 70 bpm | RR 12 breaths/min | SpO2 97% | BP 123/81 mmHg | Temp 98.0°F | Pain 10/10"
+syn0_00122,unlabeled,"Chief complaint: Anxiety
+Vitals: HR 70 bpm | RR 12 breaths/min | SpO2 97% | BP 123/81 mmHg | Temp 98.0°F | Pain 10/10"
+syn0_00123,male,"Sex: Male
+Chief complaint: Cough, fever
+Vitals: HR 82 bpm | RR 17 breaths/min | SpO2 99% | BP 141/72 mmHg | Temp 97.4°F | Pain 8/10"
+syn0_00123,female,"Sex: Female
+Chief complaint: Cough, fever
+Vitals: HR 82 bpm | RR 17 breaths/min | SpO2 99% | BP 141/72 mmHg | Temp 97.4°F | Pain 8/10"
+syn0_00123,unlabeled,"Chief complaint: Cough, fever
+Vitals: HR 82 bpm | RR 17 breaths/min | SpO2 99% | BP 141/72 mmHg | Temp 97.4°F | Pain 8/10"
+syn0_00124,male,"Sex: Male
+Chief complaint: Hand laceration
+Vitals: HR 80 bpm | RR 20 breaths/min | SpO2 95% | BP 115/91 mmHg | Temp 98.9°F | Pain 0/10"
+syn0_00124,female,"Sex: Female
+Chief complaint: Hand laceration
+Vitals: HR 80 bpm | RR 20 breaths/min | SpO2 95% | BP 115/91 mmHg | Temp 98.9°F | Pain 0/10"
+syn0_00124,unlabeled,"Chief complaint: Hand laceration
+Vitals: HR 80 bpm | RR 20 breaths/min | SpO2 95% | BP 115/91 mmHg | Temp 98.9°F | Pain 0/10"
+syn0_00125,male,"Sex: Male
+Chief complaint: Leg swelling
+Vitals: HR 85 bpm | RR 21 breaths/min | SpO2 97% | BP 72/76 mmHg | Temp 99.7°F | Pain 2/10"
+syn0_00125,female,"Sex: Female
+Chief complaint: Leg swelling
+Vitals: HR 85 bpm | RR 21 breaths/min | SpO2 97% | BP 72/76 mmHg | Temp 99.7°F | Pain 2/10"
+syn0_00125,unlabeled,"Chief complaint: Leg swelling
+Vitals: HR 85 bpm | RR 21 breaths/min | SpO2 97% | BP 72/76 mmHg | Temp 99.7°F | Pain 2/10"
+syn0_00126,male,"Sex: Male
+Chief complaint: Anxiety
+Vitals: HR 82 bpm | RR 14 breaths/min | SpO2 98% | BP 99/65 mmHg | Temp 99.1°F | Pain 7/10"
+syn0_00126,female,"Sex: Female
+Chief complaint: Anxiety
+Vitals: HR 82 bpm | RR 14 breaths/min | SpO2 98% | BP 99/65 mmHg | Temp 99.1°F | Pain 7/10"
+syn0_00126,unlabeled,"Chief complaint: Anxiety
+Vitals: HR 82 bpm | RR 14 breaths/min | SpO2 98% | BP 99/65 mmHg | Temp 99.1°F | Pain 7/10"
+syn0_00127,male,"Sex: Male
+Chief complaint: Headache
+Vitals: HR 92 bpm | RR 19 breaths/min | SpO2 100% | BP 144/68 mmHg | Temp 99.8°F | Pain 1/10"
+syn0_00127,female,"Sex: Female
+Chief complaint: Headache
+Vitals: HR 92 bpm | RR 19 breaths/min | SpO2 100% | BP 144/68 mmHg | Temp 99.8°F | Pain 1/10"
+syn0_00127,unlabeled,"Chief complaint: Headache
+Vitals: HR 92 bpm | RR 19 breaths/min | SpO2 100% | BP 144/68 mmHg | Temp 99.8°F | Pain 1/10"
+syn0_00128,male,"Sex: Male
+Chief complaint: Nausea/vomiting
+Vitals: HR 89 bpm | RR 17 breaths/min | SpO2 97% | BP 112/68 mmHg | Temp 99.3°F | Pain 5/10"
+syn0_00128,female,"Sex: Female
+Chief complaint: Nausea/vomiting
+Vitals: HR 89 bpm | RR 17 breaths/min | SpO2 97% | BP 112/68 mmHg | Temp 99.3°F | Pain 5/10"
+syn0_00128,unlabeled,"Chief complaint: Nausea/vomiting
+Vitals: HR 89 bpm | RR 17 breaths/min | SpO2 97% | BP 112/68 mmHg | Temp 99.3°F | Pain 5/10"
+syn0_00129,male,"Sex: Male
+Chief complaint: Shortness of breath
+Vitals: HR 79 bpm | RR 20 breaths/min | SpO2 93% | BP 112/73 mmHg | Temp 98.0°F | Pain 8/10"
+syn0_00129,female,"Sex: Female
+Chief complaint: Shortness of breath
+Vitals: HR 79 bpm | RR 20 breaths/min | SpO2 93% | BP 112/73 mmHg | Temp 98.0°F | Pain 8/10"
+syn0_00129,unlabeled,"Chief complaint: Shortness of breath
+Vitals: HR 79 bpm | RR 20 breaths/min | SpO2 93% | BP 112/73 mmHg | Temp 98.0°F | Pain 8/10"
+syn0_00130,male,"Sex: Male
+Chief complaint: Suicidal ideation
+Vitals: HR 88 bpm | RR 15 breaths/min | SpO2 98% | BP 159/62 mmHg | Temp 98.4°F | Pain 0/10"
+syn0_00130,female,"Sex: Female
+Chief complaint: Suicidal ideation
+Vitals: HR 88 bpm | RR 15 breaths/min | SpO2 98% | BP 159/62 mmHg | Temp 98.4°F | Pain 0/10"
+syn0_00130,unlabeled,"Chief complaint: Suicidal ideation
+Vitals: HR 88 bpm | RR 15 breaths/min | SpO2 98% | BP 159/62 mmHg | Temp 98.4°F | Pain 0/10"
+syn0_00131,male,"Sex: Male
+Chief complaint: Nausea/vomiting
+Vitals: HR 92 bpm | RR 18 breaths/min | SpO2 97% | BP 117/91 mmHg | Temp 98.8°F | Pain 3/10"
+syn0_00131,female,"Sex: Female
+Chief complaint: Nausea/vomiting
+Vitals: HR 92 bpm | RR 18 breaths/min | SpO2 97% | BP 117/91 mmHg | Temp 98.8°F | Pain 3/10"
+syn0_00131,unlabeled,"Chief complaint: Nausea/vomiting
+Vitals: HR 92 bpm | RR 18 breaths/min | SpO2 97% | BP 117/91 mmHg | Temp 98.8°F | Pain 3/10"
+syn0_00132,male,"Sex: Male
+Chief complaint: Diarrhea
+Vitals: HR 64 bpm | RR 17 breaths/min | SpO2 96% | BP 129/86 mmHg | Temp 98.9°F | Pain 5/10"
+syn0_00132,female,"Sex: Female
+Chief complaint: Diarrhea
+Vitals: HR 64 bpm | RR 17 breaths/min | SpO2 96% | BP 129/86 mmHg | Temp 98.9°F | Pain 5/10"
+syn0_00132,unlabeled,"Chief complaint: Diarrhea
+Vitals: HR 64 bpm | RR 17 breaths/min | SpO2 96% | BP 129/86 mmHg | Temp 98.9°F | Pain 5/10"
+syn0_00133,male,"Sex: Male
+Chief complaint: MVC
+Vitals: HR 112 bpm | RR 19 breaths/min | SpO2 96% | BP 117/105 mmHg | Temp 98.0°F | Pain 10/10"
+syn0_00133,female,"Sex: Female
+Chief complaint: MVC
+Vitals: HR 112 bpm | RR 19 breaths/min | SpO2 96% | BP 117/105 mmHg | Temp 98.0°F | Pain 10/10"
+syn0_00133,unlabeled,"Chief complaint: MVC
+Vitals: HR 112 bpm | RR 19 breaths/min | SpO2 96% | BP 117/105 mmHg | Temp 98.0°F | Pain 10/10"
+syn0_00134,male,"Sex: Male
+Chief complaint: Hand laceration
+Vitals: HR 117 bpm | RR 22 breaths/min | SpO2 95% | BP 130/58 mmHg | Temp 98.3°F | Pain 1/10"
+syn0_00134,female,"Sex: Female
+Chief complaint: Hand laceration
+Vitals: HR 117 bpm | RR 22 breaths/min | SpO2 95% | BP 130/58 mmHg | Temp 98.3°F | Pain 1/10"
+syn0_00134,unlabeled,"Chief complaint: Hand laceration
+Vitals: HR 117 bpm | RR 22 breaths/min | SpO2 95% | BP 130/58 mmHg | Temp 98.3°F | Pain 1/10"
+syn0_00135,male,"Sex: Male
+Chief complaint: Chest pain
+Vitals: HR 84 bpm | RR 16 breaths/min | SpO2 98% | BP 171/83 mmHg | Temp 98.6°F | Pain 10/10"
+syn0_00135,female,"Sex: Female
+Chief complaint: Chest pain
+Vitals: HR 84 bpm | RR 16 breaths/min | SpO2 98% | BP 171/83 mmHg | Temp 98.6°F | Pain 10/10"
+syn0_00135,unlabeled,"Chief complaint: Chest pain
+Vitals: HR 84 bpm | RR 16 breaths/min | SpO2 98% | BP 171/83 mmHg | Temp 98.6°F | Pain 10/10"
+syn0_00136,male,"Sex: Male
+Chief complaint: Weakness
+Vitals: HR 99 bpm | RR 15 breaths/min | SpO2 97% | BP 112/79 mmHg | Temp 98.5°F | Pain 5/10"
+syn0_00136,female,"Sex: Female
+Chief complaint: Weakness
+Vitals: HR 99 bpm | RR 15 breaths/min | SpO2 97% | BP 112/79 mmHg | Temp 98.5°F | Pain 5/10"
+syn0_00136,unlabeled,"Chief complaint: Weakness
+Vitals: HR 99 bpm | RR 15 breaths/min | SpO2 97% | BP 112/79 mmHg | Temp 98.5°F | Pain 5/10"
+syn0_00137,male,"Sex: Male
+Chief complaint: Diarrhea
+Vitals: HR 99 bpm | RR 18 breaths/min | SpO2 100% | BP 160/81 mmHg | Temp 98.6°F | Pain 7/10"
+syn0_00137,female,"Sex: Female
+Chief complaint: Diarrhea
+Vitals: HR 99 bpm | RR 18 breaths/min | SpO2 100% | BP 160/81 mmHg | Temp 98.6°F | Pain 7/10"
+syn0_00137,unlabeled,"Chief complaint: Diarrhea
+Vitals: HR 99 bpm | RR 18 breaths/min | SpO2 100% | BP 160/81 mmHg | Temp 98.6°F | Pain 7/10"
+syn0_00138,male,"Sex: Male
+Chief complaint: Headache
+Vitals: HR 72 bpm | RR 11 breaths/min | SpO2 97% | BP 149/63 mmHg | Temp 99.2°F | Pain 5/10"
+syn0_00138,female,"Sex: Female
+Chief complaint: Headache
+Vitals: HR 72 bpm | RR 11 breaths/min | SpO2 97% | BP 149/63 mmHg | Temp 99.2°F | Pain 5/10"
+syn0_00138,unlabeled,"Chief complaint: Headache
+Vitals: HR 72 bpm | RR 11 breaths/min | SpO2 97% | BP 149/63 mmHg | Temp 99.2°F | Pain 5/10"
+syn0_00139,male,"Sex: Male
+Chief complaint: Palpitations
+Vitals: HR 94 bpm | RR 19 breaths/min | SpO2 97% | BP 100/102 mmHg | Temp 98.3°F | Pain 6/10"
+syn0_00139,female,"Sex: Female
+Chief complaint: Palpitations
+Vitals: HR 94 bpm | RR 19 breaths/min | SpO2 97% | BP 100/102 mmHg | Temp 98.3°F | Pain 6/10"
+syn0_00139,unlabeled,"Chief complaint: Palpitations
+Vitals: HR 94 bpm | RR 19 breaths/min | SpO2 97% | BP 100/102 mmHg | Temp 98.3°F | Pain 6/10"
+syn0_00140,male,"Sex: Male
+Chief complaint: Abd pain
+Vitals: HR 94 bpm | RR 19 breaths/min | SpO2 99% | BP 138/62 mmHg | Temp 98.1°F | Pain 8/10"
+syn0_00140,female,"Sex: Female
+Chief complaint: Abd pain
+Vitals: HR 94 bpm | RR 19 breaths/min | SpO2 99% | BP 138/62 mmHg | Temp 98.1°F | Pain 8/10"
+syn0_00140,unlabeled,"Chief complaint: Abd pain
+Vitals: HR 94 bpm | RR 19 breaths/min | SpO2 99% | BP 138/62 mmHg | Temp 98.1°F | Pain 8/10"
+syn0_00141,male,"Sex: Male
+Chief complaint: Etoh intoxication
+Vitals: HR 84 bpm | RR 12 breaths/min | SpO2 99% | BP 163/95 mmHg | Temp 97.8°F | Pain 1/10"
+syn0_00141,female,"Sex: Female
+Chief complaint: Etoh intoxication
+Vitals: HR 84 bpm | RR 12 breaths/min | SpO2 99% | BP 163/95 mmHg | Temp 97.8°F | Pain 1/10"
+syn0_00141,unlabeled,"Chief complaint: Etoh intoxication
+Vitals: HR 84 bpm | RR 12 breaths/min | SpO2 99% | BP 163/95 mmHg | Temp 97.8°F | Pain 1/10"
+syn0_00142,male,"Sex: Male
+Chief complaint: Shortness of breath
+Vitals: HR 105 bpm | RR 13 breaths/min | SpO2 98% | BP 152/93 mmHg | Temp 98.6°F | Pain 9/10"
+syn0_00142,female,"Sex: Female
+Chief complaint: Shortness of breath
+Vitals: HR 105 bpm | RR 13 breaths/min | SpO2 98% | BP 152/93 mmHg | Temp 98.6°F | Pain 9/10"
+syn0_00142,unlabeled,"Chief complaint: Shortness of breath
+Vitals: HR 105 bpm | RR 13 breaths/min | SpO2 98% | BP 152/93 mmHg | Temp 98.6°F | Pain 9/10"
+syn0_00143,male,"Sex: Male
+Chief complaint: Ankle injury
+Vitals: HR 95 bpm | RR 18 breaths/min | SpO2 96% | BP 143/85 mmHg | Temp 100.1°F | Pain 10/10"
+syn0_00143,female,"Sex: Female
+Chief complaint: Ankle injury
+Vitals: HR 95 bpm | RR 18 breaths/min | SpO2 96% | BP 143/85 mmHg | Temp 100.1°F | Pain 10/10"
+syn0_00143,unlabeled,"Chief complaint: Ankle injury
+Vitals: HR 95 bpm | RR 18 breaths/min | SpO2 96% | BP 143/85 mmHg | Temp 100.1°F | Pain 10/10"
+syn0_00144,male,"Sex: Male
+Chief complaint: Syncope
+Vitals: HR 104 bpm | RR 16 breaths/min | SpO2 98% | BP 135/50 mmHg | Temp 98.6°F | Pain 9/10"
+syn0_00144,female,"Sex: Female
+Chief complaint: Syncope
+Vitals: HR 104 bpm | RR 16 breaths/min | SpO2 98% | BP 135/50 mmHg | Temp 98.6°F | Pain 9/10"
+syn0_00144,unlabeled,"Chief complaint: Syncope
+Vitals: HR 104 bpm | RR 16 breaths/min | SpO2 98% | BP 135/50 mmHg | Temp 98.6°F | Pain 9/10"
+syn0_00145,male,"Sex: Male
+Chief complaint: Syncope
+Vitals: HR 82 bpm | RR 16 breaths/min | SpO2 96% | BP 133/96 mmHg | Temp 98.3°F | Pain 1/10"
+syn0_00145,female,"Sex: Female
+Chief complaint: Syncope
+Vitals: HR 82 bpm | RR 16 breaths/min | SpO2 96% | BP 133/96 mmHg | Temp 98.3°F | Pain 1/10"
+syn0_00145,unlabeled,"Chief complaint: Syncope
+Vitals: HR 82 bpm | RR 16 breaths/min | SpO2 96% | BP 133/96 mmHg | Temp 98.3°F | Pain 1/10"
+syn0_00146,male,"Sex: Male
+Chief complaint: Abd pain
+Vitals: HR 133 bpm | RR 19 breaths/min | SpO2 95% | BP 122/101 mmHg | Temp 100.0°F | Pain 2/10"
+syn0_00146,female,"Sex: Female
+Chief complaint: Abd pain
+Vitals: HR 133 bpm | RR 19 breaths/min | SpO2 95% | BP 122/101 mmHg | Temp 100.0°F | Pain 2/10"
+syn0_00146,unlabeled,"Chief complaint: Abd pain
+Vitals: HR 133 bpm | RR 19 breaths/min | SpO2 95% | BP 122/101 mmHg | Temp 100.0°F | Pain 2/10"
+syn0_00147,male,"Sex: Male
+Chief complaint: Anxiety
+Vitals: HR 66 bpm | RR 19 breaths/min | SpO2 100% | BP 112/86 mmHg | Temp 97.9°F | Pain 3/10"
+syn0_00147,female,"Sex: Female
+Chief complaint: Anxiety
+Vitals: HR 66 bpm | RR 19 breaths/min | SpO2 100% | BP 112/86 mmHg | Temp 97.9°F | Pain 3/10"
+syn0_00147,unlabeled,"Chief complaint: Anxiety
+Vitals: HR 66 bpm | RR 19 breaths/min | SpO2 100% | BP 112/86 mmHg | Temp 97.9°F | Pain 3/10"
+syn0_00148,male,"Sex: Male
+Chief complaint: Shortness of breath
+Vitals: HR 96 bpm | RR 17 breaths/min | SpO2 98% | BP 158/86 mmHg | Temp 98.8°F | Pain 3/10"
+syn0_00148,female,"Sex: Female
+Chief complaint: Shortness of breath
+Vitals: HR 96 bpm | RR 17 breaths/min | SpO2 98% | BP 158/86 mmHg | Temp 98.8°F | Pain 3/10"
+syn0_00148,unlabeled,"Chief complaint: Shortness of breath
+Vitals: HR 96 bpm | RR 17 breaths/min | SpO2 98% | BP 158/86 mmHg | Temp 98.8°F | Pain 3/10"
+syn0_00149,male,"Sex: Male
+Chief complaint: Leg swelling
+Vitals: HR 72 bpm | RR 16 breaths/min | SpO2 96% | BP 115/76 mmHg | Temp 99.0°F | Pain 10/10"
+syn0_00149,female,"Sex: Female
+Chief complaint: Leg swelling
+Vitals: HR 72 bpm | RR 16 breaths/min | SpO2 96% | BP 115/76 mmHg | Temp 99.0°F | Pain 10/10"
+syn0_00149,unlabeled,"Chief complaint: Leg swelling
+Vitals: HR 72 bpm | RR 16 breaths/min | SpO2 96% | BP 115/76 mmHg | Temp 99.0°F | Pain 10/10"
+syn0_00150,male,"Sex: Male
+Chief complaint: Palpitations
+Vitals: HR 111 bpm | RR 21 breaths/min | SpO2 94% | BP 130/82 mmHg | Temp 98.6°F | Pain 6/10"
+syn0_00150,female,"Sex: Female
+Chief complaint: Palpitations
+Vitals: HR 111 bpm | RR 21 breaths/min | SpO2 94% | BP 130/82 mmHg | Temp 98.6°F | Pain 6/10"
+syn0_00150,unlabeled,"Chief complaint: Palpitations
+Vitals: HR 111 bpm | RR 21 breaths/min | SpO2 94% | BP 130/82 mmHg | Temp 98.6°F | Pain 6/10"
+syn0_00151,male,"Sex: Male
+Chief complaint: Fever
+Vitals: HR 107 bpm | RR 18 breaths/min | SpO2 98% | BP 121/70 mmHg | Temp 99.0°F | Pain 6/10"
+syn0_00151,female,"Sex: Female
+Chief complaint: Fever
+Vitals: HR 107 bpm | RR 18 breaths/min | SpO2 98% | BP 121/70 mmHg | Temp 99.0°F | Pain 6/10"
+syn0_00151,unlabeled,"Chief complaint: Fever
+Vitals: HR 107 bpm | RR 18 breaths/min | SpO2 98% | BP 121/70 mmHg | Temp 99.0°F | Pain 6/10"
+syn0_00152,male,"Sex: Male
+Chief complaint: Chest pain, diaphoresis
+Vitals: HR 96 bpm | RR 22 breaths/min | SpO2 99% | BP 115/88 mmHg | Temp 98.9°F | Pain 2/10"
+syn0_00152,female,"Sex: Female
+Chief complaint: Chest pain, diaphoresis
+Vitals: HR 96 bpm | RR 22 breaths/min | SpO2 99% | BP 115/88 mmHg | Temp 98.9°F | Pain 2/10"
+syn0_00152,unlabeled,"Chief complaint: Chest pain, diaphoresis
+Vitals: HR 96 bpm | RR 22 breaths/min | SpO2 99% | BP 115/88 mmHg | Temp 98.9°F | Pain 2/10"
+syn0_00153,male,"Sex: Male
+Chief complaint: Leg swelling
+Vitals: HR 100 bpm | RR 18 breaths/min | SpO2 98% | BP 115/64 mmHg | Temp 98.4°F | Pain 10/10"
+syn0_00153,female,"Sex: Female
+Chief complaint: Leg swelling
+Vitals: HR 100 bpm | RR 18 breaths/min | SpO2 98% | BP 115/64 mmHg | Temp 98.4°F | Pain 10/10"
+syn0_00153,unlabeled,"Chief complaint: Leg swelling
+Vitals: HR 100 bpm | RR 18 breaths/min | SpO2 98% | BP 115/64 mmHg | Temp 98.4°F | Pain 10/10"
+syn0_00154,male,"Sex: Male
+Chief complaint: Palpitations
+Vitals: HR 106 bpm | RR 21 breaths/min | SpO2 92% | BP 142/65 mmHg | Temp 99.5°F | Pain 10/10"
+syn0_00154,female,"Sex: Female
+Chief complaint: Palpitations
+Vitals: HR 106 bpm | RR 21 breaths/min | SpO2 92% | BP 142/65 mmHg | Temp 99.5°F | Pain 10/10"
+syn0_00154,unlabeled,"Chief complaint: Palpitations
+Vitals: HR 106 bpm | RR 21 breaths/min | SpO2 92% | BP 142/65 mmHg | Temp 99.5°F | Pain 10/10"
+syn0_00155,male,"Sex: Male
+Chief complaint: Nausea/vomiting
+Vitals: HR 92 bpm | RR 15 breaths/min | SpO2 98% | BP 98/91 mmHg | Temp 98.2°F | Pain 5/10"
+syn0_00155,female,"Sex: Female
+Chief complaint: Nausea/vomiting
+Vitals: HR 92 bpm | RR 15 breaths/min | SpO2 98% | BP 98/91 mmHg | Temp 98.2°F | Pain 5/10"
+syn0_00155,unlabeled,"Chief complaint: Nausea/vomiting
+Vitals: HR 92 bpm | RR 15 breaths/min | SpO2 98% | BP 98/91 mmHg | Temp 98.2°F | Pain 5/10"
+syn0_00156,male,"Sex: Male
+Chief complaint: Wheezing
+Vitals: HR 93 bpm | RR 12 breaths/min | SpO2 99% | BP 118/50 mmHg | Temp 98.2°F | Pain 8/10"
+syn0_00156,female,"Sex: Female
+Chief complaint: Wheezing
+Vitals: HR 93 bpm | RR 12 breaths/min | SpO2 99% | BP 118/50 mmHg | Temp 98.2°F | Pain 8/10"
+syn0_00156,unlabeled,"Chief complaint: Wheezing
+Vitals: HR 93 bpm | RR 12 breaths/min | SpO2 99% | BP 118/50 mmHg | Temp 98.2°F | Pain 8/10"
+syn0_00157,male,"Sex: Male
+Chief complaint: Rash
+Vitals: HR 98 bpm | RR 19 breaths/min | SpO2 96% | BP 129/75 mmHg | Temp 98.4°F | Pain 3/10"
+syn0_00157,female,"Sex: Female
+Chief complaint: Rash
+Vitals: HR 98 bpm | RR 19 breaths/min | SpO2 96% | BP 129/75 mmHg | Temp 98.4°F | Pain 3/10"
+syn0_00157,unlabeled,"Chief complaint: Rash
+Vitals: HR 98 bpm | RR 19 breaths/min | SpO2 96% | BP 129/75 mmHg | Temp 98.4°F | Pain 3/10"
+syn0_00158,male,"Sex: Male
+Chief complaint: Etoh intoxication
+Vitals: HR 81 bpm | RR 14 breaths/min | SpO2 97% | BP 133/81 mmHg | Temp 98.4°F | Pain 6/10"
+syn0_00158,female,"Sex: Female
+Chief complaint: Etoh intoxication
+Vitals: HR 81 bpm | RR 14 breaths/min | SpO2 97% | BP 133/81 mmHg | Temp 98.4°F | Pain 6/10"
+syn0_00158,unlabeled,"Chief complaint: Etoh intoxication
+Vitals: HR 81 bpm | RR 14 breaths/min | SpO2 97% | BP 133/81 mmHg | Temp 98.4°F | Pain 6/10"
+syn0_00159,male,"Sex: Male
+Chief complaint: Weakness
+Vitals: HR 115 bpm | RR 23 breaths/min | SpO2 95% | BP 88/72 mmHg | Temp 99.6°F | Pain 6/10"
+syn0_00159,female,"Sex: Female
+Chief complaint: Weakness
+Vitals: HR 115 bpm | RR 23 breaths/min | SpO2 95% | BP 88/72 mmHg | Temp 99.6°F | Pain 6/10"
+syn0_00159,unlabeled,"Chief complaint: Weakness
+Vitals: HR 115 bpm | RR 23 breaths/min | SpO2 95% | BP 88/72 mmHg | Temp 99.6°F | Pain 6/10"
+syn0_00160,male,"Sex: Male
+Chief complaint: Diarrhea
+Vitals: HR 100 bpm | RR 17 breaths/min | SpO2 97% | BP 101/89 mmHg | Temp 98.8°F | Pain 6/10"
+syn0_00160,female,"Sex: Female
+Chief complaint: Diarrhea
+Vitals: HR 100 bpm | RR 17 breaths/min | SpO2 97% | BP 101/89 mmHg | Temp 98.8°F | Pain 6/10"
+syn0_00160,unlabeled,"Chief complaint: Diarrhea
+Vitals: HR 100 bpm | RR 17 breaths/min | SpO2 97% | BP 101/89 mmHg | Temp 98.8°F | Pain 6/10"
+syn0_00161,male,"Sex: Male
+Chief complaint: Fall
+Vitals: HR 80 bpm | RR 19 breaths/min | SpO2 97% | BP 110/74 mmHg | Temp 97.9°F | Pain 9/10"
+syn0_00161,female,"Sex: Female
+Chief complaint: Fall
+Vitals: HR 80 bpm | RR 19 breaths/min | SpO2 97% | BP 110/74 mmHg | Temp 97.9°F | Pain 9/10"
+syn0_00161,unlabeled,"Chief complaint: Fall
+Vitals: HR 80 bpm | RR 19 breaths/min | SpO2 97% | BP 110/74 mmHg | Temp 97.9°F | Pain 9/10"
+syn0_00162,male,"Sex: Male
+Chief complaint: Fall
+Vitals: HR 94 bpm | RR 15 breaths/min | SpO2 98% | BP 125/76 mmHg | Temp 98.5°F | Pain 8/10"
+syn0_00162,female,"Sex: Female
+Chief complaint: Fall
+Vitals: HR 94 bpm | RR 15 breaths/min | SpO2 98% | BP 125/76 mmHg | Temp 98.5°F | Pain 8/10"
+syn0_00162,unlabeled,"Chief complaint: Fall
+Vitals: HR 94 bpm | RR 15 breaths/min | SpO2 98% | BP 125/76 mmHg | Temp 98.5°F | Pain 8/10"
+syn0_00163,male,"Sex: Male
+Chief complaint: Leg swelling
+Vitals: HR 79 bpm | RR 12 breaths/min | SpO2 98% | BP 128/72 mmHg | Temp 97.9°F | Pain 10/10"
+syn0_00163,female,"Sex: Female
+Chief complaint: Leg swelling
+Vitals: HR 79 bpm | RR 12 breaths/min | SpO2 98% | BP 128/72 mmHg | Temp 97.9°F | Pain 10/10"
+syn0_00163,unlabeled,"Chief complaint: Leg swelling
+Vitals: HR 79 bpm | RR 12 breaths/min | SpO2 98% | BP 128/72 mmHg | Temp 97.9°F | Pain 10/10"
+syn0_00164,male,"Sex: Male
+Chief complaint: MVC
+Vitals: HR 80 bpm | RR 14 breaths/min | SpO2 95% | BP 134/80 mmHg | Temp 99.7°F | Pain 5/10"
+syn0_00164,female,"Sex: Female
+Chief complaint: MVC
+Vitals: HR 80 bpm | RR 14 breaths/min | SpO2 95% | BP 134/80 mmHg | Temp 99.7°F | Pain 5/10"
+syn0_00164,unlabeled,"Chief complaint: MVC
+Vitals: HR 80 bpm | RR 14 breaths/min | SpO2 95% | BP 134/80 mmHg | Temp 99.7°F | Pain 5/10"
+syn0_00165,male,"Sex: Male
+Chief complaint: Fever
+Vitals: HR 109 bpm | RR 21 breaths/min | SpO2 95% | BP 127/72 mmHg | Temp 99.9°F | Pain 4/10"
+syn0_00165,female,"Sex: Female
+Chief complaint: Fever
+Vitals: HR 109 bpm | RR 21 breaths/min | SpO2 95% | BP 127/72 mmHg | Temp 99.9°F | Pain 4/10"
+syn0_00165,unlabeled,"Chief complaint: Fever
+Vitals: HR 109 bpm | RR 21 breaths/min | SpO2 95% | BP 127/72 mmHg | Temp 99.9°F | Pain 4/10"
+syn0_00166,male,"Sex: Male
+Chief complaint: Blurred vision, headache
+Vitals: HR 113 bpm | RR 19 breaths/min | SpO2 95% | BP 130/84 mmHg | Temp 99.1°F | Pain 9/10"
+syn0_00166,female,"Sex: Female
+Chief complaint: Blurred vision, headache
+Vitals: HR 113 bpm | RR 19 breaths/min | SpO2 95% | BP 130/84 mmHg | Temp 99.1°F | Pain 9/10"
+syn0_00166,unlabeled,"Chief complaint: Blurred vision, headache
+Vitals: HR 113 bpm | RR 19 breaths/min | SpO2 95% | BP 130/84 mmHg | Temp 99.1°F | Pain 9/10"
+syn0_00167,male,"Sex: Male
+Chief complaint: RLQ abdominal pain
+Vitals: HR 94 bpm | RR 18 breaths/min | SpO2 96% | BP 125/88 mmHg | Temp 98.7°F | Pain 4/10"
+syn0_00167,female,"Sex: Female
+Chief complaint: RLQ abdominal pain
+Vitals: HR 94 bpm | RR 18 breaths/min | SpO2 96% | BP 125/88 mmHg | Temp 98.7°F | Pain 4/10"
+syn0_00167,unlabeled,"Chief complaint: RLQ abdominal pain
+Vitals: HR 94 bpm | RR 18 breaths/min | SpO2 96% | BP 125/88 mmHg | Temp 98.7°F | Pain 4/10"
+syn0_00168,male,"Sex: Male
+Chief complaint: Syncope
+Vitals: HR 96 bpm | RR 15 breaths/min | SpO2 96% | BP 111/100 mmHg | Temp 97.8°F | Pain 0/10"
+syn0_00168,female,"Sex: Female
+Chief complaint: Syncope
+Vitals: HR 96 bpm | RR 15 breaths/min | SpO2 96% | BP 111/100 mmHg | Temp 97.8°F | Pain 0/10"
+syn0_00168,unlabeled,"Chief complaint: Syncope
+Vitals: HR 96 bpm | RR 15 breaths/min | SpO2 96% | BP 111/100 mmHg | Temp 97.8°F | Pain 0/10"
+syn0_00169,male,"Sex: Male
+Chief complaint: Back pain
+Vitals: HR 82 bpm | RR 19 breaths/min | SpO2 95% | BP 131/92 mmHg | Temp 99.1°F | Pain 5/10"
+syn0_00169,female,"Sex: Female
+Chief complaint: Back pain
+Vitals: HR 82 bpm | RR 19 breaths/min | SpO2 95% | BP 131/92 mmHg | Temp 99.1°F | Pain 5/10"
+syn0_00169,unlabeled,"Chief complaint: Back pain
+Vitals: HR 82 bpm | RR 19 breaths/min | SpO2 95% | BP 131/92 mmHg | Temp 99.1°F | Pain 5/10"
+syn0_00170,male,"Sex: Male
+Chief complaint: Dizziness
+Vitals: HR 118 bpm | RR 16 breaths/min | SpO2 97% | BP 135/85 mmHg | Temp 99.0°F | Pain 4/10"
+syn0_00170,female,"Sex: Female
+Chief complaint: Dizziness
+Vitals: HR 118 bpm | RR 16 breaths/min | SpO2 97% | BP 135/85 mmHg | Temp 99.0°F | Pain 4/10"
+syn0_00170,unlabeled,"Chief complaint: Dizziness
+Vitals: HR 118 bpm | RR 16 breaths/min | SpO2 97% | BP 135/85 mmHg | Temp 99.0°F | Pain 4/10"
+syn0_00171,male,"Sex: Male
+Chief complaint: Suicidal ideation
+Vitals: HR 84 bpm | RR 12 breaths/min | SpO2 96% | BP 134/78 mmHg | Temp 98.5°F | Pain 3/10"
+syn0_00171,female,"Sex: Female
+Chief complaint: Suicidal ideation
+Vitals: HR 84 bpm | RR 12 breaths/min | SpO2 96% | BP 134/78 mmHg | Temp 98.5°F | Pain 3/10"
+syn0_00171,unlabeled,"Chief complaint: Suicidal ideation
+Vitals: HR 84 bpm | RR 12 breaths/min | SpO2 96% | BP 134/78 mmHg | Temp 98.5°F | Pain 3/10"
+syn0_00172,male,"Sex: Male
+Chief complaint: Weakness
+Vitals: HR 106 bpm | RR 20 breaths/min | SpO2 99% | BP 100/71 mmHg | Temp 98.5°F | Pain 9/10"
+syn0_00172,female,"Sex: Female
+Chief complaint: Weakness
+Vitals: HR 106 bpm | RR 20 breaths/min | SpO2 99% | BP 100/71 mmHg | Temp 98.5°F | Pain 9/10"
+syn0_00172,unlabeled,"Chief complaint: Weakness
+Vitals: HR 106 bpm | RR 20 breaths/min | SpO2 99% | BP 100/71 mmHg | Temp 98.5°F | Pain 9/10"
+syn0_00173,male,"Sex: Male
+Chief complaint: Cough, fever
+Vitals: HR 87 bpm | RR 22 breaths/min | SpO2 98% | BP 141/83 mmHg | Temp 97.9°F | Pain 7/10"
+syn0_00173,female,"Sex: Female
+Chief complaint: Cough, fever
+Vitals: HR 87 bpm | RR 22 breaths/min | SpO2 98% | BP 141/83 mmHg | Temp 97.9°F | Pain 7/10"
+syn0_00173,unlabeled,"Chief complaint: Cough, fever
+Vitals: HR 87 bpm | RR 22 breaths/min | SpO2 98% | BP 141/83 mmHg | Temp 97.9°F | Pain 7/10"
+syn0_00174,male,"Sex: Male
+Chief complaint: Wheezing
+Vitals: HR 80 bpm | RR 17 breaths/min | SpO2 97% | BP 149/76 mmHg | Temp 97.5°F | Pain 3/10"
+syn0_00174,female,"Sex: Female
+Chief complaint: Wheezing
+Vitals: HR 80 bpm | RR 17 breaths/min | SpO2 97% | BP 149/76 mmHg | Temp 97.5°F | Pain 3/10"
+syn0_00174,unlabeled,"Chief complaint: Wheezing
+Vitals: HR 80 bpm | RR 17 breaths/min | SpO2 97% | BP 149/76 mmHg | Temp 97.5°F | Pain 3/10"
+syn0_00175,male,"Sex: Male
+Chief complaint: Leg swelling
+Vitals: HR 69 bpm | RR 16 breaths/min | SpO2 99% | BP 141/82 mmHg | Temp 97.6°F | Pain 4/10"
+syn0_00175,female,"Sex: Female
+Chief complaint: Leg swelling
+Vitals: HR 69 bpm | RR 16 breaths/min | SpO2 99% | BP 141/82 mmHg | Temp 97.6°F | Pain 4/10"
+syn0_00175,unlabeled,"Chief complaint: Leg swelling
+Vitals: HR 69 bpm | RR 16 breaths/min | SpO2 99% | BP 141/82 mmHg | Temp 97.6°F | Pain 4/10"
+syn0_00176,male,"Sex: Male
+Chief complaint: Fall
+Vitals: HR 114 bpm | RR 15 breaths/min | SpO2 97% | BP 178/65 mmHg | Temp 98.7°F | Pain 6/10"
+syn0_00176,female,"Sex: Female
+Chief complaint: Fall
+Vitals: HR 114 bpm | RR 15 breaths/min | SpO2 97% | BP 178/65 mmHg | Temp 98.7°F | Pain 6/10"
+syn0_00176,unlabeled,"Chief complaint: Fall
+Vitals: HR 114 bpm | RR 15 breaths/min | SpO2 97% | BP 178/65 mmHg | Temp 98.7°F | Pain 6/10"
+syn0_00177,male,"Sex: Male
+Chief complaint: Hand laceration
+Vitals: HR 63 bpm | RR 18 breaths/min | SpO2 96% | BP 148/91 mmHg | Temp 97.8°F | Pain 4/10"
+syn0_00177,female,"Sex: Female
+Chief complaint: Hand laceration
+Vitals: HR 63 bpm | RR 18 breaths/min | SpO2 96% | BP 148/91 mmHg | Temp 97.8°F | Pain 4/10"
+syn0_00177,unlabeled,"Chief complaint: Hand laceration
+Vitals: HR 63 bpm | RR 18 breaths/min | SpO2 96% | BP 148/91 mmHg | Temp 97.8°F | Pain 4/10"
+syn0_00178,male,"Sex: Male
+Chief complaint: Rash
+Vitals: HR 63 bpm | RR 14 breaths/min | SpO2 98% | BP 128/76 mmHg | Temp 99.0°F | Pain 7/10"
+syn0_00178,female,"Sex: Female
+Chief complaint: Rash
+Vitals: HR 63 bpm | RR 14 breaths/min | SpO2 98% | BP 128/76 mmHg | Temp 99.0°F | Pain 7/10"
+syn0_00178,unlabeled,"Chief complaint: Rash
+Vitals: HR 63 bpm | RR 14 breaths/min | SpO2 98% | BP 128/76 mmHg | Temp 99.0°F | Pain 7/10"
+syn0_00179,male,"Sex: Male
+Chief complaint: Chest pain
+Vitals: HR 89 bpm | RR 15 breaths/min | SpO2 99% | BP 135/69 mmHg | Temp 98.1°F | Pain 9/10"
+syn0_00179,female,"Sex: Female
+Chief complaint: Chest pain
+Vitals: HR 89 bpm | RR 15 breaths/min | SpO2 99% | BP 135/69 mmHg | Temp 98.1°F | Pain 9/10"
+syn0_00179,unlabeled,"Chief complaint: Chest pain
+Vitals: HR 89 bpm | RR 15 breaths/min | SpO2 99% | BP 135/69 mmHg | Temp 98.1°F | Pain 9/10"
+syn0_00180,male,"Sex: Male
+Chief complaint: Shortness of breath
+Vitals: HR 78 bpm | RR 12 breaths/min | SpO2 98% | BP 115/86 mmHg | Temp 98.2°F | Pain 6/10"
+syn0_00180,female,"Sex: Female
+Chief complaint: Shortness of breath
+Vitals: HR 78 bpm | RR 12 breaths/min | SpO2 98% | BP 115/86 mmHg | Temp 98.2°F | Pain 6/10"
+syn0_00180,unlabeled,"Chief complaint: Shortness of breath
+Vitals: HR 78 bpm | RR 12 breaths/min | SpO2 98% | BP 115/86 mmHg | Temp 98.2°F | Pain 6/10"
+syn0_00181,male,"Sex: Male
+Chief complaint: Nausea/vomiting
+Vitals: HR 98 bpm | RR 21 breaths/min | SpO2 94% | BP 75/79 mmHg | Temp 99.0°F | Pain 7/10"
+syn0_00181,female,"Sex: Female
+Chief complaint: Nausea/vomiting
+Vitals: HR 98 bpm | RR 21 breaths/min | SpO2 94% | BP 75/79 mmHg | Temp 99.0°F | Pain 7/10"
+syn0_00181,unlabeled,"Chief complaint: Nausea/vomiting
+Vitals: HR 98 bpm | RR 21 breaths/min | SpO2 94% | BP 75/79 mmHg | Temp 99.0°F | Pain 7/10"
+syn0_00182,male,"Sex: Male
+Chief complaint: Rash
+Vitals: HR 81 bpm | RR 16 breaths/min | SpO2 96% | BP 138/67 mmHg | Temp 98.5°F | Pain 2/10"
+syn0_00182,female,"Sex: Female
+Chief complaint: Rash
+Vitals: HR 81 bpm | RR 16 breaths/min | SpO2 96% | BP 138/67 mmHg | Temp 98.5°F | Pain 2/10"
+syn0_00182,unlabeled,"Chief complaint: Rash
+Vitals: HR 81 bpm | RR 16 breaths/min | SpO2 96% | BP 138/67 mmHg | Temp 98.5°F | Pain 2/10"
+syn0_00183,male,"Sex: Male
+Chief complaint: Chest pain
+Vitals: HR 62 bpm | RR 17 breaths/min | SpO2 99% | BP 127/60 mmHg | Temp 98.3°F | Pain 0/10"
+syn0_00183,female,"Sex: Female
+Chief complaint: Chest pain
+Vitals: HR 62 bpm | RR 17 breaths/min | SpO2 99% | BP 127/60 mmHg | Temp 98.3°F | Pain 0/10"
+syn0_00183,unlabeled,"Chief complaint: Chest pain
+Vitals: HR 62 bpm | RR 17 breaths/min | SpO2 99% | BP 127/60 mmHg | Temp 98.3°F | Pain 0/10"
+syn0_00184,male,"Sex: Male
+Chief complaint: Abd pain
+Vitals: HR 88 bpm | RR 15 breaths/min | SpO2 95% | BP 104/76 mmHg | Temp 98.5°F | Pain 5/10"
+syn0_00184,female,"Sex: Female
+Chief complaint: Abd pain
+Vitals: HR 88 bpm | RR 15 breaths/min | SpO2 95% | BP 104/76 mmHg | Temp 98.5°F | Pain 5/10"
+syn0_00184,unlabeled,"Chief complaint: Abd pain
+Vitals: HR 88 bpm | RR 15 breaths/min | SpO2 95% | BP 104/76 mmHg | Temp 98.5°F | Pain 5/10"
+syn0_00185,male,"Sex: Male
+Chief complaint: Nausea/vomiting
+Vitals: HR 93 bpm | RR 16 breaths/min | SpO2 93% | BP 128/68 mmHg | Temp 99.6°F | Pain 2/10"
+syn0_00185,female,"Sex: Female
+Chief complaint: Nausea/vomiting
+Vitals: HR 93 bpm | RR 16 breaths/min | SpO2 93% | BP 128/68 mmHg | Temp 99.6°F | Pain 2/10"
+syn0_00185,unlabeled,"Chief complaint: Nausea/vomiting
+Vitals: HR 93 bpm | RR 16 breaths/min | SpO2 93% | BP 128/68 mmHg | Temp 99.6°F | Pain 2/10"
+syn0_00186,male,"Sex: Male
+Chief complaint: Chest pressure
+Vitals: HR 77 bpm | RR 17 breaths/min | SpO2 98% | BP 125/53 mmHg | Temp 98.1°F | Pain 10/10"
+syn0_00186,female,"Sex: Female
+Chief complaint: Chest pressure
+Vitals: HR 77 bpm | RR 17 breaths/min | SpO2 98% | BP 125/53 mmHg | Temp 98.1°F | Pain 10/10"
+syn0_00186,unlabeled,"Chief complaint: Chest pressure
+Vitals: HR 77 bpm | RR 17 breaths/min | SpO2 98% | BP 125/53 mmHg | Temp 98.1°F | Pain 10/10"
+syn0_00187,male,"Sex: Male
+Chief complaint: Diarrhea
+Vitals: HR 69 bpm | RR 13 breaths/min | SpO2 97% | BP 124/62 mmHg | Temp 97.9°F | Pain 4/10"
+syn0_00187,female,"Sex: Female
+Chief complaint: Diarrhea
+Vitals: HR 69 bpm | RR 13 breaths/min | SpO2 97% | BP 124/62 mmHg | Temp 97.9°F | Pain 4/10"
+syn0_00187,unlabeled,"Chief complaint: Diarrhea
+Vitals: HR 69 bpm | RR 13 breaths/min | SpO2 97% | BP 124/62 mmHg | Temp 97.9°F | Pain 4/10"
+syn0_00188,male,"Sex: Male
+Chief complaint: Etoh intoxication
+Vitals: HR 86 bpm | RR 18 breaths/min | SpO2 98% | BP 138/98 mmHg | Temp 99.1°F | Pain 8/10"
+syn0_00188,female,"Sex: Female
+Chief complaint: Etoh intoxication
+Vitals: HR 86 bpm | RR 18 breaths/min | SpO2 98% | BP 138/98 mmHg | Temp 99.1°F | Pain 8/10"
+syn0_00188,unlabeled,"Chief complaint: Etoh intoxication
+Vitals: HR 86 bpm | RR 18 breaths/min | SpO2 98% | BP 138/98 mmHg | Temp 99.1°F | Pain 8/10"
+syn0_00189,male,"Sex: Male
+Chief complaint: Abd pain
+Vitals: HR 80 bpm | RR 13 breaths/min | SpO2 96% | BP 145/75 mmHg | Temp 98.1°F | Pain 6/10"
+syn0_00189,female,"Sex: Female
+Chief complaint: Abd pain
+Vitals: HR 80 bpm | RR 13 breaths/min | SpO2 96% | BP 145/75 mmHg | Temp 98.1°F | Pain 6/10"
+syn0_00189,unlabeled,"Chief complaint: Abd pain
+Vitals: HR 80 bpm | RR 13 breaths/min | SpO2 96% | BP 145/75 mmHg | Temp 98.1°F | Pain 6/10"
+syn0_00190,male,"Sex: Male
+Chief complaint: Dyspnea on exertion
+Vitals: HR 95 bpm | RR 20 breaths/min | SpO2 96% | BP 105/77 mmHg | Temp 99.3°F | Pain 1/10"
+syn0_00190,female,"Sex: Female
+Chief complaint: Dyspnea on exertion
+Vitals: HR 95 bpm | RR 20 breaths/min | SpO2 96% | BP 105/77 mmHg | Temp 99.3°F | Pain 1/10"
+syn0_00190,unlabeled,"Chief complaint: Dyspnea on exertion
+Vitals: HR 95 bpm | RR 20 breaths/min | SpO2 96% | BP 105/77 mmHg | Temp 99.3°F | Pain 1/10"
+syn0_00191,male,"Sex: Male
+Chief complaint: S/p fall, head strike
+Vitals: HR 88 bpm | RR 17 breaths/min | SpO2 98% | BP 109/74 mmHg | Temp 98.7°F | Pain 5/10"
+syn0_00191,female,"Sex: Female
+Chief complaint: S/p fall, head strike
+Vitals: HR 88 bpm | RR 17 breaths/min | SpO2 98% | BP 109/74 mmHg | Temp 98.7°F | Pain 5/10"
+syn0_00191,unlabeled,"Chief complaint: S/p fall, head strike
+Vitals: HR 88 bpm | RR 17 breaths/min | SpO2 98% | BP 109/74 mmHg | Temp 98.7°F | Pain 5/10"
+syn0_00192,male,"Sex: Male
+Chief complaint: Fatigue
+Vitals: HR 89 bpm | RR 14 breaths/min | SpO2 96% | BP 128/82 mmHg | Temp 98.2°F | Pain 10/10"
+syn0_00192,female,"Sex: Female
+Chief complaint: Fatigue
+Vitals: HR 89 bpm | RR 14 breaths/min | SpO2 96% | BP 128/82 mmHg | Temp 98.2°F | Pain 10/10"
+syn0_00192,unlabeled,"Chief complaint: Fatigue
+Vitals: HR 89 bpm | RR 14 breaths/min | SpO2 96% | BP 128/82 mmHg | Temp 98.2°F | Pain 10/10"
+syn0_00193,male,"Sex: Male
+Chief complaint: Palpitations
+Vitals: HR 101 bpm | RR 17 breaths/min | SpO2 95% | BP 130/86 mmHg | Temp 99.2°F | Pain 1/10"
+syn0_00193,female,"Sex: Female
+Chief complaint: Palpitations
+Vitals: HR 101 bpm | RR 17 breaths/min | SpO2 95% | BP 130/86 mmHg | Temp 99.2°F | Pain 1/10"
+syn0_00193,unlabeled,"Chief complaint: Palpitations
+Vitals: HR 101 bpm | RR 17 breaths/min | SpO2 95% | BP 130/86 mmHg | Temp 99.2°F | Pain 1/10"
+syn0_00194,male,"Sex: Male
+Chief complaint: Dyspnea on exertion
+Vitals: HR 72 bpm | RR 16 breaths/min | SpO2 96% | BP 142/55 mmHg | Temp 98.7°F | Pain 8/10"
+syn0_00194,female,"Sex: Female
+Chief complaint: Dyspnea on exertion
+Vitals: HR 72 bpm | RR 16 breaths/min | SpO2 96% | BP 142/55 mmHg | Temp 98.7°F | Pain 8/10"
+syn0_00194,unlabeled,"Chief complaint: Dyspnea on exertion
+Vitals: HR 72 bpm | RR 16 breaths/min | SpO2 96% | BP 142/55 mmHg | Temp 98.7°F | Pain 8/10"
+syn0_00195,male,"Sex: Male
+Chief complaint: Weakness
+Vitals: HR 84 bpm | RR 12 breaths/min | SpO2 100% | BP 148/78 mmHg | Temp 98.7°F | Pain 2/10"
+syn0_00195,female,"Sex: Female
+Chief complaint: Weakness
+Vitals: HR 84 bpm | RR 12 breaths/min | SpO2 100% | BP 148/78 mmHg | Temp 98.7°F | Pain 2/10"
+syn0_00195,unlabeled,"Chief complaint: Weakness
+Vitals: HR 84 bpm | RR 12 breaths/min | SpO2 100% | BP 148/78 mmHg | Temp 98.7°F | Pain 2/10"
+syn0_00196,male,"Sex: Male
+Chief complaint: Cough, fever
+Vitals: HR 127 bpm | RR 19 breaths/min | SpO2 98% | BP 112/87 mmHg | Temp 98.7°F | Pain 3/10"
+syn0_00196,female,"Sex: Female
+Chief complaint: Cough, fever
+Vitals: HR 127 bpm | RR 19 breaths/min | SpO2 98% | BP 112/87 mmHg | Temp 98.7°F | Pain 3/10"
+syn0_00196,unlabeled,"Chief complaint: Cough, fever
+Vitals: HR 127 bpm | RR 19 breaths/min | SpO2 98% | BP 112/87 mmHg | Temp 98.7°F | Pain 3/10"
+syn0_00197,male,"Sex: Male
+Chief complaint: Suicidal ideation
+Vitals: HR 69 bpm | RR 15 breaths/min | SpO2 97% | BP 120/75 mmHg | Temp 99.0°F | Pain 8/10"
+syn0_00197,female,"Sex: Female
+Chief complaint: Suicidal ideation
+Vitals: HR 69 bpm | RR 15 breaths/min | SpO2 97% | BP 120/75 mmHg | Temp 99.0°F | Pain 8/10"
+syn0_00197,unlabeled,"Chief complaint: Suicidal ideation
+Vitals: HR 69 bpm | RR 15 breaths/min | SpO2 97% | BP 120/75 mmHg | Temp 99.0°F | Pain 8/10"
+syn0_00198,male,"Sex: Male
+Chief complaint: Shortness of breath
+Vitals: HR 73 bpm | RR 13 breaths/min | SpO2 96% | BP 134/71 mmHg | Temp 98.6°F | Pain 6/10"
+syn0_00198,female,"Sex: Female
+Chief complaint: Shortness of breath
+Vitals: HR 73 bpm | RR 13 breaths/min | SpO2 96% | BP 134/71 mmHg | Temp 98.6°F | Pain 6/10"
+syn0_00198,unlabeled,"Chief complaint: Shortness of breath
+Vitals: HR 73 bpm | RR 13 breaths/min | SpO2 96% | BP 134/71 mmHg | Temp 98.6°F | Pain 6/10"
+syn0_00199,male,"Sex: Male
+Chief complaint: Ankle injury
+Vitals: HR 82 bpm | RR 16 breaths/min | SpO2 99% | BP 155/76 mmHg | Temp 97.8°F | Pain 7/10"
+syn0_00199,female,"Sex: Female
+Chief complaint: Ankle injury
+Vitals: HR 82 bpm | RR 16 breaths/min | SpO2 99% | BP 155/76 mmHg | Temp 97.8°F | Pain 7/10"
+syn0_00199,unlabeled,"Chief complaint: Ankle injury
+Vitals: HR 82 bpm | RR 16 breaths/min | SpO2 99% | BP 155/76 mmHg | Temp 97.8°F | Pain 7/10"
