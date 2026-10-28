@@ -52,7 +52,7 @@ from .report import verdict, write_report
 from .runner import (AnthropicClient, GeminiClient, OpenAICompatibleClient, RunConfig,
                      client_from_spec, load_results, parse_esi, run)
 from .simulate import SimulatedClient, simulate_results, synthetic_cases
-from .vignettes import (AGE_CONDITIONS, DEFAULT_CONDITIONS, NONBINARY, build_vignettes,
+from .vignettes import (AGE_CONDITIONS, DEFAULT_CONDITIONS, NONBINARY, NONBINARY_AGE, build_vignettes,
                         load_cases_csv, load_mimic_ed_demo)
 
 KEY_ENV = {"anthropic": "ANTHROPIC_API_KEY", "openai": "OPENAI_API_KEY",
@@ -378,7 +378,7 @@ class App:
                                     seed=seed)
         conds = list(AGE_CONDITIONS if b.get("with_age") else DEFAULT_CONDITIONS)
         if b.get("nonbinary"):
-            conds.append(NONBINARY)
+            conds.append(NONBINARY_AGE if b.get("with_age") else NONBINARY)
         mx = b.get("max_cases") or (LIMITS["cases"] if self.public else None)
         if mx and len(cases) > int(mx):
             cases = cases.sample(int(mx), random_state=seed)

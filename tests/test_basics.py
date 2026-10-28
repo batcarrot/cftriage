@@ -9,6 +9,19 @@ from cftriage.simulate import simulate_results, synthetic_cases
 from cftriage.vignettes import DEFAULT_CONDITIONS, build_vignettes
 
 
+def test_labels_agree_on_age():
+    from cftriage.vignettes import AGE_CONDITIONS, NONBINARY, NONBINARY_AGE
+    cases = synthetic_cases(10)
+    vs = build_vignettes(cases, AGE_CONDITIONS + [NONBINARY_AGE])
+    first = vs.vignettes[vs.vignettes.case_id == vs.vignettes.case_id.iloc[0]]
+    assert all(p.startswith("Patient: ") for p in first.prompt)
+    try:
+        build_vignettes(cases, AGE_CONDITIONS + [NONBINARY])
+        assert False, "mixing age and no-age labels must fail"
+    except ValueError:
+        pass
+
+
 def test_parse_esi():
     assert parse_esi('{"esi": 3}') == 3
     assert parse_esi('```json\n{"esi": 2}\n```') == 2

@@ -21,7 +21,7 @@ from . import stats as S
 from .report import write_report
 from .runner import RunConfig, client_from_spec, load_results, run
 from .simulate import SimulatedClient, simulate_results, synthetic_cases
-from .vignettes import (AGE_CONDITIONS, DEFAULT_CONDITIONS, NONBINARY, VignetteSet,
+from .vignettes import (AGE_CONDITIONS, DEFAULT_CONDITIONS, NONBINARY, NONBINARY_AGE, VignetteSet,
                         build_vignettes, load_cases_csv, load_mimic_ed_demo)
 
 
@@ -54,7 +54,7 @@ def cmd_build(a):
         cases = synthetic_cases(a.synthetic, seed=a.seed)
     conds = list(AGE_CONDITIONS if a.with_age else DEFAULT_CONDITIONS)
     if a.nonbinary:
-        conds.append(NONBINARY)
+        conds.append(NONBINARY_AGE if a.with_age else NONBINARY)
     if a.max_cases and len(cases) > a.max_cases:
         cases = cases.sample(a.max_cases, random_state=a.seed)
     vs = build_vignettes(cases, conds)

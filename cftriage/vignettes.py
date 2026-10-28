@@ -77,6 +77,7 @@ AGE_CONDITIONS = [
 ]
 
 NONBINARY = Condition("nonbinary", "Sex: Non-binary")
+NONBINARY_AGE = Condition("nonbinary", "Patient: {age}-year-old non-binary person")
 
 DEFAULT_TEMPLATE = (
     "{demographics}"
@@ -139,6 +140,11 @@ def build_vignettes(cases: pd.DataFrame,
                     exclude_sex_linked: bool = True,
                     require_complete_vitals: bool = True) -> VignetteSet:
     conditions = conditions or DEFAULT_CONDITIONS
+    with_age = {"{age}" in c.line for c in conditions if c.line}
+    if len(with_age) > 1:
+        raise ValueError("some labels include the patient's age and others don't, so labels "
+                         "would differ in more than sex: " +
+                         ", ".join(f"{c.name}: {c.line!r}" for c in conditions if c.line))
     missing = [c for c in REQUIRED_COLUMNS if c not in cases.columns]
     if missing:
         raise ValueError(f"cases is missing columns: {missing}")
