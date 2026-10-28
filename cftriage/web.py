@@ -124,6 +124,7 @@ def _analyze_by_model(res_df, cases, contrasts, n_perm, seed, job):
 _HTTP_HINTS = {
     400: "The provider rejected the request; often the model name is wrong.",
     401: "The provider didn't accept the API key. Check that you copied all of it.",
+    402: "Your account with this provider is out of credit. Add credit, then start again; answers so far are kept.",
     403: "The API key isn't allowed to use this model.",
     404: "The provider doesn't know that model name. Check the spelling.",
     429: "The provider is limiting requests, or the account is out of credit.",
@@ -534,7 +535,8 @@ class App:
             for line in ck.read_text().splitlines():
                 if line.strip():
                     r = json.loads(line)
-                    if r["model"] == name and r.get("error") is None and r["sample"] < cfg.n_samples:
+                    if r["model"] == name and r.get("error") is None and r.get("response") \
+                            and r["sample"] < cfg.n_samples:
                         keys.add((r["case_id"], r["condition"], r["sample"]))
             return len(keys)
 

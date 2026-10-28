@@ -991,7 +991,7 @@ async function loadStudy(name) {
   const host = $("#st-detail");
   let d;
   try { d = await api(`/api/studies/${encodeURIComponent(name)}`); } catch (e) { host.innerHTML = `<div class="error">${esc(e.message)}</div>`; return; }
-  const runForm = store.get("run-form", { provider: "anthropic", model: "", name: "", samples: 10, temperature: 1, max_tokens: 64, concurrency: 4 });
+  const runForm = store.get("run-form", { provider: "anthropic", model: "", name: "", samples: 10, temperature: 1, max_tokens: 1024, concurrency: 4 });
   let h = `<div class="panel stack"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><h2 style="font-size:18px">${esc(d.name)}</h2><span class="btn-row" style="align-items:center">${info.public ? "" : `<code class="hint">${esc(d.path)}</code>`}<button class="btn small" id="st-dl">Download (.zip)</button></span></div>
     <div class="stats">
       <div><div class="stat">${d.n_cases.toLocaleString()}</div><div class="stat-label">cases kept</div></div>
@@ -1333,7 +1333,7 @@ $("#g-start").onclick = async () => {
     say("Preparing the patient cases…");
     const st = await api("/api/studies", { name, source: gForm.src, n: sz.cases, path: (gForm.path || "").trim(), max_cases: gForm.src === "synthetic" ? null : sz.cases,
       csv_text: gForm.src === "csv" && gCsv ? gCsv.text : null });
-    const { job } = await api("/api/run", { study: st.name, model: gSpec(), api_key: KEYS[gForm.provider] || null, samples: sz.samples, temperature: 1, max_tokens: 64, concurrency: 4 });
+    const { job } = await api("/api/run", { study: st.name, model: gSpec(), api_key: KEYS[gForm.provider] || null, samples: sz.samples, temperature: 1, max_tokens: 1024, concurrency: 4 });
     let stopping = false;
     const j = await waitJob(job, j => {
       const left = j.progress > 0 ? j.elapsed / j.progress * (j.total - j.progress) : null;

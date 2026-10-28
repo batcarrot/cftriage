@@ -102,6 +102,7 @@
   const HINTS = {
     400: "The provider rejected the request; often the model name is wrong.",
     401: "The provider didn't accept the API key. Check that you copied all of it.",
+    402: "Your account with this provider is out of credit. Add credit, then start again; answers so far are kept.",
     403: "The API key isn't allowed to use this model.",
     404: "The provider doesn't know that model name. Check the spelling.",
     429: "The provider is limiting requests, or the account is out of credit.",
@@ -114,26 +115,40 @@
     }
   }
   const RETRY = new Set([408, 409, 429, 500, 502, 503, 504, 529]);
+  // These will fail every call the same way, so a run stops at the first one.
+  const FATAL = new Set([401, 402, 403, 404]);
+  class EmptyAnswer extends Error {
+    constructor(truncated, maxTokens) {
+      super(truncated
+        ? `The model used its whole answer limit (${maxTokens} tokens) without giving an answer, usually because it "thinks" first. Raise Max tokens in the Studies tab, or pick a model without built-in reasoning.`
+        : "The model returned an empty answer.");
+      this.truncated = truncated;
+    }
+  }
+  const EMPTY_LIMIT = 20;
 
   async function callProvider(spec, key, system, user, temperature = 1, maxTokens = 64) {
     const i = spec.indexOf(":"), provider = spec.slice(0, i), model = spec.slice(i + 1);
-    let url, headers, body, extract;
+    let url, headers, body, extract, truncated;
     if (provider === "anthropic") {
       url = "https://api.anthropic.com/v1/messages";
       headers = { "content-type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" };
       body = { model, system, max_tokens: maxTokens, temperature, messages: [{ role: "user", content: user }] };
       extract = j => (j.content || []).map(b => b.text || "").join("");
+      truncated = j => j.stop_reason === "max_tokens";
     } else if (provider === "openai" || provider === "openrouter") {
       url = provider === "openai" ? "https://api.openai.com/v1/chat/completions" : "https://openrouter.ai/api/v1/chat/completions";
       headers = { "content-type": "application/json", authorization: `Bearer ${key}` };
       body = { model, temperature, max_tokens: maxTokens, messages: [{ role: "system", content: system }, { role: "user", content: user }] };
       extract = j => j.choices[0].message.content || "";
+      truncated = j => j.choices[0].finish_reason === "length";
     } else if (provider === "gemini") {
       url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
       headers = { "content-type": "application/json", "x-goog-api-key": key };
       body = { systemInstruction: { parts: [{ text: system }] }, contents: [{ role: "user", parts: [{ text: user }] }],
         generationConfig: { temperature, maxOutputTokens: maxTokens } };
       extract = j => ((j.candidates || [])[0]?.content?.parts || []).map(p => p.text || "").join("");
+      truncated = j => (j.candidates || [])[0]?.finishReason === "MAX_TOKENS";
     } else throw new Error(`${provider} isn't available on the hosted version`);
     const r = await realFetch(url, { method: "POST", headers, body: JSON.stringify(body) });
     const text = await r.text();
@@ -142,7 +157,9 @@
       const err = j && (Array.isArray(j) ? j[0]?.error : j.error);
       throw new ProviderError(r.status, err && (err.message || (typeof err === "string" ? err : "")));
     }
-    return extract(j);
+    const answer = extract(j);
+    if (!answer.trim()) throw new EmptyAnswer(truncated(j), maxTokens);
+    return answer;
   }
   function checkSpec(spec, key) {
     if (spec === "simulated") return;
@@ -162,7 +179,7 @@
     const t0 = performance.now();
     const response = b.model === "simulated"
       ? (await call("simulate_answers", { system, prompts: [prompt] })).responses[0]
-      : await callProvider(b.model, key, system, prompt, b.temperature ?? 1, b.max_tokens ?? 64);
+      : await callProvider(b.model, key, system, prompt, b.temperature ?? 1, b.max_tokens ?? 1024);
     const { esi } = await call("parse_esi", { text: response });
     return { prompt, response, esi, seconds: (performance.now() - t0) / 1000 };
   }
@@ -181,7 +198,7 @@
       Object.assign(j, { total: prep.total, progress: prep.done,
         message: `${spec}: ${prep.n_cases} cases × ${prep.n_conditions} conditions × ${+b.samples || 10} samples` });
       const queue = prep.jobs.slice();
-      let buf = [], saving = Promise.resolve(), calls = 0, errors = 0, unparsed = 0, fatal = null;
+      let buf = [], saving = Promise.resolve(), calls = 0, errors = 0, unparsed = 0, fatal = null, answered = 0, empty = 0;
       const save = () => {
         if (!buf.length) return saving;
         const records = buf; buf = [];
@@ -206,11 +223,18 @@
             const q = queue.shift();
             let text = null, err = null;
             for (let attempt = 0; attempt < 5; attempt++) {
-              try { text = await callProvider(spec, key, prep.system, q.prompt, b.temperature ?? 1, b.max_tokens ?? 64); err = null; break; }
+              try { text = await callProvider(spec, key, prep.system, q.prompt, b.temperature ?? 1, b.max_tokens ?? 1024); err = null; answered++; break; }
               catch (e) {
                 err = e.message;
+                if (e instanceof EmptyAnswer) {
+                  answered++; empty++;
+                  if (e.truncated) fatal = e.message;
+                  else if (answered >= EMPTY_LIMIT && empty === answered) fatal = "The model's first answers were all empty. Try another model, or raise Max tokens in the Studies tab.";
+                  err = "empty response";
+                  break;
+                }
                 const retry = !(e instanceof ProviderError) || RETRY.has(e.status);
-                if (!retry) { if (e.status === 401 || e.status === 403 || e.status === 404) fatal = e.message; break; }
+                if (!retry) { if (FATAL.has(e.status)) fatal = e.message; break; }
                 await sleep(Math.min(60000, 1000 * (2 ** attempt) + Math.random() * 1000));
                 if (j.stop) break;
               }
@@ -221,7 +245,7 @@
         await Promise.all(Array.from({ length: concurrency }, worker));
       }
       await save();
-      if (fatal) throw new Error(fatal);
+      if (fatal) throw new Error(`${fatal} The run has stopped.`);
       finish(j, j.stop ? "cancelled" : "done", { calls, errors, unparsed });
     })().catch(e => { if (j.status === "running") finish(j, "error", null, clean(e.message)); });
     return { job: j.id };

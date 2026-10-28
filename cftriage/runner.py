@@ -179,6 +179,17 @@ def client_from_spec(spec: str) -> ModelClient:
 
 # ------------------------------------------------------------------ runner
 
+FATAL_HTTP = {
+    401: "The provider didn't accept the API key.",
+    402: "The provider account is out of credit.",
+    403: "The API key isn't allowed to use this model.",
+    404: "The provider doesn't know that model name.",
+}
+EMPTY_LIMIT = 20
+EMPTY_MESSAGE = ("The model's first answers were all empty. It may be spending the whole "
+                 "max-tokens budget on hidden reasoning: raise max tokens or pick another model.")
+
+
 @dataclass
 class RunConfig:
     model_name: str
@@ -204,7 +215,7 @@ def run(vset: VignetteSet, client: ModelClient | Callable, cfg: RunConfig,
         for line in ck.read_text().splitlines():
             if line.strip():
                 rec = json.loads(line)
-                if rec.get("error") is None:
+                if rec.get("error") is None and rec.get("response"):
                     done[(rec["model"], rec["case_id"], rec["condition"], rec["sample"])] = rec
 
     jobs = [(row.case_id, row.condition, row.prompt, s)
@@ -216,10 +227,21 @@ def run(vset: VignetteSet, client: ModelClient | Callable, cfg: RunConfig,
     lock = threading.Lock()
     fh = ck.open("a") if ck else None
     results = list(done.values())
+    # Errors that will hit every call (bad key, no credit, unknown model) stop
+    # the run instead of being recorded thousands of times.
+    halt = threading.Event()
+    fatal: list[str] = []
+    answered = [0, 0]  # calls answered, of which empty
+
+    def stop_with(msg):
+        with lock:
+            if not fatal:
+                fatal.append(msg)
+        halt.set()
 
     def work(job):
         case_id, cond, prompt, s = job
-        if stop is not None and stop.is_set():
+        if halt.is_set() or (stop is not None and stop.is_set()):
             return None
         err, text = None, None
         for attempt in range(cfg.max_retries):
@@ -229,11 +251,24 @@ def run(vset: VignetteSet, client: ModelClient | Callable, cfg: RunConfig,
                 break
             except urllib.error.HTTPError as e:
                 err = f"HTTP {e.code}: {e.read()[:200]!r}"
+                if e.code in FATAL_HTTP:
+                    stop_with(f"{FATAL_HTTP[e.code]} ({err})")
+                    return None
                 if e.code not in (408, 409, 429, 500, 502, 503, 504, 529):
                     break
             except Exception as e:  # network errors, parse errors in client
                 err = f"{type(e).__name__}: {e}"
             time.sleep(min(60, 2 ** attempt + random.random()))
+        if err is None and not (text or "").strip():
+            err = "empty response"
+            with lock:
+                answered[1] += 1
+        if err is None or err == "empty response":
+            with lock:
+                answered[0] += 1
+                all_empty = answered[0] >= EMPTY_LIMIT and answered[1] == answered[0]
+            if all_empty:
+                stop_with(EMPTY_MESSAGE)
         rec = {"model": cfg.model_name, "case_id": case_id, "condition": cond,
                "sample": s, "response": text, "esi": parse_esi(text),
                "error": err, "t": time.time()}
@@ -255,6 +290,9 @@ def run(vset: VignetteSet, client: ModelClient | Callable, cfg: RunConfig,
     finally:
         if fh:
             fh.close()
+    if fatal:
+        raise RuntimeError(fatal[0] + " Answers received so far are kept; fix this and run "
+                           "again to continue.")
     if not results:
         return pd.DataFrame(columns=["model", "case_id", "condition", "sample",
                                      "response", "esi", "error", "t"])

@@ -75,7 +75,8 @@ def run_prepare(b: dict) -> dict:
         for line in ck.read_text().splitlines():
             if line.strip():
                 r = json.loads(line)
-                if r["model"] == name and r.get("error") is None and r["sample"] < samples:
+                if r["model"] == name and r.get("error") is None and r.get("response") \
+                        and r["sample"] < samples:
                     done.add((r["case_id"], r["condition"], r["sample"]))
     jobs = [{"case_id": row.case_id, "condition": row.condition, "sample": s, "prompt": row.prompt}
             for row in vs.vignettes.itertuples() for s in range(samples)
