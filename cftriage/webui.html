@@ -599,7 +599,7 @@ function jobWidget(host, jobId, { onDone, cancelLabel = "Cancel", note = "" } = 
   const msg = $(".msg", host), bar = $(".bar", host), fill = $(".bar > div", host), pt = $("[data-p]", host), tt = $("[data-t]", host);
   const btn = $("[data-cancel]", host);
   btn.onclick = async () => { btn.disabled = true; btn.textContent = "Stopping…"; await api(`/api/jobs/${jobId}/cancel`, {}).catch(() => {}); };
-  let stopped = false;
+  let stopped = false, first = null;  // first progress reading, for the time-left estimate
   const tick = async () => {
     if (stopped) return;
     let j;
@@ -608,7 +608,12 @@ function jobWidget(host, jobId, { onDone, cancelLabel = "Cancel", note = "" } = 
     tt.textContent = j.elapsed < 60 ? `${j.elapsed.toFixed(0)}s` : `${Math.floor(j.elapsed / 60)}m ${Math.round(j.elapsed % 60)}s`;
     const frac = j.total ? j.progress / j.total : 0;
     if (j.total > 1 || j.progress > 0) { bar.classList.remove("indet"); fill.style.width = (100 * frac).toFixed(1) + "%"; }
-    pt.textContent = j.total > 1 ? `${j.progress.toLocaleString()} / ${j.total.toLocaleString()}` : "";
+    // Time left from the pace seen since this bar appeared (a resumed run
+    // starts part-way, so its elapsed time alone would overstate the speed).
+    if (!first) first = { p: j.progress, t: j.elapsed };
+    const rate = (j.progress - first.p) / (j.elapsed - first.t);
+    const eta = j.status === "running" && j.elapsed - first.t >= 5 && rate > 0 ? ` · about ${fdur((j.total - j.progress) / rate)} left` : "";
+    pt.textContent = j.total > 1 ? `${j.progress.toLocaleString()} / ${j.total.toLocaleString()}${eta}` : "";
     if (j.status === "running") return setTimeout(tick, 600);
     stopped = true;
     if (j.status === "error") host.innerHTML = `<div class="error">${esc(j.error)}</div>`;
