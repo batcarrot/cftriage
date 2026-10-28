@@ -88,7 +88,7 @@ main { max-width: 1280px; margin: 0 auto; padding: 24px; }
 label.field { display: block; }
 label.field > span { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--ink-2); margin-bottom: 4px; }
 label.field > span output { color: var(--ink); font-variant-numeric: tabular-nums; font-weight: 500; }
-input[type=text], input[type=number], select, textarea {
+input[type=text], input[type=number], input[type=password], input[type=file], select, textarea {
   width: 100%; font: inherit; color: var(--ink); background: var(--surface);
   border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px;
 }
@@ -499,7 +499,7 @@ Vitals: HR 104 | RR 20 | SpO2 95% | BP 128/84 | Temp 98.6°F | Pain 7/10</pre></
 
   <!-- ========================================================== Studies -->
   <section class="view" id="view-studies" hidden>
-    <p class="intro">Build a study from MIMIC-IV-ED, your own CSV or synthetic cases, query a model with repeated sampling, then analyze. Studies live in <code id="workspace"></code>.</p>
+    <p class="intro" id="st-intro">Build a study from MIMIC-IV-ED, your own CSV or synthetic cases, query a model with repeated sampling, then analyze. Studies live in <code id="workspace"></code>.</p>
     <div class="layout">
       <div class="side">
         <div class="panel">
@@ -515,6 +515,7 @@ Vitals: HR 104 | RR 20 | SpO2 95% | BP 128/84 | Temp 98.6°F | Pain 7/10</pre></
             <button aria-pressed="false" data-v="mimic">MIMIC-IV-ED</button>
           </div>
           <label class="field" id="nb-n-wrap"><span>Synthetic cases</span><input type="number" id="nb-n" value="200" min="10"></label>
+          <label class="field" id="nb-file-wrap" hidden><span>CSV file</span><input type="file" id="nb-file" accept=".csv,text/csv"></label>
           <label class="field" id="nb-path-wrap" hidden><span id="nb-path-label">Path</span><input type="text" id="nb-path" placeholder="~/data/mimic-iv-ed-demo"></label>
           <p class="hint" id="nb-hint">Synthetic cases test the pipeline only; they say nothing about real models.</p>
           <label class="field"><span>Max cases (optional)</span><input type="number" id="nb-max" min="1" placeholder="all"></label>
@@ -528,6 +529,9 @@ Vitals: HR 104 | RR 20 | SpO2 95% | BP 128/84 | Temp 98.6°F | Pain 7/10</pre></
     </div>
   </section>
 </main>
+<footer class="foot" style="max-width:1280px;margin:0 auto;padding:0 24px 32px">
+  Research tool, not medical advice. <a href="https://github.com/batcarrot/cftriage" target="_blank" rel="noopener">Source code</a><span id="mimic-credit" hidden> · Real cases: MIMIC-IV-ED Demo v2.2 (Johnson et al., PhysioNet), <a href="https://physionet.org/content/mimic-iv-ed-demo/2.2/" target="_blank" rel="noopener">ODbL</a></span>
+</footer>
 <div id="tip" role="tooltip"></div>
 
 <script>
@@ -548,13 +552,42 @@ const store = {
   set(k, v) { try { localStorage.setItem("cftriage." + k, JSON.stringify(v)); } catch {} },
 };
 
+// Per-browser session id. On the hosted version it keeps each visitor's
+// studies separate; locally the server ignores it.
+const SID = (() => {
+  let sid = store.get("sid", null);
+  if (!/^[A-Za-z0-9-]{16,64}$/.test(sid || "")) {
+    sid = [...crypto.getRandomValues(new Uint8Array(16))].map(b => b.toString(16).padStart(2, "0")).join("");
+    store.set("sid", sid);
+  }
+  return sid;
+})();
 async function api(path, body) {
-  const opt = body === undefined ? {} : { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) };
+  const headers = { "x-cftriage-session": SID };
+  const opt = body === undefined ? { headers } : { method: "POST", headers: { ...headers, "content-type": "application/json" }, body: JSON.stringify(body) };
   const r = await fetch(path, opt);
   const j = await r.json().catch(() => ({ error: `HTTP ${r.status}` }));
-  if (!r.ok || (j && j.error && !j.id)) throw new Error(j.error || `HTTP ${r.status}`);
+  if (!r.ok || (j && j.error && !j.id)) throw new Error(String(j.error || `HTTP ${r.status}`).replace(/^(ValueError|RuntimeError): /, ""));
   return j;
 }
+
+async function downloadStudy(name) {
+  const r = await fetch(`/api/studies/${encodeURIComponent(name)}/download`, { headers: { "x-cftriage-session": SID } });
+  if (!r.ok) throw new Error(`Download failed (HTTP ${r.status})`);
+  const url = URL.createObjectURL(await r.blob()), a = document.createElement("a");
+  a.href = url; a.download = `${name}.zip`; document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+// Visitor API keys (hosted version): held in this tab's memory only, never stored.
+const KEYS = {};
+const KEY_HELP = { anthropic: "https://console.anthropic.com/settings/keys", openai: "https://platform.openai.com/api-keys",
+  gemini: "https://aistudio.google.com/apikey", openrouter: "https://openrouter.ai/keys" };
+function keyField(id, provider, label) {
+  return `<label class="field"><span>Your ${esc(label)} API key</span><input type="password" id="${id}" autocomplete="off" spellcheck="false" placeholder="paste it here" value="${esc(KEYS[provider] || "")}"></label>
+    <p class="hint" style="margin-top:6px">No key yet? <a href="${KEY_HELP[provider]}" target="_blank" rel="noopener">Create one</a>. Your key is sent to this server only to ask the AI your questions, kept in memory while your test runs, and never saved or shown to anyone. Questions are billed to your account, so consider a key with a spending limit and delete it afterwards.</p>`;
+}
+function bindKey(id, provider) { const i = $("#" + id); if (i) i.oninput = () => { KEYS[provider] = i.value.trim(); }; }
+const needsKey = p => info && info.public && !!KEY_HELP[p];
 
 // ---------------------------------------------------------------- jobs
 function jobWidget(host, jobId, { onDone, cancelLabel = "Cancel", note = "" } = {}) {
@@ -803,7 +836,8 @@ function renderResults(host, res, { reportPath } = {}) {
     h += `</div></details>`;
   }
   h += `</div>`;
-  if (reportPath) h += `<p class="foot">Markdown report and figures written to <code>${esc(reportPath)}</code></p>`;
+  if (reportPath) h += info && info.public ? `<p class="foot">The Markdown report and figures are included when you download the study.</p>`
+    : `<p class="foot">Markdown report and figures written to <code>${esc(reportPath)}</code></p>`;
   host.innerHTML = h;
 }
 
@@ -912,19 +946,25 @@ $$("#nb-source button").forEach(b => b.onclick = () => {
   nbSource = b.dataset.v;
   $$("#nb-source button").forEach(x => x.setAttribute("aria-pressed", x === b));
   $("#nb-n-wrap").hidden = nbSource !== "synthetic";
-  $("#nb-path-wrap").hidden = nbSource === "synthetic";
+  const builtin = nbSource === "mimic" && info && info.mimic_builtin, upload = nbSource === "csv" && info && info.public;
+  $("#nb-path-wrap").hidden = nbSource === "synthetic" || builtin || upload;
+  $("#nb-file-wrap").hidden = !upload;
   $("#nb-path-label").textContent = nbSource === "csv" ? "CSV file" : "Folder with ed/edstays.csv.gz and ed/triage.csv.gz";
   $("#nb-path").placeholder = nbSource === "csv" ? "~/data/cases.csv" : "~/data/mimic-iv-ed-demo";
   $("#nb-hint").innerHTML = {
     synthetic: "Synthetic cases test the pipeline only; they say nothing about real models.",
     csv: "Columns: case_id, chief_complaint, heart_rate, resp_rate, spo2, sbp, dbp, temperature, pain, esi_true (and optionally age).",
-    mimic: `Open-access demo: <a href="https://physionet.org/content/mimic-iv-ed-demo/2.2/" target="_blank" rel="noopener">physionet.org</a>. Check the data use agreement before sending the full MIMIC-IV-ED to a commercial API.`,
+    mimic: builtin ? `Built in: the open MIMIC-IV-ED demo (about 200 anonymised emergency visits), ODbL licence.`
+      : `Open-access demo: <a href="https://physionet.org/content/mimic-iv-ed-demo/2.2/" target="_blank" rel="noopener">physionet.org</a>. Check the data use agreement before sending the full MIMIC-IV-ED to a commercial API.`,
   }[nbSource];
 });
 $("#nb-build").onclick = async () => {
   const btn = $("#nb-build"); btn.disabled = true; $("#nb-err").innerHTML = "";
   try {
+    const file = nbSource === "csv" && info.public ? $("#nb-file").files[0] : null;
+    if (nbSource === "csv" && info.public && !file) throw new Error("Choose a CSV file.");
     const d = await api("/api/studies", { name: $("#nb-name").value.trim(), source: nbSource, n: +$("#nb-n").value, path: $("#nb-path").value.trim(),
+      csv_text: file ? await file.text() : null,
       max_cases: +$("#nb-max").value || null, nonbinary: $("#nb-nb").checked, with_age: $("#nb-age").checked });
     current = d.name; store.set("study", current);
     await loadStudies();
@@ -951,7 +991,7 @@ async function loadStudy(name) {
   let d;
   try { d = await api(`/api/studies/${encodeURIComponent(name)}`); } catch (e) { host.innerHTML = `<div class="error">${esc(e.message)}</div>`; return; }
   const runForm = store.get("run-form", { provider: "anthropic", model: "", name: "", samples: 10, temperature: 1, max_tokens: 64, concurrency: 4 });
-  let h = `<div class="panel stack"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><h2 style="font-size:18px">${esc(d.name)}</h2><code class="hint">${esc(d.path)}</code></div>
+  let h = `<div class="panel stack"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><h2 style="font-size:18px">${esc(d.name)}</h2><span class="btn-row" style="align-items:center">${info.public ? "" : `<code class="hint">${esc(d.path)}</code>`}<button class="btn small" id="st-dl">Download (.zip)</button></span></div>
     <div class="stats">
       <div><div class="stat">${d.n_cases.toLocaleString()}</div><div class="stat-label">cases kept</div></div>
       <div><div class="stat">${d.excluded.toLocaleString()}</div><div class="stat-label">excluded</div></div>
@@ -977,7 +1017,7 @@ async function loadStudy(name) {
 
   // run form
   h += `<h3>Run a model</h3>
-    <div class="row"><label class="field" style="flex:0 0 150px"><span>Provider</span><select id="rf-provider">${PROVIDERS.map(([p]) => `<option ${p === runForm.provider ? "selected" : ""}>${p}</option>`).join("")}</select></label>
+    <div class="row"><label class="field" style="flex:0 0 150px"><span>Provider</span><select id="rf-provider">${PROVIDERS.filter(([p]) => !info.public || !["ollama", "litellm"].includes(p)).map(([p]) => `<option ${p === runForm.provider ? "selected" : ""}>${p}</option>`).join("")}</select></label>
       <label class="field"><span>Model ID</span><input type="text" id="rf-model" value="${esc(runForm.model)}"></label></div>
     <div id="rf-key"></div>
     <div class="row"><label class="field"><span>Report name (optional)</span><input type="text" id="rf-name" value="${esc(runForm.name)}" placeholder="defaults to provider:model"></label></div>
@@ -995,7 +1035,7 @@ async function loadStudy(name) {
   h += `<div class="panel stack"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h2>Analysis</h2>
     <div class="btn-row"><label class="check">Permutations <select id="an-perm" style="width:auto"><option>1000</option><option selected>2000</option><option>5000</option></select></label>
     <button class="btn primary" id="an-run" ${d.results.length ? "" : "disabled"}>Analyze all runs</button></div></div>
-    ${d.report ? `<p class="hint">Last report: <code>${esc(d.report)}</code></p>` : ""}<div id="an-job"></div></div><div id="an-results"></div>`;
+    ${d.report ? (info.public ? `<p class="hint">A written report is included in the download.</p>` : `<p class="hint">Last report: <code>${esc(d.report)}</code></p>`) : ""}<div id="an-job"></div></div><div id="an-results"></div>`;
   host.innerHTML = h;
 
   // example prompt tabs
@@ -1018,7 +1058,8 @@ async function loadStudy(name) {
     const p = $("#rf-provider").value, ph = PROVIDERS.find(x => x[0] === p)[1];
     $("#rf-model").placeholder = ph; $("#rf-model").disabled = p === "simulated";
     const env = info.key_env[p];
-    $("#rf-key").innerHTML = p === "simulated" ? `<span class="pill ok"><i>✓</i>Offline simulated model; no API key, no cost.</span>`
+    if (needsKey(p)) { $("#rf-key").innerHTML = keyField("rf-apikey", p, p); bindKey("rf-apikey", p); }
+    else $("#rf-key").innerHTML = p === "simulated" ? `<span class="pill ok"><i>✓</i>Offline simulated model; no API key, no cost.</span>`
       : env ? (info.keys[p] ? `<span class="pill ok"><i>✓</i><code>${env}</code> is set</span>`
         : `<span class="pill missing"><i>✕</i><code>${env}</code> is not set. Export it, then restart <code>python -m cftriage serve</code>.</span>`)
       : p === "ollama" ? `<span class="pill ok"><i>✓</i>Local server at localhost:11434</span>` : `<span class="pill"><i>•</i>Uses LiteLLM's own environment variables</span>`;
@@ -1028,7 +1069,9 @@ async function loadStudy(name) {
   };
   ["rf-provider", "rf-model", "rf-name", "rf-samples", "rf-temp", "rf-tok", "rf-conc"].forEach(id => $("#" + id).addEventListener("input", upd));
   upd();
-  const runBody = () => ({ study: d.name, model: spec(), name: $("#rf-name").value.trim() || null, samples: +$("#rf-samples").value,
+  if (!$("#rf-provider").value) $("#rf-provider").selectedIndex = 0;
+  $("#st-dl").onclick = () => downloadStudy(d.name).catch(e => alert(e.message));
+  const runBody = () => ({ study: d.name, model: spec(), api_key: KEYS[$("#rf-provider").value] || null, name: $("#rf-name").value.trim() || null, samples: +$("#rf-samples").value,
     temperature: +$("#rf-temp").value, max_tokens: +$("#rf-tok").value, concurrency: +$("#rf-conc").value });
   $("#rf-test").onclick = async () => {
     const b = $("#rf-test"); b.disabled = true; $("#rf-out").innerHTML = `<p class="hint">Calling…</p>`;
@@ -1194,8 +1237,13 @@ const G_PROVIDERS = [
 ];
 const G_SIZES = { quick: { cases: 50, samples: 5 }, standard: { cases: 200, samples: 10 }, thorough: { cases: 500, samples: 10 } };
 const gForm = store.get("g-form", { src: "synthetic", size: "standard", provider: "simulated", model: "", path: "" });
-$("#g-provider").innerHTML = G_PROVIDERS.map(([v, l]) => `<option value="${v}">${esc(l)}</option>`).join("");
-$("#g-provider").value = gForm.provider; $("#g-model").value = gForm.model;
+let gCsv = null;  // uploaded CSV (hosted version), kept in memory
+function gProviders() {
+  const list = G_PROVIDERS.filter(([v]) => !(info && info.public && v === "ollama"));
+  $("#g-provider").innerHTML = list.map(([v, l]) => `<option value="${v}">${esc(l)}</option>`).join("");
+  $("#g-provider").value = list.some(x => x[0] === gForm.provider) ? gForm.provider : "simulated";
+}
+gProviders(); $("#g-model").value = gForm.model;
 function gChoice(id, key) {
   $$(`#${id} .choice`).forEach(b => {
     b.setAttribute("aria-pressed", b.dataset.v === gForm[key]);
@@ -1206,8 +1254,20 @@ function gUpdate() {
   store.set("g-form", gForm);
   const src = gForm.src;
   const extra = $("#g-src-extra");
-  if (src === "synthetic") extra.innerHTML = "";
-  else if (!extra.querySelector("input") || extra.dataset.src !== src) {
+  const builtin = src === "mimic" && info && info.mimic_builtin, upload = src === "csv" && info && info.public;
+  if (src === "synthetic") { extra.innerHTML = ""; extra.dataset.src = src; }
+  else if (builtin) { extra.dataset.src = src;
+    extra.innerHTML = `<span class="pill ok"><i>✓</i>Ready to use: about 200 anonymised emergency visits from the MIMIC-IV-ED demo (open data, ODbL licence).</span>`; }
+  else if (upload) {
+    if (extra.dataset.src !== "upload") {
+      extra.dataset.src = "upload";
+      extra.innerHTML = `<p class="hint">Columns needed: case_id, chief_complaint, heart_rate, resp_rate, spo2, sbp, dbp, temperature, pain, esi_true (age optional). Up to 5 MB.</p>
+        <label class="field" style="margin-top:6px"><span>File</span><input type="file" id="g-file" accept=".csv,text/csv"></label><p class="hint" id="g-file-name"></p>`;
+      $("#g-file").onchange = async e => { const f = e.target.files[0]; gCsv = f ? { name: f.name, text: await f.text() } : null; $("#g-file-name").textContent = gCsv ? `Loaded ${gCsv.name}` : ""; };
+      if (gCsv) $("#g-file-name").textContent = `Loaded ${gCsv.name}`;
+    }
+  }
+  else if (!extra.querySelector("input[type=text]") || extra.dataset.src !== src) {
     extra.dataset.src = src;
     extra.innerHTML = src === "mimic"
       ? `<p class="hint">1. Download <code>ed/edstays.csv.gz</code> and <code>ed/triage.csv.gz</code> from the <a href="https://physionet.org/content/mimic-iv-ed-demo/2.2/" target="_blank" rel="noopener">MIMIC-IV-ED demo</a>. 2. Put them in one folder. 3. Paste that folder's location here.</p>
@@ -1222,7 +1282,8 @@ function gUpdate() {
   $("#g-model").placeholder = p[2] ? `e.g. ${p[2]}` : "";
   $("#g-model").disabled = p[0] === "simulated";
   const env = info && info.key_env[p[0]];
-  $("#g-key").innerHTML = p[0] === "simulated"
+  if (needsKey(p[0])) { $("#g-key").innerHTML = keyField("g-apikey", p[0], p[1]); bindKey("g-apikey", p[0]); }
+  else $("#g-key").innerHTML = p[0] === "simulated"
     ? `<span class="pill ok"><i>✓</i>A pretend AI built into this tool. Use it to rehearse; its results mean nothing about real AIs.</span>`
     : p[0] === "ollama" ? `<span class="pill ok"><i>✓</i>Needs Ollama running on this computer with the model downloaded.</span>`
     : info && info.keys[p[0]] ? `<span class="pill ok"><i>✓</i>Your ${esc(p[1])} key is set up.</span>`
@@ -1230,26 +1291,33 @@ function gUpdate() {
        <pre class="cmd">export ${env}=paste-your-key-here
 python -m cftriage serve</pre>For your security, this page never asks for the key itself.</div>`;
   const sz = G_SIZES[gForm.size], n = sz.cases * 3 * sz.samples;
-  $("#g-summary").innerHTML = `You're about to ask <strong>${esc(p[1])}</strong> up to <strong>${n.toLocaleString()}</strong> short questions about ${src === "synthetic" ? "practice" : "real"} cases. You can stop at any time and pick up where you left off.`;
+  $("#g-summary").innerHTML = `You're about to ask <strong>${esc(p[1])}</strong> up to <strong>${n.toLocaleString()}</strong> short questions about ${src === "synthetic" ? "practice" : "real"} cases.${needsKey(p[0]) ? " They are billed to your account." : ""} You can stop at any time and pick up where you left off.`;
 }
 gChoice("g-src", "src"); gChoice("g-size", "size");
 $("#g-provider").onchange = () => { $("#g-model").value = ""; $("#g-check-out").innerHTML = ""; gUpdate(); };
 $("#g-model").oninput = gUpdate;
 const gSpec = () => gForm.provider === "simulated" ? "simulated" : `${gForm.provider}:${$("#g-model").value.trim()}`;
-function gValidate() {
+function gValidateAI() {
   if (gForm.provider !== "simulated" && !$("#g-model").value.trim()) return "Type the model name, for example " + G_PROVIDERS.find(x => x[0] === gForm.provider)[2] + ".";
-  if (gForm.src !== "synthetic" && !(gForm.path || "").trim()) return gForm.src === "mimic" ? "Paste the folder that holds the MIMIC files." : "Paste the location of your CSV file.";
+  if (needsKey(gForm.provider) && !KEYS[gForm.provider]) return "Paste your API key first.";
+  return null;
+}
+function gValidate() {
+  const e = gValidateAI(); if (e) return e;
+  if (gForm.src === "mimic" && !(info && info.mimic_builtin) && !(gForm.path || "").trim()) return "Paste the folder that holds the MIMIC files.";
+  if (gForm.src === "csv" && info && info.public && !gCsv) return "Choose your CSV file.";
+  if (gForm.src === "csv" && !(info && info.public) && !(gForm.path || "").trim()) return "Paste the location of your CSV file.";
   return null;
 }
 $("#g-check").onclick = async () => {
-  const err = gValidate(); if (err && !err.startsWith("Paste")) { $("#g-check-out").innerHTML = `<div class="error">${esc(err)}</div>`; return; }
+  const err = gValidateAI(); if (err) { $("#g-check-out").innerHTML = `<div class="error">${esc(err)}</div>`; return; }
   const b = $("#g-check"); b.disabled = true; $("#g-check-out").innerHTML = `<p class="hint">Asking one practice question…</p>`;
   try {
-    const r = await api("/api/test-call", { model: gSpec() });
+    const r = await api("/api/test-call", { model: gSpec(), api_key: KEYS[gForm.provider] || null });
     $("#g-check-out").innerHTML = r.esi
       ? `<span class="pill ok"><i>✓</i>Connected. The AI answered level ${r.esi} in ${r.seconds.toFixed(1)} seconds.</span>`
       : `<div class="callout">Connected, but we couldn't read a level from the answer. The test can still run, and unreadable answers are counted separately. The AI said: <code>${esc(r.response.slice(0, 200))}</code></div>`;
-  } catch (e) { $("#g-check-out").innerHTML = `<div class="error">Couldn't reach the AI. ${esc(e.message)}</div>`; }
+  } catch (e) { $("#g-check-out").innerHTML = `<div class="error">That didn't work. ${esc(e.message)}</div>`; }
   b.disabled = false;
 };
 $("#g-start").onclick = async () => {
@@ -1262,8 +1330,9 @@ $("#g-start").onclick = async () => {
     <div class="bar ${frac == null ? "indet" : ""}"><div style="width:${frac == null ? 0 : (100 * frac).toFixed(1)}%"></div></div>${extra}</div>`;
   try {
     say("Preparing the patient cases…");
-    const st = await api("/api/studies", { name, source: gForm.src, n: sz.cases, path: (gForm.path || "").trim(), max_cases: gForm.src === "synthetic" ? null : sz.cases });
-    const { job } = await api("/api/run", { study: st.name, model: gSpec(), samples: sz.samples, temperature: 1, max_tokens: 64, concurrency: 4 });
+    const st = await api("/api/studies", { name, source: gForm.src, n: sz.cases, path: (gForm.path || "").trim(), max_cases: gForm.src === "synthetic" ? null : sz.cases,
+      csv_text: gForm.src === "csv" && gCsv ? gCsv.text : null });
+    const { job } = await api("/api/run", { study: st.name, model: gSpec(), api_key: KEYS[gForm.provider] || null, samples: sz.samples, temperature: 1, max_tokens: 64, concurrency: 4 });
     let stopping = false;
     const j = await waitJob(job, j => {
       const left = j.progress > 0 ? j.elapsed / j.progress * (j.total - j.progress) : null;
@@ -1285,8 +1354,10 @@ $("#g-start").onclick = async () => {
     if (ja.status !== "done") throw new Error(ja.error || "Analysis stopped.");
     const m = Object.keys(ja.result.models)[0];
     out.innerHTML = `${plainVerdict(ja.result, m).html}
-      <div class="btn-row" style="margin-top:12px"><button class="btn" id="g-full">See the full statistics</button></div>
-      <p class="foot">Saved as <code>${esc(st.name)}</code>, with a written report at <code>${esc(ja.result.report)}</code>.</p>`;
+      <div class="btn-row" style="margin-top:12px"><button class="btn primary" id="g-dl">Download results and report</button><button class="btn" id="g-full">See the full statistics</button></div>
+      <p class="foot">${info.public ? `Saved as <code>${esc(st.name)}</code> for 24 hours, visible only in this browser. Download it to keep it.`
+        : `Saved as <code>${esc(st.name)}</code>, with a written report at <code>${esc(ja.result.report)}</code>.`}</p>`;
+    $("#g-dl").onclick = () => downloadStudy(st.name).catch(e => alert(e.message));
     $("#g-full").onclick = () => { current = st.name; store.set("study", current); show("studies"); };
   } catch (e) {
     out.innerHTML = `<div class="error">${esc(e.message)}</div>`;
@@ -1296,8 +1367,10 @@ $("#g-start").onclick = async () => {
 
 // ---------------------------------------------------------------- boot
 (async () => {
-  try { info = await api("/api/info"); $("#version").textContent = "v" + info.version; $("#workspace").textContent = info.workspace; } catch {}
-  gUpdate(); gShow(gStep);
+  try { info = await api("/api/info"); $("#version").textContent = "v" + info.version; $("#workspace").textContent = info.workspace || ""; } catch {}
+  if (info && info.public) $("#st-intro").textContent = "Build a study, query a model with repeated sampling, then analyze. Your studies are private to this browser and deleted after 24 hours; download anything you want to keep.";
+  if (info && info.mimic_builtin) $("#mimic-credit").hidden = false;
+  gProviders(); gUpdate(); gShow(gStep);
   show(store.get("view", "guide"));
   refreshJobs(); setInterval(refreshJobs, 5000);
 })();

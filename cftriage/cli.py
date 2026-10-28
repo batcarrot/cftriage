@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
 
 import pandas as pd
@@ -125,7 +126,8 @@ def cmd_demo(a):
 
 def cmd_serve(a):
     from .web import serve
-    serve(a.workspace, port=a.port, open_browser=not a.no_browser)
+    serve(a.workspace, port=a.port, open_browser=not a.no_browser, public=a.public,
+          mimic_demo=a.mimic_demo)
 
 
 def main(argv=None):
@@ -189,8 +191,13 @@ def main(argv=None):
 
     sv = sub.add_parser("serve", help="local web app (playground, power, studies)")
     sv.add_argument("--workspace", default=".", help="folder that holds study folders")
-    sv.add_argument("--port", type=int, default=8765)
+    sv.add_argument("--port", type=int, default=int(os.environ.get("PORT", 8765)))
     sv.add_argument("--no-browser", action="store_true")
+    sv.add_argument("--public", action="store_true",
+                    default=os.environ.get("CFTRIAGE_PUBLIC") == "1",
+                    help="hosting mode: per-visitor workspaces, visitors bring their own API keys")
+    sv.add_argument("--mimic-demo", default=os.environ.get("CFTRIAGE_MIMIC_DEMO"),
+                    help="folder with the MIMIC-IV-ED demo, offered as built-in real cases")
     sv.set_defaults(func=cmd_serve)
 
     a = ap.parse_args(argv)

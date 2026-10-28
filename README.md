@@ -44,6 +44,23 @@ A local web app, standard library only, with four views:
 
 Study folders live under `--workspace` (default: the current folder), so everything the web app does also works from the CLI. API keys come only from the server's environment. Export them before `serve`; the page never asks for them. The server listens on 127.0.0.1 only and refuses cross-origin requests, so other websites cannot start paid runs.
 
+### Hosting it
+
+`python -m cftriage serve --public` (or the `Dockerfile`) runs the hosted version:
+
+- Each browser gets a private workspace, deleted after 24 hours.
+- Visitors paste their own API key. It is held in memory only while their test runs, never written to disk or logged, and the server's own environment keys are never used.
+- Local file paths, Ollama and LiteLLM are turned off. Cases come from the built-in [MIMIC-IV-ED demo](https://physionet.org/content/mimic-iv-ed-demo/2.2/) (open data, ODbL), a CSV upload, or synthetic data.
+- Study sizes and simultaneous jobs are capped, and visitors can download their results and report as a zip.
+
+To publish on a free [Hugging Face Space](https://huggingface.co/spaces) (2 CPUs):
+
+1. Create a Space at <https://huggingface.co/new-space> with SDK **Docker** and template **Blank**.
+2. Log in once with a write token: `hf auth login`.
+3. Run `deploy/hf_space.sh <your-username>/<space-name>`. It pushes the committed code plus the Space config; the Space builds in a few minutes.
+
+Re-run step 3 after each commit you want to publish.
+
 ## Running a real study
 
 ### 1. Get cases
@@ -199,8 +216,11 @@ cftriage/
   report.py      markdown report and figures
   simulate.py    synthetic cases and simulated models
   cli.py         command line
-  web.py         local web app server (python -m cftriage serve)
+  web.py         web app server (python -m cftriage serve [--public])
   webui.html     web app page
+Dockerfile       hosted version (public mode, built-in MIMIC-IV-ED demo)
+deploy/
+  hf_space.sh    publish to a Hugging Face Space
 tests/
   test_basics.py
   validate_calibration.py

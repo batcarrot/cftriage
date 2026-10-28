@@ -1,32 +1,44 @@
-"""Local web app: python -m cftriage serve
+"""Web app: python -m cftriage serve
 
-Standard library only (http.server). Binds to 127.0.0.1 by default. Long work
-(simulations, power analysis, model runs, analysis) runs in background jobs
-that the page polls.
+Standard library only (http.server). Long work (simulations, power analysis,
+model runs, analysis) runs in background jobs that the page polls.
 
-Three views:
-* Playground - simulated models with known behaviour; see what each verdict
-  looks like as you change noise, planted bias and instability.
+Views:
+* Guide      - plain-language walkthrough and a three-choice wizard.
+* Playground - simulated models with known behaviour.
 * Power      - simulated power for the female-vs-male contrast.
-* Studies    - build a study, query a model (API keys come from the server's
-  environment, never from the page), analyze and write the Markdown report.
+* Studies    - build a study, query a model, analyze, write the report.
 
-API keys are read from environment variables only. Because the server can
-spend money on API calls, every POST must be JSON with a matching Origin, so
-other web pages cannot drive it.
+Two modes:
+
+Local (default). Binds to 127.0.0.1. API keys come from the server's
+environment. Only same-origin JSON requests to localhost are accepted, so
+other web pages cannot start paid runs.
+
+Public (--public, for hosting). Binds to 0.0.0.0. Each browser gets its own
+workspace (a random session id sent in a header), deleted after a day of
+inactivity. Visitors bring their own API key with each request; it is kept in
+memory only while their calls run, never written to disk or logged, and the
+server's own environment keys are never used. Local file paths, Ollama and
+LiteLLM are disabled; cases come from the built-in MIMIC-IV-ED demo, a CSV
+upload or synthetic data. Sizes and concurrent jobs are capped.
 """
 
 from __future__ import annotations
 
 import dataclasses
+import io
 import json
 import math
 import os
 import re
+import shutil
 import threading
 import time
 import traceback
+import urllib.error
 import uuid
+import zipfile
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse
@@ -37,7 +49,8 @@ import pandas as pd
 from . import __version__
 from . import stats as S
 from .report import verdict, write_report
-from .runner import RunConfig, client_from_spec, load_results, parse_esi, run
+from .runner import (AnthropicClient, GeminiClient, OpenAICompatibleClient, RunConfig,
+                     client_from_spec, load_results, parse_esi, run)
 from .simulate import SimulatedClient, simulate_results, synthetic_cases
 from .vignettes import (AGE_CONDITIONS, DEFAULT_CONDITIONS, NONBINARY, build_vignettes,
                         load_cases_csv, load_mimic_ed_demo)
@@ -45,6 +58,12 @@ from .vignettes import (AGE_CONDITIONS, DEFAULT_CONDITIONS, NONBINARY, build_vig
 KEY_ENV = {"anthropic": "ANTHROPIC_API_KEY", "openai": "OPENAI_API_KEY",
            "openrouter": "OPENROUTER_API_KEY", "gemini": "GEMINI_API_KEY"}
 _NAME_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
+_SID_RE = re.compile(r"^[A-Za-z0-9-]{16,64}$")
+
+# Caps that apply in public mode only.
+LIMITS = {"cases": 1000, "samples": 20, "sim_models": 4, "power_points": 6, "power_sims": 200,
+          "n_perm": 5000, "calls": 30000, "concurrency": 8, "csv_bytes": 5_000_000,
+          "cpu_jobs": 2, "runs_total": 6, "session_ttl_h": 24}
 
 
 # ------------------------------------------------------------ serialization
@@ -102,6 +121,33 @@ def _analyze_by_model(res_df, cases, contrasts, n_perm, seed, job):
     return out
 
 
+_HTTP_HINTS = {
+    400: "The provider rejected the request; often the model name is wrong.",
+    401: "The provider didn't accept the API key. Check that you copied all of it.",
+    403: "The API key isn't allowed to use this model.",
+    404: "The provider doesn't know that model name. Check the spelling.",
+    429: "The provider is limiting requests, or the account is out of credit.",
+}
+
+
+def _explain_http(e: urllib.error.HTTPError) -> str:
+    """Plain-language reason for a provider error, plus its own message."""
+    detail = ""
+    try:
+        body = json.loads(e.read()[:2000] or b"{}")
+        err = body[0].get("error") if isinstance(body, list) else body.get("error", body)
+        detail = (err.get("message") if isinstance(err, dict) else err) or ""
+    except Exception:
+        pass
+    hint = _HTTP_HINTS.get(e.code, f"The provider answered with error {e.code}; try again shortly."
+                           if e.code >= 500 else f"The provider answered with error {e.code}.")
+    return f"{hint} ({str(detail)[:200]})" if detail else hint
+
+
+def _scrub(msg: str, secret: str | None) -> str:
+    return msg.replace(secret, "[your key]") if secret else msg
+
+
 # --------------------------------------------------------------------- jobs
 
 class Cancelled(Exception):
@@ -109,14 +155,15 @@ class Cancelled(Exception):
 
 
 class Job:
-    def __init__(self, kind: str, fn, **meta):
+    def __init__(self, kind: str, fn, sid: str = "local", slot: threading.Semaphore | None = None,
+                 **meta):
         self.id = uuid.uuid4().hex[:12]
-        self.kind, self.meta = kind, meta
+        self.kind, self.sid, self.meta = kind, sid, meta
         self.status, self.message, self.error, self.result = "running", "", None, None
         self.progress, self.total = 0, 1
         self.started, self.finished = time.time(), None
         self.stop = threading.Event()
-        self._fn = fn
+        self._fn, self._slot = fn, slot
         threading.Thread(target=self._run, daemon=True).start()
 
     def check_stop(self):
@@ -124,15 +171,29 @@ class Job:
             raise Cancelled()
 
     def _run(self):
+        acquired = False
         try:
+            if self._slot is not None:
+                if not self._slot.acquire(blocking=False):
+                    self.message = "Waiting for a free slot (others are using the server)…"
+                    while not self._slot.acquire(timeout=1):
+                        self.check_stop()
+                    self.message = ""
+                acquired = True
+                self.started = time.time()
             self.result = self._fn(self)
             self.status = "cancelled" if self.stop.is_set() else "done"
         except Cancelled:
             self.status = "cancelled"
         except Exception as e:
             self.status, self.error = "error", f"{type(e).__name__}: {e}"
-            traceback.print_exc()
-        self.finished = time.time()
+            if self.kind != "run":  # run errors may echo provider text; keep logs clean
+                traceback.print_exc()
+        finally:
+            if acquired:
+                self._slot.release()
+            self._fn = None  # drops the client, and with it any visitor key
+            self.finished = time.time()
 
     def view(self) -> dict:
         prog = self.meta.get("progress_fn")
@@ -147,29 +208,74 @@ class Job:
 
 
 class App:
-    def __init__(self, workspace: Path):
-        self.workspace = workspace.resolve()
+    def __init__(self, workspace: Path, public: bool = False, mimic_demo: str | None = None):
+        self.root = workspace.resolve()
+        self.root.mkdir(parents=True, exist_ok=True)
+        self.public = public
+        self.mimic_demo = Path(mimic_demo) if mimic_demo else None
         self.jobs: dict[str, Job] = {}
         self.lock = threading.Lock()
+        self.cpu_slots = threading.Semaphore(LIMITS["cpu_jobs"]) if public else None
+        if public:
+            threading.Thread(target=self._janitor, daemon=True).start()
+
+    # ------------------------------------------------------- sessions
+
+    def workspace(self, sid: str) -> Path:
+        if not self.public:
+            return self.root
+        ws = self.root / "sessions" / sid
+        ws.mkdir(parents=True, exist_ok=True)
+        os.utime(ws)  # last-activity marker for the janitor
+        return ws
+
+    def _janitor(self):
+        while True:
+            time.sleep(1800)
+            cutoff = time.time() - LIMITS["session_ttl_h"] * 3600
+            busy = {j.sid for j in self.jobs.values() if j.status == "running"}
+            for d in (self.root / "sessions").glob("*"):
+                try:
+                    if d.name not in busy and d.stat().st_mtime < cutoff:
+                        shutil.rmtree(d, ignore_errors=True)
+                except FileNotFoundError:
+                    pass
+            with self.lock:
+                for k in [k for k, j in self.jobs.items()
+                          if j.finished and j.finished < time.time() - 3600]:
+                    del self.jobs[k]
+
+    def _cap(self, value, name: str, label: str):
+        if self.public and value > LIMITS[name]:
+            raise ValueError(f"{label} is limited to {LIMITS[name]:,} on the hosted version. "
+                             f"Run cftriage on your own computer for larger studies.")
+        return value
+
+    def clean(self, msg: str) -> str:
+        return msg.replace(str(self.root), "") if self.public else msg
 
     def add(self, job: Job) -> dict:
         with self.lock:
             self.jobs[job.id] = job
         return {"job": job.id}
 
+    def job_for(self, jid: str, sid: str) -> Job | None:
+        j = self.jobs.get(jid)
+        return j if j is not None and (not self.public or j.sid == sid) else None
+
     # ---------------------------------------------------------- studies
 
-    def study_dir(self, name: str) -> Path:
+    def study_dir(self, ws: Path, name: str) -> Path:
         if not _NAME_RE.match(name or ""):
             raise ValueError("study names use letters, digits, '.', '_' and '-'")
-        d = (self.workspace / name).resolve()
-        if d.parent != self.workspace:
+        d = (ws / name).resolve()
+        if d.parent != ws.resolve():
             raise ValueError("bad study name")
         return d
 
-    def list_studies(self):
+    def list_studies(self, ws: Path):
         out = []
-        for d in sorted(self.workspace.iterdir()):
+        for d in sorted(ws.iterdir()):
             if d.is_dir() and (d / "conditions.json").exists() and (d / "cases.csv").exists():
                 n = sum(1 for _ in open(d / "cases.csv")) - 1
                 res = sorted((d / "results").glob("*.jsonl")) if (d / "results").exists() else []
@@ -177,8 +283,10 @@ class App:
                             "modified": d.stat().st_mtime})
         return out
 
-    def study_detail(self, name: str):
-        d = self.study_dir(name)
+    def study_detail(self, ws: Path, name: str):
+        d = self.study_dir(ws, name)
+        if not (d / "conditions.json").exists():
+            raise ValueError(f"no study called {name!r}")
         conds = json.loads((d / "conditions.json").read_text())
         cases = pd.read_csv(d / "cases.csv", dtype={"case_id": str})
         vign = pd.read_csv(d / "vignettes.csv", dtype={"case_id": str})
@@ -204,7 +312,7 @@ class App:
                 })
         report = d / "report" / "report.md"
         return {
-            "name": d.name, "path": str(d),
+            "name": d.name, "path": d.name if self.public else str(d),
             "n_cases": len(cases), "n_prompts": len(vign),
             "conditions": conds,
             "excluded": len(exc),
@@ -215,40 +323,75 @@ class App:
             "system_prompt": (d / "system_prompt.txt").read_text(),
             "example": [{"condition": r.condition, "prompt": r.prompt} for r in first.itertuples()],
             "results": results,
-            "report": str(report) if report.exists() else None,
+            "report": (f"{d.name}/report/report.md" if self.public else str(report))
+                      if report.exists() else None,
         }
 
-    def build_study(self, b: dict):
-        out = self.study_dir(b.get("name", ""))
+    def study_zip(self, ws: Path, name: str) -> bytes:
+        d = self.study_dir(ws, name)
+        if not d.exists():
+            raise ValueError("no such study")
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
+            for f in sorted(d.rglob("*")):
+                if f.is_file():
+                    z.write(f, f"{d.name}/{f.relative_to(d)}")
+        return buf.getvalue()
+
+    def build_study(self, ws: Path, b: dict):
+        out = self.study_dir(ws, b.get("name", ""))
         if out.exists():
             raise ValueError(f"a study called {out.name!r} already exists")
         src = b.get("source", "synthetic")
         seed = int(b.get("seed", 0))
         if src == "mimic":
-            cases = load_mimic_ed_demo(Path(b["path"]).expanduser())
+            if b.get("path") and not self.public:
+                folder = Path(b["path"]).expanduser()
+            elif self.mimic_demo:
+                folder = self.mimic_demo
+            else:
+                raise ValueError("give the folder that holds the MIMIC-IV-ED demo files")
+            cases = load_mimic_ed_demo(folder)
         elif src == "csv":
-            cases = load_cases_csv(Path(b["path"]).expanduser())
+            if b.get("csv_text"):
+                text = b["csv_text"]
+                if len(text.encode()) > LIMITS["csv_bytes"]:
+                    raise ValueError("CSV files are limited to 5 MB")
+                tmp = ws / f".upload-{uuid.uuid4().hex}.csv"
+                try:
+                    tmp.write_text(text)
+                    cases = load_cases_csv(tmp)
+                finally:
+                    tmp.unlink(missing_ok=True)
+            elif self.public:
+                raise ValueError("choose a CSV file to upload")
+            else:
+                cases = load_cases_csv(Path(b["path"]).expanduser())
         else:
-            cases = synthetic_cases(int(b.get("n", 200)), seed=seed)
+            cases = synthetic_cases(self._cap(int(b.get("n", 200)), "cases", "Number of cases"),
+                                    seed=seed)
         conds = list(AGE_CONDITIONS if b.get("with_age") else DEFAULT_CONDITIONS)
         if b.get("nonbinary"):
             conds.append(NONBINARY)
-        mx = b.get("max_cases")
+        mx = b.get("max_cases") or (LIMITS["cases"] if self.public else None)
         if mx and len(cases) > int(mx):
             cases = cases.sample(int(mx), random_state=seed)
         vs = build_vignettes(cases, conds)
         from .cli import _save_study
         _save_study(vs, out)
-        return self.study_detail(out.name)
+        return self.study_detail(ws, out.name)
 
     # ------------------------------------------------------------- jobs
 
-    def job_simulate(self, b: dict):
-        n_cases, n_samples = int(b.get("cases", 200)), int(b.get("samples", 10))
-        seed, n_perm = int(b.get("seed", 0)), int(b.get("n_perm", 1000))
+    def job_simulate(self, sid: str, b: dict):
+        n_cases = self._cap(int(b.get("cases", 200)), "cases", "Number of cases")
+        n_samples = self._cap(int(b.get("samples", 10)), "samples", "Samples per prompt")
+        seed = int(b.get("seed", 0))
+        n_perm = self._cap(int(b.get("n_perm", 1000)), "n_perm", "Permutations")
         models = b.get("models") or []
         if not models:
             raise ValueError("add at least one simulated model")
+        self._cap(len(models), "sim_models", "Number of simulated models")
         if n_cases * n_samples * len(models) > 600_000:
             raise ValueError("too large for the playground; lower cases or samples")
         allowed = {"noise", "female_shift", "instability", "model_disagreement",
@@ -261,19 +404,25 @@ class App:
             frames = []
             for i, m in enumerate(models):
                 kw = {k: float(v) for k, v in m.items() if k in allowed}
-                frames.append(simulate_results(vs.cases, model=str(m.get("name") or f"sim-{i+1}"),
+                frames.append(simulate_results(vs.cases, model=str(m.get("name") or f"sim-{i+1}")[:64],
                                                n_samples=n_samples, seed=seed + i, **kw))
             res_df = pd.concat(frames, ignore_index=True)
             res = _analyze_by_model(res_df, vs.cases, [("female", "male"), ("unlabeled", "male")],
                                     n_perm, seed, job)
             return _results_payload(res)
-        return self.add(Job("simulate", fn, label=f"{len(models)} simulated models"))
+        return self.add(Job("simulate", fn, sid, self.cpu_slots,
+                            label=f"{len(models)} simulated models"))
 
-    def job_power(self, b: dict):
+    def job_power(self, sid: str, b: dict):
         ns = [int(n) for n in b.get("cases", [70, 200, 500])]
-        samples, shift = int(b.get("samples", 10)), float(b.get("shift", 0.10))
+        self._cap(len(ns), "power_points", "Number of case counts")
+        for n in ns:
+            self._cap(n, "cases", "Number of cases")
+        samples = self._cap(int(b.get("samples", 10)), "samples", "Samples per prompt")
+        shift = float(b.get("shift", 0.10))
         noise, affected = float(b.get("noise", 0.25)), float(b.get("affected", 1.0))
-        sims, seed = int(b.get("sims", 100)), int(b.get("seed", 0))
+        sims = self._cap(int(b.get("sims", 100)), "power_sims", "Simulated studies per point")
+        seed = int(b.get("seed", 0))
 
         def fn(job):
             job.total = len(ns)
@@ -287,48 +436,81 @@ class App:
                              "power": r["power"], "mean_effect": r["mean_effect"], "sims": sims})
                 job.progress = i + 1
             return {"rows": _jsonable(rows)}
-        return self.add(Job("power", fn, label=f"power, shift {shift:.2f}"))
+        return self.add(Job("power", fn, sid, self.cpu_slots, label=f"power, shift {shift:.2f}"))
 
-    def _client(self, spec: str, sim_shift: float = 0.0):
+    def _client(self, spec: str, key: str | None = None, sim_shift: float = 0.0):
         if spec == "simulated":
             return SimulatedClient(female_shift=sim_shift)
-        provider = spec.partition(":")[0]
+        provider, _, model = spec.partition(":")
+        if not model or len(model) > 200 or re.search(r"\s", model):
+            raise ValueError("enter a model name, for example claude-sonnet-4-6")
+        key = (key or "").strip() or None
+        if key and (len(key) > 400 or re.search(r"\s", key)):
+            raise ValueError("that API key doesn't look right")
+        if self.public:
+            if provider not in KEY_ENV:
+                raise ValueError(f"{provider!r} isn't available on the hosted version")
+            if not key:
+                raise ValueError("paste your API key to use a real AI")
+        if key:
+            if provider == "anthropic":
+                return AnthropicClient(model, api_key=key)
+            if provider == "openai":
+                return OpenAICompatibleClient(model, api_key=key)
+            if provider == "openrouter":
+                return OpenAICompatibleClient(model, api_key=key, base_url="https://openrouter.ai/api/v1",
+                                              key_env="OPENROUTER_API_KEY")
+            if provider == "gemini":
+                return GeminiClient(model, api_key=key)
         env = KEY_ENV.get(provider)
         if env and not os.environ.get(env):
             raise ValueError(f"{env} is not set in the server's environment. "
                              f"Export it and restart `python -m cftriage serve`.")
         return client_from_spec(spec)
 
-    def test_call(self, b: dict):
+    def test_call(self, ws: Path, b: dict):
         from .cli import _load_study
+        key = b.get("api_key")
         # Without a study (the guided page checks the connection first), use
         # a synthetic case; it is only a connectivity check.
-        vs = _load_study(self.study_dir(b["study"])) if b.get("study") \
+        vs = _load_study(self.study_dir(ws, b["study"])) if b.get("study") \
             else build_vignettes(synthetic_cases(5), DEFAULT_CONDITIONS)
-        client = self._client(b["model"], float(b.get("sim_shift", 0)))
+        client = self._client(b["model"], key, float(b.get("sim_shift", 0)))
         row = vs.vignettes.iloc[0]
         t0 = time.time()
-        text = client(vs.system_prompt, row.prompt, float(b.get("temperature", 1.0)),
-                      int(b.get("max_tokens", 64)))
+        try:
+            text = client(vs.system_prompt, row.prompt, float(b.get("temperature", 1.0)),
+                          int(b.get("max_tokens", 64)))
+        except urllib.error.HTTPError as e:
+            raise ValueError(_scrub(_explain_http(e), key)) from None
+        except Exception as e:
+            raise ValueError(_scrub(f"{type(e).__name__}: {e}", key)) from None
         return {"prompt": row.prompt, "response": text, "esi": parse_esi(text),
                 "seconds": time.time() - t0}
 
-    def job_run(self, b: dict):
+    def job_run(self, sid: str, ws: Path, b: dict):
         from .cli import _load_study
-        study = self.study_dir(b["study"])
+        study = self.study_dir(ws, b["study"])
         vs = _load_study(study)
         spec = b["model"].strip()
-        client = self._client(spec, float(b.get("sim_shift", 0)))
-        name = (b.get("name") or spec).strip()
-        ck = study / "results" / (name.replace("/", "_").replace(":", "_") + ".jsonl")
-        for j in self.jobs.values():
-            if j.kind == "run" and j.status == "running" and j.meta.get("ck") == ck:
-                raise ValueError(f"{name} is already running on this study")
-        ck.parent.mkdir(exist_ok=True)
-        cfg = RunConfig(name, int(b.get("samples", 10)), float(b.get("temperature", 1.0)),
-                        int(b.get("max_tokens", 64)), int(b.get("concurrency", 4)),
+        key = (b.get("api_key") or "").strip() or None
+        client = self._client(spec, key, float(b.get("sim_shift", 0)))
+        name = (b.get("name") or spec).strip()[:100]
+        ck = study / "results" / (re.sub(r"[^A-Za-z0-9._-]", "_", name) + ".jsonl")
+        running = [j for j in self.jobs.values() if j.kind == "run" and j.status == "running"]
+        if any(j.meta.get("ck") == ck for j in running):
+            raise ValueError(f"{name} is already running on this study")
+        if self.public:
+            if any(j.sid == sid for j in running):
+                raise ValueError("you already have a test running; wait for it or stop it first")
+            if len(running) >= LIMITS["runs_total"]:
+                raise ValueError("the server is busy; please try again in a few minutes")
+        cfg = RunConfig(name, self._cap(int(b.get("samples", 10)), "samples", "Samples per prompt"),
+                        float(b.get("temperature", 1.0)), int(b.get("max_tokens", 64)),
+                        self._cap(int(b.get("concurrency", 4)), "concurrency", "Concurrency"),
                         seed=int(b.get("seed", 0)))
-        total = len(vs.vignettes) * cfg.n_samples
+        total = self._cap(len(vs.vignettes) * cfg.n_samples, "calls", "Number of questions")
+        ck.parent.mkdir(exist_ok=True)
 
         def done_count():
             if not ck.exists():
@@ -344,18 +526,23 @@ class App:
         def fn(job):
             job.total = total
             job.message = f"{spec}: {len(vs.cases)} cases × {len(vs.conditions)} conditions × {cfg.n_samples} samples"
-            df = run(vs, client, cfg, checkpoint=ck, progress=False, stop=job.stop)
+            try:
+                df = run(vs, client, cfg, checkpoint=ck, progress=False, stop=job.stop)
+            except Exception as e:
+                raise RuntimeError(_scrub(str(e), key)) from None
             job.progress = done_count()
             return {"calls": int(len(df)), "errors": int(df["error"].notna().sum()) if len(df) else 0,
                     "unparsed": float(df["esi"].isna().mean()) if len(df) else 0.0}
-        return self.add(Job("run", fn, label=f"{name} on {study.name}", ck=ck, study=study.name,
-                            progress_fn=done_count))
+        return self.add(Job("run", fn, sid, None, label=f"{name} on {study.name}", ck=ck,
+                            study=study.name, progress_fn=done_count))
 
-    def job_analyze(self, b: dict):
-        study = self.study_dir(b["study"])
-        n_perm, seed = int(b.get("n_perm", 2000)), int(b.get("seed", 0))
+    def job_analyze(self, sid: str, ws: Path, b: dict):
+        study = self.study_dir(ws, b["study"])
+        n_perm = self._cap(int(b.get("n_perm", 2000)), "n_perm", "Permutations")
+        seed = int(b.get("seed", 0))
         models = b.get("models") or None
         title = b.get("title") or "Counterfactual triage audit"
+        public = self.public
 
         def fn(job):
             cases = pd.read_csv(study / "cases.csv", dtype={"case_id": str})
@@ -369,21 +556,24 @@ class App:
             job.message = "writing report"
             path = write_report(res, study / "report", title=title)
             out = _results_payload(res)
-            out["report"] = str(path)
+            out["report"] = f"{study.name}/report/report.md" if public else str(path)
             return out
-        return self.add(Job("analyze", fn, label=f"analyze {study.name}"))
+        return self.add(Job("analyze", fn, sid, self.cpu_slots, label=f"analyze {study.name}"))
 
     def info(self):
-        return {"version": __version__, "workspace": str(self.workspace),
-                "keys": {k: bool(os.environ.get(v)) for k, v in KEY_ENV.items()},
-                "key_env": KEY_ENV}
+        return {"version": __version__, "public": self.public,
+                "workspace": None if self.public else str(self.root),
+                "keys": {k: (False if self.public else bool(os.environ.get(v)))
+                         for k, v in KEY_ENV.items()},
+                "key_env": KEY_ENV, "mimic_builtin": self.mimic_demo is not None,
+                "limits": LIMITS if self.public else None}
 
 
 # ------------------------------------------------------------------- HTTP
 
 def _handler(app: App, port: int):
     page = (Path(__file__).with_name("webui.html")).read_bytes()
-    hosts = {f"127.0.0.1:{port}", f"localhost:{port}", f"[::1]:{port}"}
+    local_hosts = {f"127.0.0.1:{port}", f"localhost:{port}", f"[::1]:{port}"}
 
     class H(BaseHTTPRequestHandler):
         server_version = "cftriage"
@@ -392,28 +582,48 @@ def _handler(app: App, port: int):
             if not self.path.startswith("/api/jobs"):
                 super().log_message(fmt, *args)
 
-        def _send(self, code, body: bytes, ctype="application/json"):
+        def _send(self, code, body: bytes, ctype="application/json", extra=None):
             self.send_response(code)
             self.send_header("content-type", ctype)
             self.send_header("content-length", str(len(body)))
             self.send_header("cache-control", "no-store")
             self.send_header("x-content-type-options", "nosniff")
-            self.send_header("x-frame-options", "DENY")
+            self.send_header("referrer-policy", "no-referrer")
+            if app.public:
+                # Hugging Face shows Spaces inside an iframe on huggingface.co.
+                self.send_header("content-security-policy",
+                                 "frame-ancestors 'self' https://huggingface.co https://*.hf.space")
+            else:
+                self.send_header("x-frame-options", "DENY")
+            for k, v in (extra or {}).items():
+                self.send_header(k, v)
             self.end_headers()
             self.wfile.write(body)
 
         def _json(self, obj, code=200):
             self._send(code, json.dumps(_jsonable(obj), allow_nan=False).encode())
 
-        def _guard(self) -> bool:
-            # DNS rebinding: only answer to our own host names.
-            if self.headers.get("host") not in hosts:
-                self._json({"error": "bad host"}, 403)
-                return False
-            return True
+        def _fail(self, e: Exception):
+            msg = f"{type(e).__name__}: {e}"
+            if app.public:  # never reveal server paths to visitors
+                msg = msg.replace(str(app.root), "").replace(str(Path(__file__).parent), "")
+            self._json({"error": msg}, 400)
+
+        def _host_ok(self) -> bool:
+            # Local: refuse DNS-rebinding hosts. Public: any host (behind a proxy).
+            if app.public or self.headers.get("host") in local_hosts:
+                return True
+            self._json({"error": "bad host"}, 403)
+            return False
+
+        def _sid(self) -> str | None:
+            if not app.public:
+                return "local"
+            sid = self.headers.get("x-cftriage-session") or ""
+            return sid if _SID_RE.match(sid) else None
 
         def do_GET(self):
-            if not self._guard():
+            if not self._host_ok():
                 return
             path = urlparse(self.path).path
             try:
@@ -421,57 +631,86 @@ def _handler(app: App, port: int):
                     return self._send(200, page, "text/html; charset=utf-8")
                 if path == "/api/info":
                     return self._json(app.info())
+                sid = self._sid()
+                if sid is None:
+                    return self._json({"error": "missing session"}, 400)
                 if path == "/api/studies":
-                    return self._json(app.list_studies())
+                    return self._json(app.list_studies(app.workspace(sid)))
+                m = re.fullmatch(r"/api/studies/([^/]+)/download", path)
+                if m:
+                    data = app.study_zip(app.workspace(sid), m.group(1))
+                    return self._send(200, data, "application/zip", {
+                        "content-disposition": f'attachment; filename="{m.group(1)}.zip"'})
                 m = re.fullmatch(r"/api/studies/([^/]+)", path)
                 if m:
-                    return self._json(app.study_detail(m.group(1)))
+                    return self._json(app.study_detail(app.workspace(sid), m.group(1)))
                 if path == "/api/jobs":
                     return self._json([{k: v for k, v in j.view().items() if k != "result"}
-                                       for j in app.jobs.values()])
+                                       for j in list(app.jobs.values())
+                                       if not app.public or j.sid == sid])
                 m = re.fullmatch(r"/api/jobs/([0-9a-f]+)", path)
-                if m and m.group(1) in app.jobs:
-                    return self._json(app.jobs[m.group(1)].view())
+                if m and app.job_for(m.group(1), sid):
+                    v = app.job_for(m.group(1), sid).view()
+                    if v["error"]:
+                        v["error"] = app.clean(v["error"])
+                    return self._json(v)
                 self._json({"error": "not found"}, 404)
             except Exception as e:
-                self._json({"error": f"{type(e).__name__}: {e}"}, 400)
+                self._fail(e)
 
         def do_POST(self):
-            if not self._guard():
+            if not self._host_ok():
                 return
-            # CSRF: require a same-origin JSON request (forces a CORS preflight,
-            # which this server never approves, for any cross-site page).
+            # CSRF: same-origin JSON only (a cross-site page would need a CORS
+            # preflight, which this server never approves).
             origin = self.headers.get("origin")
-            if origin is not None and urlparse(origin).netloc not in hosts:
-                return self._json({"error": "cross-origin request refused"}, 403)
+            if origin is not None:
+                ok = local_hosts | ({self.headers.get("host"), self.headers.get("x-forwarded-host")}
+                                    if app.public else set())
+                if urlparse(origin).netloc not in ok:
+                    return self._json({"error": "cross-origin request refused"}, 403)
             if not (self.headers.get("content-type") or "").startswith("application/json"):
                 return self._json({"error": "expected application/json"}, 415)
+            sid = self._sid()
+            if sid is None:
+                return self._json({"error": "missing session"}, 400)
             n = int(self.headers.get("content-length") or 0)
+            if n > 8_000_000:
+                return self._json({"error": "request too large"}, 413)
             try:
-                body = json.loads(self.rfile.read(n) or b"{}") if n < 1_000_000 else {}
+                body = json.loads(self.rfile.read(n) or b"{}")
                 path = urlparse(self.path).path
-                routes = {"/api/simulate": app.job_simulate, "/api/power": app.job_power,
-                          "/api/run": app.job_run, "/api/analyze": app.job_analyze,
-                          "/api/studies": app.build_study, "/api/test-call": app.test_call}
+                ws = app.workspace(sid)
+                routes = {
+                    "/api/simulate": lambda: app.job_simulate(sid, body),
+                    "/api/power": lambda: app.job_power(sid, body),
+                    "/api/run": lambda: app.job_run(sid, ws, body),
+                    "/api/analyze": lambda: app.job_analyze(sid, ws, body),
+                    "/api/studies": lambda: app.build_study(ws, body),
+                    "/api/test-call": lambda: app.test_call(ws, body),
+                }
                 if path in routes:
-                    return self._json(routes[path](body))
+                    return self._json(routes[path]())
                 m = re.fullmatch(r"/api/jobs/([0-9a-f]+)/cancel", path)
-                if m and m.group(1) in app.jobs:
-                    app.jobs[m.group(1)].stop.set()
+                if m and app.job_for(m.group(1), sid):
+                    app.job_for(m.group(1), sid).stop.set()
                     return self._json({"ok": True})
                 self._json({"error": "not found"}, 404)
             except Exception as e:
-                self._json({"error": f"{type(e).__name__}: {e}"}, 400)
+                self._fail(e)
 
     return H
 
 
-def serve(workspace: str | Path = ".", port: int = 8765, open_browser: bool = True):
-    app = App(Path(workspace))
-    httpd = ThreadingHTTPServer(("127.0.0.1", port), _handler(app, port))
+def serve(workspace: str | Path = ".", port: int = 8765, open_browser: bool = True,
+          public: bool = False, mimic_demo: str | None = None):
+    app = App(Path(workspace), public=public, mimic_demo=mimic_demo)
+    host = "0.0.0.0" if public else "127.0.0.1"
+    httpd = ThreadingHTTPServer((host, port), _handler(app, port))
     url = f"http://localhost:{port}/"
-    print(f"cftriage web app on {url}  (workspace: {app.workspace})  Ctrl+C to stop")
-    if open_browser:
+    mode = "public mode" if public else f"workspace: {app.root}"
+    print(f"cftriage web app on {url}  ({mode})  Ctrl+C to stop", flush=True)
+    if open_browser and not public:
         import webbrowser
         threading.Timer(0.5, webbrowser.open, args=(url,)).start()
     try:
