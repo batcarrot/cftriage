@@ -225,3 +225,9 @@ tests/
   test_basics.py
   validate_calibration.py
 ```
+
+## License
+
+Copyright (c) 2026 Vivan Gupta. All rights reserved. Commercial use, modification, redistribution, or hosting on other public platforms requires prior written permission. See [LICENSE](LICENSE).
+
+The built-in MIMIC-IV-ED demo cases are not covered by this license; they are open data under the [ODbL](https://physionet.org/content/mimic-iv-ed-demo/2.2/).

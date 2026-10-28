@@ -25,7 +25,7 @@ colorTo: gray
 sdk: docker
 app_port: 7860
 pinned: false
-license: mit
+license: other
 short_description: Does an AI triage women and men differently?
 ---
 
