@@ -1,20 +1,18 @@
 #!/usr/bin/env bash
-# Publish the hosted web app to a Hugging Face Space (Docker SDK).
+# Publish the static site to a Hugging Face Space (Static SDK, free).
 #
-#   1. Create a Space at https://huggingface.co/new-space (SDK: Docker, Blank).
+#   1. Create a Space at https://huggingface.co/new-space (SDK: Static, Blank).
 #   2. Log in once:  hf auth login   (a token with write access)
 #   3. Run:          deploy/hf_space.sh <your-hf-username>/<space-name>
 #
-# The Space gets the committed files from HEAD plus a README with the Space
-# config. Uncommitted changes are not deployed.
+# The Space gets the site built by static/build.py from the working tree.
 set -euo pipefail
 space="${1:?usage: deploy/hf_space.sh <user>/<space>}"
 root="$(git rev-parse --show-toplevel)"
 tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
 
-git -C "$root" archive HEAD | tar -x -C "$tmp"
-rm -rf "$tmp/demo" "$tmp/tests"
+python3 "$root/static/build.py" "$tmp"
 {
   cat <<'YAML'
 ---
@@ -22,15 +20,15 @@ title: cftriage
 emoji: 🩺
 colorFrom: blue
 colorTo: gray
-sdk: docker
-app_port: 7860
+sdk: static
+app_file: index.html
 pinned: false
 license: other
 short_description: Does an AI triage women and men differently?
 ---
 
 YAML
-  cat "$root/README.md"
+  echo "Does an AI triage women and men differently? Source: https://github.com/batcarrot/cftriage"
 } > "$tmp/README.md"
 
 token="$(python3 -c 'from huggingface_hub import get_token; print(get_token() or "")' 2>/dev/null || true)"

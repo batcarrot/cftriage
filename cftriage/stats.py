@@ -101,14 +101,14 @@ def cell_table(p: Prepared) -> pd.DataFrame:
     g = p.df.groupby(["case_id", "condition"])["esi"]
 
     def mode(x):
-        c = np.bincount(x, minlength=6)
+        c = _bincount(x, minlength=6)
         return int(np.argmax(c))  # ties -> lower ESI (more urgent), deterministic
 
     def within_disagree(x):
         n = len(x)
         if n < 2:
             return np.nan
-        c = np.bincount(x, minlength=6)
+        c = _bincount(x, minlength=6)
         same = (c * (c - 1)).sum()
         return 1 - same / (n * (n - 1))
 
@@ -119,6 +119,12 @@ def cell_table(p: Prepared) -> pd.DataFrame:
 
 
 # ======================================================== permutation engine
+
+def _bincount(x, **kw):
+    # np.bincount needs the platform integer; pandas gives int64, which
+    # 32-bit builds (e.g. Pyodide in the browser) refuse to cast.
+    return np.bincount(np.asarray(x, dtype=np.intp), **kw)
+
 
 def _encode(p: Prepared, conds: list[str]):
     d = p.df[p.df["condition"].isin(conds)]
@@ -132,8 +138,8 @@ def _encode(p: Prepared, conds: list[str]):
 
 def _group_means(case, lab, y, n_case, n_cond):
     idx = case * n_cond + lab
-    s = np.bincount(idx, weights=y, minlength=n_case * n_cond)
-    n = np.bincount(idx, minlength=n_case * n_cond)
+    s = _bincount(idx, weights=y, minlength=n_case * n_cond)
+    n = _bincount(idx, minlength=n_case * n_cond)
     with np.errstate(invalid="ignore", divide="ignore"):
         return (s / n).reshape(n_case, n_cond), n.reshape(n_case, n_cond)
 
@@ -322,8 +328,8 @@ def _split_half_modal_flip(p: Prepared, cond: str, rng) -> float:
             continue
         x = rng.permutation(x)
         h = len(x) // 2
-        m1 = np.argmax(np.bincount(x[:h], minlength=6))
-        m2 = np.argmax(np.bincount(x[h:2 * h], minlength=6))
+        m1 = np.argmax(_bincount(x[:h], minlength=6))
+        m2 = np.argmax(_bincount(x[h:2 * h], minlength=6))
         flips += m1 != m2
         tot += 1
     return flips / tot if tot else np.nan
@@ -340,8 +346,8 @@ def _split_half_modal_flip_between(p: Prepared, a: str, b: str, rng) -> float:
         h = min(len(xa), len(xb)) // 2
         if h < 2:
             continue
-        flips += np.argmax(np.bincount(xa[:h], minlength=6)) != \
-            np.argmax(np.bincount(xb[:h], minlength=6))
+        flips += np.argmax(_bincount(xa[:h], minlength=6)) != \
+            np.argmax(_bincount(xb[:h], minlength=6))
         tot += 1
     return flips / tot if tot else np.nan
 

@@ -144,6 +144,10 @@ def _explain_http(e: urllib.error.HTTPError) -> str:
     return f"{hint} ({str(detail)[:200]})" if detail else hint
 
 
+def checkpoint_path(study: Path, name: str) -> Path:
+    return study / "results" / (re.sub(r"[^A-Za-z0-9._-]", "_", name) + ".jsonl")
+
+
 def _scrub(msg: str, secret: str | None) -> str:
     return msg.replace(secret, "[your key]") if secret else msg
 
@@ -208,7 +212,8 @@ class Job:
 
 
 class App:
-    def __init__(self, workspace: Path, public: bool = False, mimic_demo: str | None = None):
+    def __init__(self, workspace: Path, public: bool = False, mimic_demo: str | None = None,
+                 janitor: bool = True):
         self.root = workspace.resolve()
         self.root.mkdir(parents=True, exist_ok=True)
         self.public = public
@@ -216,7 +221,7 @@ class App:
         self.jobs: dict[str, Job] = {}
         self.lock = threading.Lock()
         self.cpu_slots = threading.Semaphore(LIMITS["cpu_jobs"]) if public else None
-        if public:
+        if public and janitor:
             threading.Thread(target=self._janitor, daemon=True).start()
 
     # ------------------------------------------------------- sessions
@@ -383,7 +388,14 @@ class App:
 
     # ------------------------------------------------------------- jobs
 
+    # Each *_task returns (fn, label); fn(job) does the work. The server runs
+    # it in a background Job; the static site (browser.py) runs it directly.
+
     def job_simulate(self, sid: str, b: dict):
+        fn, label = self.simulate_task(b)
+        return self.add(Job("simulate", fn, sid, self.cpu_slots, label=label))
+
+    def simulate_task(self, b: dict):
         n_cases = self._cap(int(b.get("cases", 200)), "cases", "Number of cases")
         n_samples = self._cap(int(b.get("samples", 10)), "samples", "Samples per prompt")
         seed = int(b.get("seed", 0))
@@ -410,10 +422,13 @@ class App:
             res = _analyze_by_model(res_df, vs.cases, [("female", "male"), ("unlabeled", "male")],
                                     n_perm, seed, job)
             return _results_payload(res)
-        return self.add(Job("simulate", fn, sid, self.cpu_slots,
-                            label=f"{len(models)} simulated models"))
+        return fn, f"{len(models)} simulated models"
 
     def job_power(self, sid: str, b: dict):
+        fn, label = self.power_task(b)
+        return self.add(Job("power", fn, sid, self.cpu_slots, label=label))
+
+    def power_task(self, b: dict):
         ns = [int(n) for n in b.get("cases", [70, 200, 500])]
         self._cap(len(ns), "power_points", "Number of case counts")
         for n in ns:
@@ -436,7 +451,7 @@ class App:
                              "power": r["power"], "mean_effect": r["mean_effect"], "sims": sims})
                 job.progress = i + 1
             return {"rows": _jsonable(rows)}
-        return self.add(Job("power", fn, sid, self.cpu_slots, label=f"power, shift {shift:.2f}"))
+        return fn, f"power, shift {shift:.2f}"
 
     def _client(self, spec: str, key: str | None = None, sim_shift: float = 0.0):
         if spec == "simulated":
@@ -496,7 +511,7 @@ class App:
         key = (b.get("api_key") or "").strip() or None
         client = self._client(spec, key, float(b.get("sim_shift", 0)))
         name = (b.get("name") or spec).strip()[:100]
-        ck = study / "results" / (re.sub(r"[^A-Za-z0-9._-]", "_", name) + ".jsonl")
+        ck = checkpoint_path(study, name)
         running = [j for j in self.jobs.values() if j.kind == "run" and j.status == "running"]
         if any(j.meta.get("ck") == ck for j in running):
             raise ValueError(f"{name} is already running on this study")
@@ -537,6 +552,10 @@ class App:
                             study=study.name, progress_fn=done_count))
 
     def job_analyze(self, sid: str, ws: Path, b: dict):
+        fn, label = self.analyze_task(ws, b)
+        return self.add(Job("analyze", fn, sid, self.cpu_slots, label=label))
+
+    def analyze_task(self, ws: Path, b: dict):
         study = self.study_dir(ws, b["study"])
         n_perm = self._cap(int(b.get("n_perm", 2000)), "n_perm", "Permutations")
         seed = int(b.get("seed", 0))
@@ -558,7 +577,7 @@ class App:
             out = _results_payload(res)
             out["report"] = f"{study.name}/report/report.md" if public else str(path)
             return out
-        return self.add(Job("analyze", fn, sid, self.cpu_slots, label=f"analyze {study.name}"))
+        return fn, f"analyze {study.name}"
 
     def info(self):
         return {"version": __version__, "public": self.public,

@@ -44,22 +44,22 @@ A local web app, standard library only, with four views:
 
 Study folders live under `--workspace` (default: the current folder), so everything the web app does also works from the CLI. API keys come only from the server's environment. Export them before `serve`; the page never asks for them. The server listens on 127.0.0.1 only and refuses cross-origin requests, so other websites cannot start paid runs.
 
-### Hosting it
+### Hosted version (static site)
 
-`python -m cftriage serve --public` (or the `Dockerfile`) runs the hosted version:
+The same app runs entirely in the visitor's browser, so it can be hosted for free on any static host. `python static/build.py` writes it to `_site/`:
 
-- Each browser gets a private workspace, deleted after 24 hours.
-- Visitors paste their own API key. It is held in memory only while their test runs, never written to disk or logged, and the server's own environment keys are never used.
-- Local file paths, Ollama and LiteLLM are turned off. Cases come from the built-in [MIMIC-IV-ED demo](https://physionet.org/content/mimic-iv-ed-demo/2.2/) (open data, ODbL), a CSV upload, or synthetic data.
-- Study sizes and simultaneous jobs are capped, and visitors can download their results and report as a zip.
+- The page is `webui.html` unchanged. `static/backend.js` answers its `/api/*` calls in the browser instead of a server.
+- The cftriage Python package runs in a Web Worker with [Pyodide](https://pyodide.org), so the statistics are the same code as the CLI (`cftriage/browser.py`). The first visit downloads about 30 MB, then the browser caches it.
+- Visitors paste their own API key. Model calls go straight from their browser to the provider; the key never reaches any other server and is forgotten when the page closes.
+- Studies are saved in the visitor's browser (IndexedDB) and can be downloaded as a zip with the report.
+- Cases come from the built-in [MIMIC-IV-ED demo](https://physionet.org/content/mimic-iv-ed-demo/2.2/) (open data, ODbL), a CSV upload, or synthetic data. Ollama and LiteLLM are not available.
 
-To publish on a free [Hugging Face Space](https://huggingface.co/spaces) (2 CPUs):
+Publish:
 
-1. Create a Space at <https://huggingface.co/new-space> with SDK **Docker** and template **Blank**.
-2. Log in once with a write token: `hf auth login`.
-3. Run `deploy/hf_space.sh <your-username>/<space-name>`. It pushes the committed code plus the Space config; the Space builds in a few minutes.
+- **GitHub Pages:** `deploy/gh_pages.sh` builds and pushes to the `gh-pages` branch.
+- **Hugging Face (free Static Space):** create a Space with SDK **Static**, run `hf auth login`, then `deploy/hf_space.sh <user>/<space>`.
 
-Re-run step 3 after each commit you want to publish.
+`serve --public` and the `Dockerfile` run a server-backed variant for hosts that run containers: per-browser workspaces deleted after 24 hours, visitor keys held in memory only, capped sizes.
 
 ## Running a real study
 
@@ -218,9 +218,15 @@ cftriage/
   cli.py         command line
   web.py         web app server (python -m cftriage serve [--public])
   webui.html     web app page
+  browser.py     in-browser backend for the static site (Pyodide)
+static/
+  build.py       builds the static site into _site/
+  backend.js     answers the page's /api/* calls in the browser
+  worker.js      runs Python (Pyodide) in a Web Worker
 Dockerfile       hosted version (public mode, built-in MIMIC-IV-ED demo)
 deploy/
-  hf_space.sh    publish to a Hugging Face Space
+  gh_pages.sh    publish the static site to GitHub Pages
+  hf_space.sh    publish the static site to a Hugging Face Space
 tests/
   test_basics.py
   validate_calibration.py

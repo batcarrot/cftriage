@@ -584,7 +584,8 @@ const KEY_HELP = { anthropic: "https://console.anthropic.com/settings/keys", ope
   gemini: "https://aistudio.google.com/apikey", openrouter: "https://openrouter.ai/keys" };
 function keyField(id, provider, label) {
   return `<label class="field"><span>Your ${esc(label)} API key</span><input type="password" id="${id}" autocomplete="off" spellcheck="false" placeholder="paste it here" value="${esc(KEYS[provider] || "")}"></label>
-    <p class="hint" style="margin-top:6px">No key yet? <a href="${KEY_HELP[provider]}" target="_blank" rel="noopener">Create one</a>. Your key is sent to this server only to ask the AI your questions, kept in memory while your test runs, and never saved or shown to anyone. Questions are billed to your account, so consider a key with a spending limit and delete it afterwards.</p>`;
+    <p class="hint" style="margin-top:6px">No key yet? <a href="${KEY_HELP[provider]}" target="_blank" rel="noopener">Create one</a>. ${info && info.static ? `Your key stays in this browser: it goes only to ${esc(label)} to ask your questions, never to us, and is forgotten when you close or reload the page.`
+      : "Your key is sent to this server only to ask the AI your questions, kept in memory while your test runs, and never saved or shown to anyone."} Questions are billed to your account, so consider a key with a spending limit and delete it afterwards.</p>`;
 }
 function bindKey(id, provider) { const i = $("#" + id); if (i) i.oninput = () => { KEYS[provider] = i.value.trim(); }; }
 const needsKey = p => info && info.public && !!KEY_HELP[p];
@@ -1058,7 +1059,7 @@ async function loadStudy(name) {
     const p = $("#rf-provider").value, ph = PROVIDERS.find(x => x[0] === p)[1];
     $("#rf-model").placeholder = ph; $("#rf-model").disabled = p === "simulated";
     const env = info.key_env[p];
-    if (needsKey(p)) { $("#rf-key").innerHTML = keyField("rf-apikey", p, p); bindKey("rf-apikey", p); }
+    if (needsKey(p)) { $("#rf-key").innerHTML = keyField("rf-apikey", p, { anthropic: "Anthropic", openai: "OpenAI", gemini: "Google Gemini", openrouter: "OpenRouter" }[p] || p); bindKey("rf-apikey", p); }
     else $("#rf-key").innerHTML = p === "simulated" ? `<span class="pill ok"><i>✓</i>Offline simulated model; no API key, no cost.</span>`
       : env ? (info.keys[p] ? `<span class="pill ok"><i>✓</i><code>${env}</code> is set</span>`
         : `<span class="pill missing"><i>✕</i><code>${env}</code> is not set. Export it, then restart <code>python -m cftriage serve</code>.</span>`)
@@ -1355,7 +1356,8 @@ $("#g-start").onclick = async () => {
     const m = Object.keys(ja.result.models)[0];
     out.innerHTML = `${plainVerdict(ja.result, m).html}
       <div class="btn-row" style="margin-top:12px"><button class="btn primary" id="g-dl">Download results and report</button><button class="btn" id="g-full">See the full statistics</button></div>
-      <p class="foot">${info.public ? `Saved as <code>${esc(st.name)}</code> for 24 hours, visible only in this browser. Download it to keep it.`
+      <p class="foot">${info.static ? `Saved in this browser as <code>${esc(st.name)}</code>. Download it to keep a copy.`
+        : info.public ? `Saved as <code>${esc(st.name)}</code> for 24 hours, visible only in this browser. Download it to keep it.`
         : `Saved as <code>${esc(st.name)}</code>, with a written report at <code>${esc(ja.result.report)}</code>.`}</p>`;
     $("#g-dl").onclick = () => downloadStudy(st.name).catch(e => alert(e.message));
     $("#g-full").onclick = () => { current = st.name; store.set("study", current); show("studies"); };
@@ -1368,7 +1370,10 @@ $("#g-start").onclick = async () => {
 // ---------------------------------------------------------------- boot
 (async () => {
   try { info = await api("/api/info"); $("#version").textContent = "v" + info.version; $("#workspace").textContent = info.workspace || ""; } catch {}
-  if (info && info.public) $("#st-intro").textContent = "Build a study, query a model with repeated sampling, then analyze. Your studies are private to this browser and deleted after 24 hours; download anything you want to keep.";
+  if (info && info.public) $("#st-intro").textContent = info.static
+    ? "Build a study, query a model with repeated sampling, then analyze. Your studies are saved only in this browser; download anything you want to keep."
+    : "Build a study, query a model with repeated sampling, then analyze. Your studies are private to this browser and deleted after 24 hours; download anything you want to keep.";
+  if (info && info.static) $("#pw-sims").value = "50";
   if (info && info.mimic_builtin) $("#mimic-credit").hidden = false;
   gProviders(); gUpdate(); gShow(gStep);
   show(store.get("view", "guide"));
