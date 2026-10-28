@@ -157,6 +157,13 @@ def build_vignettes(cases: pd.DataFrame,
         reasons[inc & (reasons == "")] = "incomplete vitals"
     bad_esi = ~df["esi_true"].isin([1, 2, 3, 4, 5])
     reasons[bad_esi & (reasons == "")] = "missing ESI"
+    if any(c.line and "{age}" in c.line for c in conditions):
+        no_age = df["age"].isna() if "age" in df.columns else pd.Series(True, index=df.index)
+        if no_age.all():
+            raise ValueError("these cases have no ages, so the age-based labels can't be used. "
+                             "For MIMIC-IV-ED, add hosp/patients.csv.gz from the MIMIC-IV demo "
+                             "next to the ed/ folder, or untick the age option.")
+        reasons[no_age & (reasons == "")] = "missing age"
 
     excluded = df[reasons != ""].assign(exclusion_reason=reasons[reasons != ""])
     kept = df[reasons == ""].copy()
@@ -195,6 +202,8 @@ def _check_only_demographics_differ(vign: pd.DataFrame, conditions) -> None:
 # ---------------------------------------------------------------- loaders
 
 def _read(path: Path) -> pd.DataFrame:
+    if not path.exists():
+        raise FileNotFoundError(f"no file at {path}")
     if path.suffix == ".gz":
         with gzip.open(path, "rt") as fh:
             return pd.read_csv(fh)
@@ -208,7 +217,9 @@ def load_mimic_ed_demo(folder: str | Path) -> pd.DataFrame:
     directly or in an ``ed/`` subfolder. Age is not in the ED demo tables;
     if ``patients.csv(.gz)`` from the MIMIC-IV demo is present it is used.
     """
-    folder = Path(folder)
+    folder = Path(folder).expanduser()
+    if not folder.is_dir():
+        raise FileNotFoundError(f"there is no folder at {folder}")
     if (folder / "ed").is_dir():
         folder = folder / "ed"
 
@@ -220,6 +231,10 @@ def load_mimic_ed_demo(folder: str | Path) -> pd.DataFrame:
                 return cand
         return None
 
+    missing = [f"{stem}.csv.gz" for stem in ("edstays", "triage") if find(stem) is None]
+    if missing:
+        raise FileNotFoundError(f"{' and '.join(missing)} not found in {folder}. Download them from "
+                                "https://physionet.org/content/mimic-iv-ed-demo/2.2/ (folder ed/)")
     stays = _read(find("edstays"))
     triage = _read(find("triage"))
     df = triage.merge(stays[["stay_id", "subject_id", "gender", "disposition"]],

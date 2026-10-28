@@ -567,7 +567,7 @@ async function api(path, body) {
   const opt = body === undefined ? { headers } : { method: "POST", headers: { ...headers, "content-type": "application/json" }, body: JSON.stringify(body) };
   const r = await fetch(path, opt);
   const j = await r.json().catch(() => ({ error: `HTTP ${r.status}` }));
-  if (!r.ok || (j && j.error && !j.id)) throw new Error(String(j.error || `HTTP ${r.status}`).replace(/^(ValueError|RuntimeError): /, ""));
+  if (!r.ok || (j && j.error && !j.id)) throw new Error(String(j.error || `HTTP ${r.status}`).replace(/^(ValueError|RuntimeError|FileNotFoundError): /, ""));
   return j;
 }
 

@@ -81,7 +81,7 @@
   function finish(j, status, result, error) {
     Object.assign(j, { status, result: result ?? null, error: error ?? null, finished: Date.now() });
   }
-  const clean = msg => String(msg).replace(/^(ValueError|RuntimeError): /, "");
+  const clean = msg => String(msg).replace(/^(ValueError|RuntimeError|FileNotFoundError): /, "");
   function view(j, withResult = true) {
     const v = { id: j.id, kind: j.kind, status: j.status, message: j.message, error: j.error, progress: j.progress, total: j.total,
       elapsed: ((j.finished || Date.now()) - j.started) / 1000, label: j.label, study: j.study };
