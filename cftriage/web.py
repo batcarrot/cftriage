@@ -727,7 +727,13 @@ def serve(workspace: str | Path = ".", port: int = 8765, open_browser: bool = Tr
           public: bool = False, mimic_demo: str | None = None):
     app = App(Path(workspace), public=public, mimic_demo=mimic_demo)
     host = "0.0.0.0" if public else "127.0.0.1"
-    httpd = ThreadingHTTPServer((host, port), _handler(app, port))
+    try:
+        httpd = ThreadingHTTPServer((host, port), _handler(app, port))
+    except OSError as e:
+        if e.errno in (48, 98):  # address in use (macOS, Linux)
+            raise SystemExit(f"Port {port} is already in use, probably by another copy of "
+                             f"cftriage. Close it, or pick another port: --port {port + 1}")
+        raise
     url = f"http://localhost:{port}/"
     mode = "public mode" if public else f"workspace: {app.root}"
     print(f"cftriage web app on {url}  ({mode})  Ctrl+C to stop", flush=True)
