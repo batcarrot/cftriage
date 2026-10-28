@@ -301,7 +301,10 @@ class App:
 
     def test_call(self, b: dict):
         from .cli import _load_study
-        vs = _load_study(self.study_dir(b["study"]))
+        # Without a study (the guided page checks the connection first), use
+        # a synthetic case; it is only a connectivity check.
+        vs = _load_study(self.study_dir(b["study"])) if b.get("study") \
+            else build_vignettes(synthetic_cases(5), DEFAULT_CONDITIONS)
         client = self._client(b["model"], float(b.get("sim_shift", 0)))
         row = vs.vignettes.iloc[0]
         t0 = time.time()

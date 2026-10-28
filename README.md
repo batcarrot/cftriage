@@ -35,8 +35,9 @@ The demo builds 200 synthetic cases, runs three simulated models with known beha
 python -m cftriage serve            # opens http://localhost:8765/
 ```
 
-A local web app, standard library only, with three views:
+A local web app, standard library only, with four views:
 
+- **Guide** (opens first): a plain-language, four-step walkthrough for non-technical readers. It explains the experiment, shows why one answer is not enough, tests three pretend AIs with known behaviour, then runs a real AI through a three-choice wizard and explains the result in plain words.
 - **Playground**: tune simulated models (noise, planted female under-triage, direction-free instability) and see the verdicts, effect plot and noise comparison update. No API calls.
 - **Power**: power for the female-vs-male test across case counts, samples and noise.
 - **Studies**: build a study (synthetic, CSV or MIMIC-IV-ED demo), test one call, run a model with live progress (stop and resume at any time), analyze and write the Markdown report.
