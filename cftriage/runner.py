@@ -185,6 +185,16 @@ FATAL_HTTP = {
     403: "The API key isn't allowed to use this model.",
     404: "The provider doesn't know that model name.",
 }
+def _provider_message(body: str) -> str:
+    """The human-readable message from a provider's JSON error body."""
+    try:
+        d = json.loads(body)
+        e = d[0].get("error") if isinstance(d, list) else d.get("error", d)
+        return str(e.get("message") if isinstance(e, dict) else e or "")[:300]
+    except Exception:
+        return ""
+
+
 EMPTY_LIMIT = 20
 EMPTY_MESSAGE = ("The model's first answers were all empty. It may be spending the whole "
                  "max-tokens budget on hidden reasoning: raise max tokens or pick another model.")
@@ -250,9 +260,10 @@ def run(vset: VignetteSet, client: ModelClient | Callable, cfg: RunConfig,
                 err = None
                 break
             except urllib.error.HTTPError as e:
-                err = f"HTTP {e.code}: {e.read()[:200]!r}"
+                body = e.read()[:2000].decode(errors="replace")
+                err = f"HTTP {e.code}: {body[:200]}"
                 if e.code in FATAL_HTTP:
-                    stop_with(f"{FATAL_HTTP[e.code]} ({err})")
+                    stop_with(f"{FATAL_HTTP[e.code]} (Provider says: {_provider_message(body) or err})")
                     return None
                 if e.code not in (408, 409, 429, 500, 502, 503, 504, 529):
                     break

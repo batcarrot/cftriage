@@ -979,7 +979,7 @@ async function loadStudies() {
   $("#st-list").innerHTML = list.length ? list.map(s => `<li><button data-s="${esc(s.name)}" aria-current="${s.name === current}"><span>${esc(s.name)}</span><small>${s.n_cases} cases · ${s.n_results} run${s.n_results === 1 ? "" : "s"}</small></button></li>`).join("")
     : `<li class="hint">No studies yet.</li>`;
   $$("#st-list button").forEach(b => b.onclick = () => { current = b.dataset.s; store.set("study", current); loadStudies(); });
-  if (current && list.some(s => s.name === current)) loadStudy(current);
+  if (current && list.some(s => s.name === current)) await loadStudy(current);
 }
 
 const PROVIDERS = [
@@ -1085,7 +1085,12 @@ async function loadStudy(name) {
   const attachRun = (jobId) => {
     $("#rf-run").disabled = true;
     jobWidget($("#rf-job"), jobId, { cancelLabel: "Stop", note: "Stopping keeps every finished call; start the same run again to resume.",
-      onDone: () => { delete studyJobs[d.name + ":run"]; loadStudies(); } });
+      onDone: async j => {
+        delete studyJobs[d.name + ":run"];
+        await loadStudies();  // re-renders this panel, so show the outcome afterwards
+        if (j.status === "error") $("#rf-out").innerHTML = `<div class="error">The run stopped. ${esc(String(j.error).replace(/^(ValueError|RuntimeError): /, ""))}</div>`;
+        else if (j.status === "cancelled") $("#rf-out").innerHTML = `<div class="callout">Stopped. Answers so far are kept; start the same run again to continue.</div>`;
+      } });
   };
   $("#rf-run").onclick = async () => {
     if (!$("#rf-model").value.trim() && $("#rf-provider").value !== "simulated") { $("#rf-out").innerHTML = `<div class="error">Enter a model ID.</div>`; return; }
